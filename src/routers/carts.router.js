@@ -26,7 +26,7 @@ router.get("/:id", async (req, res) => {
       .status(404)
       .json({ status: "error", error: "ID does not exists" });
   } else {
-    res.status(200).json({ status: "succes", payload: result });
+    res.status(200).json({ status: "succes", payload: result.product });
   }
 });
 router.post("/", async (req, res) => {
@@ -37,22 +37,11 @@ router.post("/", async (req, res) => {
 router.post("/:cid/product/:pid", async (req, res) => {
   const cid = parseInt(req.params.cid);
   const pid = parseInt(req.params.pid);
-  const carts = await cm.getCart();
-  const result = carts.find((cart) => cart.id === cid);
-  if (!result)
-    return res
-      .status(404)
-      .json({ status: "error", error: `Cart id: ${cid} does not exist` });
-  const idProduct = result.products.find((product) => product.pid === pid);
-  if (!idProduct) {
-    result.products.push({ pid: pid, quantity: 1 });
-  } else {
-    const index = result.products.findIndex((product) => product.pid === pid);
-    result.products[index].quantity++;
+  const newCart = await cm.addProductToCart(cid, pid);
+  if (typeof newCart === "string") {
+    res.status(404).json({ status: "error", payload: newCart });
   }
-
-  const newCart = await cm.updateCart(cid, result);
-  res.status(201).json({ status: "success", payload: newCart });
+  res.status(200).json({ status: "success", payload: newCart.products });
 });
 
 router.delete("/:id", async (req, res) => {

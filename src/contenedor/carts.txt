@@ -3,12 +3,8 @@
     "id": 2,
     "products": [
       {
-        "pid": 3,
-        "quantity": 2
-      },
-      {
         "pid": 4,
-        "quantity": 2
+        "quantity": 4
       }
     ]
   },

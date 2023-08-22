@@ -1,5 +1,9 @@
 import fs from "fs";
 
+import ProductManager from "./productManager.js";
+
+const pm = new ProductManager("./src/contenedor/products.txt");
+
 class CartManager {
   #_path;
   constructor(path) {
@@ -24,6 +28,12 @@ class CartManager {
     if (!cartId) return "[ERROR] El Id no existe";
     return cartId;
   }
+  async getProductsFromCartById(id) {
+    const carts = await this.getCart();
+    const cartId = carts.find((cart) => cart.id === id);
+    if (!cartId) return "[ERROR] El Id no existe";
+    return cartId.products;
+  }
   async addCart() {
     if (!fs.existsSync(this.#_path))
       return "[ERROR] La Base de datos no existe";
@@ -32,6 +42,30 @@ class CartManager {
     carts.push(newCart);
     await fs.promises.writeFile(this.#_path, JSON.stringify(carts, null, "\t"));
     return newCart;
+  }
+  async addProductToCart(cid, pid) {
+    const productId = await pm.getProductById(pid);
+    if (typeof productId === "string") return `[ERROR] el ID: ${pid} no existe`;
+    const cart = await this.getCartById(cid);
+    if (typeof cart === "string") return `[ERROR] El carrito no existe`;
+    const productIndex = cart.products.findIndex(
+      (product) => product.pid === pid
+    );
+    if (productIndex > -1) {
+      cart.products[productIndex].quantity += 1;
+    } else {
+      cart.products.push({ pid: pid, quantity: 1 });
+    }
+    let carts = await this.getCart();
+    carts = carts.map((item) => {
+      if (item.id === cid) {
+        return cart;
+      } else {
+        return item;
+      }
+    });
+    await fs.promises.writeFile(this.#_path, JSON.stringify(carts, null, 2));
+    return cart;
   }
   async deleteCart(id) {
     if (!fs.existsSync(this.#_path)) return "[ERROR] Base de datos no existe";
