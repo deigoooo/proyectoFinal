@@ -6,12 +6,14 @@ const pm = new ProductManager("./src/contenedor/products.txt");
 
 router.get("/home", async (req, res) => {
   const product = await pm.getProduct();
-  console.log(product);
   res.render("home", { product });
 });
 router.get("/", async (req, res) => {
   const product = await pm.getProduct();
-  res.render("home", { product });
+  res.render("realTimeProducts", { product });
 });
-
+/* router.get("/prueba", async (req, res) => {
+  //const product = await pm.getProduct();
+  res.render("index", {});
+}); */
 export default router;
