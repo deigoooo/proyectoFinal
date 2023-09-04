@@ -9,11 +9,8 @@ router.get("/home", async (req, res) => {
   res.render("home", { product });
 });
 router.get("/", async (req, res) => {
-  const product = await pm.getProduct();
-  res.render("realTimeProducts", { product });
+  const products = await pm.getProduct();
+  res.render("realTimeProducts", { products });
 });
-/* router.get("/prueba", async (req, res) => {
-  //const product = await pm.getProduct();
-  res.render("index", {});
-}); */
+
 export default router;

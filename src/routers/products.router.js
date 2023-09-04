@@ -57,10 +57,8 @@ router.delete("/:id", async (req, res) => {
     return res
       .status(404)
       .json({ status: "error", error: "ID does not exist" });
-  await pm.deleteProduct(id);
-  res
-    .status(200)
-    .json({ status: "success", payload: `Product ID: ${id} was deleted` });
+  const newProducts = await pm.deleteProduct(id);
+  res.status(200).json({ status: "success", payload: newProducts });
 });
 
 export default router;

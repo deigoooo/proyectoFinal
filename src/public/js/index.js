@@ -1,50 +1,81 @@
 const socketClient = io();
-let allProducts = document.getElementById("allProducts");
-let idUsuario = document.getElementById("idUsuario");
-let addProduct = document.getElementById("addProduct");
-let getProducts = document.getElementById("getProducts");
+let table = document.getElementById("realProduct");
+let getProduct = document.getElementById("getProducts");
 
-addProduct.addEventListener("submit", (element) => {
-  const newProduct = {
-    title: addProduct[0].value,
-    description: addProduct[1].value,
-    price: addProduct[2].value,
-    thumbnail: addProduct[3].value,
-    stock: addProduct[4].value,
-    code: addProduct[5].value,
-    category: addProduct[6].value,
+document.getElementById("createBtn").addEventListener("click", () => {
+  const body = {
+    title: document.getElementById("title").value,
+    description: document.getElementById("description").value,
+    price: document.getElementById("price").value,
+    thumbnail: document.getElementById("thumbnail").value,
+    stock: document.getElementById("stock").value,
+    code: document.getElementById("code").value,
+    category: document.getElementById("category").value,
   };
-  socketClient.emit("add", newProduct);
-  addProduct.reset();
+  //este fetch  es de metod post para enviarle el nuevo producto en el body
+  fetch("/api/products", {
+    method: "post",
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((result) => result.json())
+    .then((result) => {
+      if (result.status === "error") throw new Error(result.error);
+    })
+    //este fetch es un Get para tener la lista nueva completa
+    .then(() => fetch("/api/products"))
+    .then((result) => result.json())
+    .then((result) => {
+      if (result.status === "error") throw new Error(result.error);
+      socketClient.emit("productList", result.payload);
+      alert(`El producto fue agregado con exito \n Vista actualizada`);
+      document.getElementById("title").value = "";
+      document.getElementById("description").value = "";
+      document.getElementById("price").value = "";
+      document.getElementById("thumbnail").value = "";
+      document.getElementById("stock").value = "";
+      document.getElementById("code").value = "";
+      document.getElementById("category").value = "";
+    })
+    .catch((error) => alert(`Ocurrio un error:\n${error}`));
 });
 
-/* socketClient.on("userId", (data) => {
-  idUsuario.innerHTML = `Usuario: ${data}`;
-}); */
+deleteProduct = (id) => {
+  fetch(`/api/products/${id}`, {
+    method: "delete",
+  })
+    .then((result) => result.json())
+    .then((result) => {
+      if (result.status === "error") throw new Error(result.error);
+      socketClient.emit("productList", result.payload);
+      alert(`El product fue eliminado \nVista actualizada`);
+    })
+    .catch((error) => alert(`Ocurrio un error:\n${error}`));
+};
 
-socketClient.on("products", async (data) => {
-  console.log(data);
-  for (let index = 0; index < data.length; index++) {
-    let row = ` <tr>
-                  <td>${data[index].id}</td>
-                  <td>${data[index].title}</td>
-                  <td>${data[index].description}</td>
-                  <td>${data[index].price}</td>
-                  <td>${data[index].thumbnail}</td>
-                  <td>${data[index].stock}</td>
-                  <td>${data[index].code}</td>
-                  <td>${data[index].status}</td>
-                  <td>${data[index].category}</td>
-                  <td><button
-                    onclick="deleteProduct(${data[index].id})"
-                    class="btn btn-danger"
-                    >Eliminar</button></td>
-                </tr>`;
-    getProducts.innerHTML += row;
+socketClient.on("updateProduct", (data) => {
+  table.innerHTML = `<tr>
+      <td>ID</td>
+      <td>Nombre</td>
+      <td>Descripcion</td>
+      <td>Precio</td>
+      <td>Stock</td>
+      <td>Codigo</td>
+      <td>Categoria</td>
+      <td></td>
+    </tr>`;
+  for (product of data) {
+    let tr = document.createElement("tr");
+    tr.innerHTML = `<td>${product.id}</td>
+      <td>${product.title}</td>
+      <td>${product.description}</td>
+      <td>${product.price}</td>
+      <td>${product.stock}</td>
+      <td>${product.code}</td>
+      <td>${product.category}</td>
+      <td><button class="btn btn-danger" onclick="deleteProduct(${product.id})">Eliminar</button></td>`;
+    table.getElementsByTagName("tbody")[0].appendChild(tr);
   }
 });
-
-const deleteProduct = (id) => {
-  socketClient.emit("delete", id);
-  location.reload();
-};
