@@ -1,0 +1,46 @@
+[
+	{
+		"id": 14,
+		"title": "tornillo",
+		"description": "tornillo",
+		"price": "50",
+		"thumbnail": "algo",
+		"stock": "1500",
+		"code": "fer003",
+		"category": "ferreteria",
+		"status": true
+	},
+	{
+		"id": 15,
+		"title": "Otro nuevo producto",
+		"description": "Este es un nuevo producto del metodo post",
+		"price": 138,
+		"thumbnail": "Sin imagen",
+		"stock": 2,
+		"code": "624sda",
+		"status": true,
+		"category": "otra cosa que no se que va"
+	},
+	{
+		"id": 16,
+		"title": "tuerca",
+		"description": "tuerca de 10 mm",
+		"price": "50",
+		"thumbnail": "algo",
+		"stock": "1500",
+		"code": "fer001",
+		"category": "ferreteria",
+		"status": true
+	},
+	{
+		"id": 17,
+		"title": "tuerca",
+		"description": "tuerca de 10 mm",
+		"price": "50",
+		"thumbnail": "algo",
+		"stock": "1500",
+		"code": "fer002",
+		"category": "ferreteria",
+		"status": true
+	}
+]

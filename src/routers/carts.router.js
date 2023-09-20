@@ -1,8 +1,10 @@
 import { Router } from "express";
-import CartManager from "../contenedor/cartManager.js";
+//import CartManager from "../dao/fileSystem/cartManager.js";
+import CartManager from "../dao/DB/cartManager.js";
 
 const router = Router();
-const cm = new CartManager("./src/contenedor/carts.txt");
+const cm = new CartManager("./src/dao/fileSystem/carts.txt");
+//"./src/contenedor/carts.txt"
 
 router.get("/", async (req, res) => {
   const limit = req.query.limit;
@@ -18,17 +20,17 @@ router.get("/", async (req, res) => {
   }
 });
 router.get("/:id", async (req, res) => {
-  const carts = await cm.getCart();
-  const id = parseInt(req.params.id);
-  const result = carts.find((cart) => cart.id === id);
-  if (!result) {
+  const id = req.params.id;
+  const result = await cm.getCartById(id);
+  if (typeof result === "string") {
     return res
       .status(404)
       .json({ status: "error", error: "ID does not exists" });
   } else {
-    res.status(200).json({ status: "succes", payload: result.product });
+    res.status(200).json({ status: "succes", payload: result.products });
   }
 });
+
 router.post("/", async (req, res) => {
   const newcart = await cm.addCart();
   console.log(newcart);

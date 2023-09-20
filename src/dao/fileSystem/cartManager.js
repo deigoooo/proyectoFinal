@@ -2,7 +2,7 @@ import fs from "fs";
 
 import ProductManager from "./productManager.js";
 
-const pm = new ProductManager("./src/contenedor/products.txt");
+const pm = new ProductManager("./src/dao/fileSystem/products.txt");
 
 class CartManager {
   #_path;

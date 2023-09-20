@@ -1,8 +1,8 @@
 import { Router } from "express";
-import ProductManager from "../contenedor/productManager.js";
+import ProductManager from "../dao/fileSystem/productManager.js";
 
 const router = Router();
-const pm = new ProductManager("./src/contenedor/products.txt");
+const pm = new ProductManager("./src/dao/fileSystem/products.txt");
 
 router.get("/", async (req, res) => {
   const limit = req.query.limit;
@@ -45,7 +45,7 @@ router.post("/", async (req, res) => {
   const product = req.body;
   if (Object.keys(req.body).length === 0)
     return res.status(404).json({ status: "error", error: "Body is empty" });
-
+  console.log(product);
   const newProduct = await pm.addProduct(product);
   res.status(201).json({ status: "success", payload: newProduct });
 });

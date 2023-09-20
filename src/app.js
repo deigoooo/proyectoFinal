@@ -4,10 +4,10 @@ import productsRouter from "./routers/products.router.js";
 import cartsRouter from "./routers/carts.router.js";
 import realTimeProductsRouter from "./routers/realtimeproducts.router.js";
 import { Server } from "socket.io";
-import ProductManager from "./contenedor/productManager.js";
+import ProductManager from "./dao/fileSystem/productManager.js";
 
 const app = express();
-const pm = new ProductManager("./src/contenedor/products.txt");
+const pm = new ProductManager("./src/dao/fileSystem/products.txt");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -25,15 +25,17 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/realtimeproducts", realTimeProductsRouter);
 
+//Configuro el server
 const httpServer = app.listen(8080, () =>
   console.log(`Server Running in port ${httpServer.address().port}`)
 );
+
+//conexion con el socket
 const io = new Server(httpServer);
 
 io.on("connection", (socket) => {
   console.log(`Nuevo cliente conectado: ${socket.id}`);
   socket.on("productList", (data) => {
-    console.log(data);
     io.emit("updateProduct", data);
   });
 });
