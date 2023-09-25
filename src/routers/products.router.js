@@ -1,8 +1,8 @@
 import { Router } from "express";
-import ProductManager from "../dao/fileSystem/productManager.js";
+import ProductManager from "../dao/DB/productManager.js";
 
 const router = Router();
-const pm = new ProductManager("./src/dao/fileSystem/products.txt");
+const pm = new ProductManager(/* "./src/dao/fileSystem/products.txt" */);
 
 router.get("/", async (req, res) => {
   const limit = req.query.limit;
@@ -18,10 +18,9 @@ router.get("/", async (req, res) => {
   }
 });
 router.get("/:id", async (req, res) => {
-  const products = await pm.getProduct();
-  const id = parseInt(req.params.id);
-  const result = products.find((product) => product.id === id);
-  if (!result) {
+  const id = req.params.id;
+  const result = await pm.getProductById(id);
+  if (typeof result === "string") {
     return res
       .status(404)
       .json({ status: "error", error: "ID does not exists" });
@@ -30,25 +29,25 @@ router.get("/:id", async (req, res) => {
   }
 });
 router.put("/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = req.params.id;
   const productUpdate = req.body;
-  const products = await pm.getProduct();
-  const idProduct = products.find((product) => product.id === id);
-  if (!idProduct)
+  const result = await pm.updateProduct(id, productUpdate);
+  if (typeof result === "string") {
     return res
       .status(404)
       .json({ status: "error", error: "ID does not exists" });
-  const newProduct = await pm.updateProduct(id, productUpdate);
-  res.status(200).json({ status: "succes", payload: newProduct });
+  }
+  res.status(200).json({ status: "succes", payload: result });
 });
+
 router.post("/", async (req, res) => {
   const product = req.body;
   if (Object.keys(req.body).length === 0)
     return res.status(404).json({ status: "error", error: "Body is empty" });
-  console.log(product);
   const newProduct = await pm.addProduct(product);
   res.status(201).json({ status: "success", payload: newProduct });
 });
+
 router.delete("/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   const products = await pm.getProduct();

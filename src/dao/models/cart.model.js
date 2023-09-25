@@ -5,13 +5,13 @@ const cartCollection = "carts";
 const cartSchema = new mongoose.Schema({
   products: {
     type: [
-      /* {
+      {
         _id: false,
         products: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "products",
         },
-      }, */
+      },
     ],
   },
 });

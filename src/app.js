@@ -5,9 +5,13 @@ import cartsRouter from "./routers/carts.router.js";
 import realTimeProductsRouter from "./routers/realtimeproducts.router.js";
 import { Server } from "socket.io";
 import ProductManager from "./dao/fileSystem/productManager.js";
+import mongoose from "mongoose";
 
 const app = express();
 const pm = new ProductManager("./src/dao/fileSystem/products.txt");
+
+//declaro la url de conexion
+const uri = "mongodb://0.0.0.0:27017";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,6 +23,20 @@ app.use(express.static("./src/public"));
 app.engine("handlebars", handlebars.engine());
 app.set("views", "./src/views");
 app.set("view engine", "handlebars");
+
+try {
+  //conecto la base de datos
+  await mongoose.connect(uri, {
+    dbName: "ecommerce",
+    useUnifiedTopology: true,
+  });
+  /*   app.use((req, re, next) => {
+    req.io = io;
+    next();
+  }); */
+} catch (error) {
+  console.log(`No se pudo conectar con la BD error: ${error.message}`);
+}
 
 //Dispongo las rutas de los endpoints
 app.use("/api/products", productsRouter);

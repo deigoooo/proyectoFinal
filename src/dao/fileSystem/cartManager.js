@@ -73,7 +73,7 @@ class CartManager {
     let carts = await this.getCart();
     let newCarts = carts.filter((cart) => cart.id !== id);
     if (carts.length !== newCarts.length) isFound = true;
-    if (!isFound) return "[ERROR} El id no existe";
+    if (!isFound) return null;
     await fs.promises.writeFile(this.#_path, JSON.stringify(newCarts, null, 2));
     return newCarts;
   }

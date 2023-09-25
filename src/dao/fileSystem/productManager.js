@@ -46,7 +46,6 @@ class ProductManager {
       return "[ERROR] El Codigo ya existe";
     }
 
-    console.log(product);
     const newProduct = { id: this.#getNextID(products), ...product };
     products.push(newProduct);
     await fs.promises.writeFile(
