@@ -4,11 +4,11 @@ import productsRouter from "./routers/products.router.js";
 import cartsRouter from "./routers/carts.router.js";
 import realTimeProductsRouter from "./routers/realtimeproducts.router.js";
 import { Server } from "socket.io";
-import ProductManager from "./dao/fileSystem/productManager.js";
+/* import ProductManager from "./dao/fileSystem/productManager.js"; */
 import mongoose from "mongoose";
 
 const app = express();
-const pm = new ProductManager("./src/dao/fileSystem/products.txt");
+/* const pm = new ProductManager("./src/dao/fileSystem/products.txt"); */
 
 //declaro la url de conexion
 const uri = "mongodb://0.0.0.0:27017";
