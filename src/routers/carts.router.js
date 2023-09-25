@@ -32,6 +32,9 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const newcart = await cm.addCart();
+  if (typeof newcart === "string") {
+    res.status(404).json({ status: "error", error: `${newcart.message}` });
+  }
   res.status(201).json({ status: "success", payload: newcart });
 });
 router.post("/:cid/product/:pid", async (req, res) => {
@@ -39,7 +42,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
   const pid = req.params.pid;
   const newCart = await cm.addProductToCart(cid, pid);
   if (typeof newCart === "string") {
-    res.status(404).json({ status: "error", payload: newCart });
+    res.status(404).json({ status: "error", error: newCart });
   }
   res.status(200).json({ status: "success", payload: newCart });
 });
