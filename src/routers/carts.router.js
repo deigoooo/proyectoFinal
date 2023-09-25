@@ -38,10 +38,10 @@ router.post("/:cid/product/:pid", async (req, res) => {
   const cid = req.params.cid;
   const pid = req.params.pid;
   const newCart = await cm.addProductToCart(cid, pid);
-  /*   if (typeof newCart === "string") {
+  if (typeof newCart === "string") {
     res.status(404).json({ status: "error", payload: newCart });
   }
-  res.status(200).json({ status: "success", payload: newCart.products }); */
+  res.status(200).json({ status: "success", payload: newCart });
 });
 
 router.delete("/:id", async (req, res) => {

@@ -42,8 +42,15 @@ class CartManager {
     try {
       const cart = await cartModel.findOne({ _id: cid });
       const product = await productModel.findOne({ _id: pid });
-      console.log(product._id);
-    } catch (error) {}
+      cart.products.push({ product: product._id });
+      await cartModel.updateOne({ _id: cid }, cart);
+      const newCart = cartModel
+        .findOne({ _id: cid })
+        .populate("products.product");
+      return newCart;
+    } catch (error) {
+      return `[ERROR]: ${error.message}`;
+    }
   }
 }
 
