@@ -6,11 +6,9 @@ import realTimeProductsRouter from "./routers/realtimeproducts.router.js";
 import chatRouter from "./routers/messages.router.js";
 import MessageManager from "./dao/DB/messageManager.js";
 import { Server } from "socket.io";
-/* import ProductManager from "./dao/fileSystem/productManager.js"; */
 import mongoose from "mongoose";
 
 const app = express();
-/* const pm = new ProductManager("./src/dao/fileSystem/products.txt"); */
 
 //declaro la url de conexion
 const uri = "mongodb://0.0.0.0:27017";
@@ -67,7 +65,6 @@ io.on("connection", (socket) => {
   socket.on("message", async (data) => {
     message.addMessage(data);
     const newMessage = await message.getMessage();
-    console.log(newMessage);
     io.emit("logs", newMessage);
   });
 });
