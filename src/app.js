@@ -3,6 +3,7 @@ import handlebars from "express-handlebars";
 import productsRouter from "./routers/products.router.js";
 import cartsRouter from "./routers/carts.router.js";
 import realTimeProductsRouter from "./routers/realtimeproducts.router.js";
+import chatRouter from "./routers/messages.router.js";
 import { Server } from "socket.io";
 /* import ProductManager from "./dao/fileSystem/productManager.js"; */
 import mongoose from "mongoose";
@@ -42,6 +43,7 @@ try {
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/realtimeproducts", realTimeProductsRouter);
+app.use("/chat", chatRouter);
 
 //Configuro el server
 const httpServer = app.listen(8080, () =>
@@ -51,9 +53,15 @@ const httpServer = app.listen(8080, () =>
 //conexion con el socket
 const io = new Server(httpServer);
 
+const messages = [];
+
 io.on("connection", (socket) => {
   console.log(`Nuevo cliente conectado: ${socket.id}`);
   socket.on("productList", (data) => {
     io.emit("updateProduct", data);
+  });
+  socket.on("message", (data) => {
+    messages.push(data);
+    io.emit("logs", messages);
   });
 });

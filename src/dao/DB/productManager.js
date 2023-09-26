@@ -40,7 +40,6 @@ class ProductManager {
     }
   }
   async updateProduct(id, updateProduct) {
-    console.log(updateProduct);
     try {
       await productModel.updateOne({ _id: id }, updateProduct);
 
