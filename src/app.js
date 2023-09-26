@@ -4,6 +4,7 @@ import productsRouter from "./routers/products.router.js";
 import cartsRouter from "./routers/carts.router.js";
 import realTimeProductsRouter from "./routers/realtimeproducts.router.js";
 import chatRouter from "./routers/messages.router.js";
+import MessageManager from "./dao/DB/messageManager.js";
 import { Server } from "socket.io";
 /* import ProductManager from "./dao/fileSystem/productManager.js"; */
 import mongoose from "mongoose";
@@ -13,6 +14,9 @@ const app = express();
 
 //declaro la url de conexion
 const uri = "mongodb://0.0.0.0:27017";
+
+//hasrcode el modelo de message
+const message = new MessageManager();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -60,8 +64,10 @@ io.on("connection", (socket) => {
   socket.on("productList", (data) => {
     io.emit("updateProduct", data);
   });
-  socket.on("message", (data) => {
-    messages.push(data);
-    io.emit("logs", messages);
+  socket.on("message", async (data) => {
+    message.addMessage(data);
+    const newMessage = await message.getMessage();
+    console.log(newMessage);
+    io.emit("logs", newMessage);
   });
 });

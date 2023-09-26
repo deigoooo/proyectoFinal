@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import messageModel from "../models/message.model.js";
 
 class MessageManager {
@@ -18,9 +19,9 @@ class MessageManager {
       return `[ERROR]: ${error.message}`;
     }
   }
-  async addMessage() {
+  async addMessage(data) {
     try {
-      const response = await messageModel.create();
+      const response = await messageModel.create(data);
       return response;
     } catch (error) {
       return `[ERROR]: ${error.message}`;
