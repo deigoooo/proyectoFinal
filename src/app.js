@@ -55,8 +55,6 @@ const httpServer = app.listen(8080, () =>
 //conexion con el socket
 const io = new Server(httpServer);
 
-const messages = [];
-
 io.on("connection", (socket) => {
   console.log(`Nuevo cliente conectado: ${socket.id}`);
   socket.on("productList", (data) => {
