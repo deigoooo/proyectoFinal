@@ -6,7 +6,7 @@ import realTimeProductsRouter from "./routers/realtimeproducts.router.js";
 import chatRouter from "./routers/messages.router.js";
 //import MessageManager from "./dao/DB/messageManager.js";
 import { Server } from "socket.io";
-import { initializeSocketIoServer } from "./socket.js";
+import initializeSocketIoServer from "./socket.js";
 import mongoose from "mongoose";
 
 const app = express();
