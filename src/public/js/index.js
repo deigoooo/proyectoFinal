@@ -67,15 +67,16 @@ socketClient.on("updateProduct", (data) => {
       <td></td>
     </tr>`;
   for (product of data) {
+    console.log(product);
     let tr = document.createElement("tr");
-    tr.innerHTML = `<td>${product.id}</td>
+    tr.innerHTML = `<td>${product._id}</td>
       <td>${product.title}</td>
       <td>${product.description}</td>
       <td>${product.price}</td>
       <td>${product.stock}</td>
       <td>${product.code}</td>
       <td>${product.category}</td>
-      <td><button class="btn btn-danger" onclick="deleteProduct(${product.id})">Eliminar</button></td>`;
+      <td><button class="btn btn-danger" onclick="deleteProduct(${product._id})">Eliminar</button></td>`;
     table.getElementsByTagName("tbody")[0].appendChild(tr);
   }
 });

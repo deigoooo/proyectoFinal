@@ -72,8 +72,6 @@
     <button id="createBtn" class="btn btn-primary">Agregar Producto</button>
   </form>
 
-  {{! <button type="submit" class="btn btn-primary">Agregar Producto</button> }}
-
   <table class="table table-dark table-striped m-5" id="realProduct">
     <thead>
       <tr>
@@ -91,7 +89,7 @@
     <tbody id="getproducts">
       {{#each products}}
         <tr>
-          <td>{{this.id}}</td>
+          <td>{{this._id}}</td>
           <td>{{this.title}}</td>
           <td>{{this.description}}</td>
           <td>{{this.price}}</td>
@@ -100,7 +98,7 @@
           <td>{{this.category}}</td>
           <td><button
               class="btn btn-danger"
-              onclick="deleteProduct({{this.id}})"
+              onclick="deleteProduct({{this._id}})"
             >Eliminar</button></td>
         </tr>
       {{/each}}

@@ -6,7 +6,8 @@ class ProductManager {
 
   async getProduct() {
     try {
-      const response = await productModel.find();
+      //el lean es para no tener problemas con handlebars
+      const response = await productModel.find().lean();
       return response;
     } catch (error) {
       return `[ERROR]: ${error.message}`;
