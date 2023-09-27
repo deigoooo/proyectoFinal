@@ -4,17 +4,16 @@ import productsRouter from "./routers/products.router.js";
 import cartsRouter from "./routers/carts.router.js";
 import realTimeProductsRouter from "./routers/realtimeproducts.router.js";
 import chatRouter from "./routers/messages.router.js";
-import MessageManager from "./dao/DB/messageManager.js";
+//import MessageManager from "./dao/DB/messageManager.js";
 import { Server } from "socket.io";
+import { initializeSocketIoServer } from "./socket.js";
 import mongoose from "mongoose";
 
 const app = express();
 
 //declaro la url de conexion
-const uri = "mongodb://0.0.0.0:27017";
-
-//hasrcode el modelo de message
-const message = new MessageManager();
+const URI_MONGO = "mongodb://0.0.0.0:27017";
+const DBNAME_MONGO = "ecommerce";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -29,40 +28,31 @@ app.set("view engine", "handlebars");
 
 try {
   //conecto la base de datos
-  await mongoose.connect(uri, {
-    dbName: "ecommerce",
+  await mongoose.connect(URI_MONGO, {
+    dbName: `${DBNAME_MONGO}`,
     useUnifiedTopology: true,
   });
-  /*   app.use((req, re, next) => {
+  console.log(`DB connected`);
+
+  //desde aca
+  const httpServer = app.listen(8080, () =>
+    console.log(`Server Running in port ${httpServer.address().port}`)
+  );
+  const io = new Server(httpServer);
+  app.use((req, res, next) => {
     req.io = io;
     next();
-  }); */
+  });
+  //Dispongo las rutas de los endpoints
+  app.use("/api/products", productsRouter);
+  app.use("/api/carts", cartsRouter);
+  app.use("/realtimeproducts", realTimeProductsRouter);
+  app.use("/chat", chatRouter);
+
+  initializeSocketIoServer(io);
+
+  //hasta aca
 } catch (error) {
   console.log(`No se pudo conectar con la BD error: ${error.message}`);
+  process.exit(-1);
 }
-
-//Dispongo las rutas de los endpoints
-app.use("/api/products", productsRouter);
-app.use("/api/carts", cartsRouter);
-app.use("/realtimeproducts", realTimeProductsRouter);
-app.use("/chat", chatRouter);
-
-//Configuro el server
-const httpServer = app.listen(8080, () =>
-  console.log(`Server Running in port ${httpServer.address().port}`)
-);
-
-//conexion con el socket
-const io = new Server(httpServer);
-
-io.on("connection", (socket) => {
-  console.log(`Nuevo cliente conectado: ${socket.id}`);
-  socket.on("productList", (data) => {
-    io.emit("updateProduct", data);
-  });
-  socket.on("message", async (data) => {
-    message.addMessage(data);
-    const newMessage = await message.getMessage();
-    io.emit("logs", newMessage);
-  });
-});
