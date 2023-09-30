@@ -1,8 +1,19 @@
-import mongoose from "mongoose";
 import productModel from "../models/product.model.js";
 
 class ProductManager {
   constructor() {}
+
+  async paginate(filterOption, paginateOption) {
+    try {
+      const response = await productModel.paginate(
+        filterOption,
+        paginateOption
+      );
+      return response;
+    } catch (error) {
+      return `[ERROR]: ${error.message}`;
+    }
+  }
 
   async getProduct() {
     try {

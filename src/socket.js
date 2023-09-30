@@ -1,4 +1,3 @@
-import { Server } from "socket.io";
 import MessageManager from "./dao/DB/messageManager.js";
 
 //hasrcode el modelo de message

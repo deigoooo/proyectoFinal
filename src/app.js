@@ -4,7 +4,6 @@ import productsRouter from "./routers/products.router.js";
 import cartsRouter from "./routers/carts.router.js";
 import realTimeProductsRouter from "./routers/realtimeproducts.router.js";
 import chatRouter from "./routers/messages.router.js";
-//import MessageManager from "./dao/DB/messageManager.js";
 import { Server } from "socket.io";
 import initializeSocketIoServer from "./socket.js";
 import mongoose from "mongoose";
@@ -14,6 +13,7 @@ const app = express();
 //declaro la url de conexion
 const URI_MONGO = "mongodb://0.0.0.0:27017";
 const DBNAME_MONGO = "ecommerce";
+export const PORT = 8080;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -35,7 +35,7 @@ try {
   console.log(`DB connected`);
 
   //desde aca
-  const httpServer = app.listen(8080, () =>
+  const httpServer = app.listen(PORT, () =>
     console.log(`Server Running in port ${httpServer.address().port}`)
   );
   const io = new Server(httpServer);
