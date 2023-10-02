@@ -1,0 +1,26 @@
+<h2>Products from Cart with id={{cart._id}}</h2>
+<hr />
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <td><strong>Producto</strong></td>
+      <td><strong>Descripción</strong></td>
+      <td><strong>Precio</strong></td>
+      <td><strong>Código</strong></td>
+      <td><strong>Stock</strong></td>
+      <td><strong>Cantidad</strong></td>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each cart.products}}
+      <tr>
+        <td>{{this.product.title}}</td>
+        <td>{{this.product.description}}</td>
+        <td>{{this.product.price}}</td>
+        <td>{{this.product.code}}</td>
+        <td>{{this.product.stock}}</td>
+        <td>{{this.quantity}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

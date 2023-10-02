@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node .",
-    "dev": "node --watch ."
+    "dev": "nodemon ."
   },
   "keywords": [],
   "author": "",

@@ -2,7 +2,7 @@ import express from "express";
 import handlebars from "express-handlebars";
 import productsRouter from "./routers/products.router.js";
 import cartsRouter from "./routers/carts.router.js";
-import realTimeProductsRouter from "./routers/realtimeproducts.router.js";
+import viewRouter from "./routers/view.router.js";
 import chatRouter from "./routers/messages.router.js";
 import { Server } from "socket.io";
 import initializeSocketIoServer from "./socket.js";
@@ -44,9 +44,11 @@ try {
     next();
   });
   //Dispongo las rutas de los endpoints
+  app.get("/", (req, res) => res.render("index"));
   app.use("/api/products", productsRouter);
   app.use("/api/carts", cartsRouter);
-  app.use("/realtimeproducts", realTimeProductsRouter);
+  app.use("/products", viewRouter);
+  app.use("/carts", viewRouter);
   app.use("/chat", chatRouter);
 
   initializeSocketIoServer(io);

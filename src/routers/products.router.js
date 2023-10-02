@@ -21,27 +21,27 @@ export const getProducts = async (req, res) => {
     if (req.query.sort === "desc") paginateOptions.sort = { price: -1 };
 
     const result = await pm.paginate(filterOption, paginateOptions);
-    console.log(result);
-    let prevlink;
+
+    let prevLink;
     if (!req.query.page) {
-      prevlink = `http://${req.hostname}:${PORT}${req.originalUrl}&page=${result.prevPage}`;
+      prevLink = `http://${req.hostname}:${PORT}${req.originalUrl}?page=${result.prevPage}`;
     } else {
       const modifiedUrl = req.originalUrl.replace(
         `page=${req.query.page}`,
-        `page="${result.prevpage}`
+        `page=${result.prevPage}`
       );
-      prevlink = `http://${req.hostname}:${PORT}${req.modifiedUrl}`;
+      prevLink = `http://${req.hostname}:${PORT}${modifiedUrl}`;
     }
 
-    let nextlink;
+    let nextLink;
     if (!req.query.page) {
-      nextlink = `http://${req.hostname}:${PORT}${req.originalUrl}&page=${result.nextPage}`;
+      nextLink = `http://${req.hostname}:${PORT}${req.originalUrl}?page=${result.nextPage}`;
     } else {
       const modifiedUrl = req.originalUrl.replace(
         `page=${req.query.page}`,
-        `page="${result.nextPage}`
+        `page=${result.nextPage}`
       );
-      nextlink = `http://${req.hostname}:${PORT}${req.modifiedUrl}`;
+      nextLink = `http://${req.hostname}:${PORT}${modifiedUrl}`;
     }
 
     return {
@@ -55,8 +55,8 @@ export const getProducts = async (req, res) => {
         page: result.page,
         hasPrevPage: result.hasPrevPage,
         hasNextPage: result.hasNextPage,
-        prevlink: result.hasPrevPage ? prevlink : null,
-        nextLink: result.hasNextPage ? nextlink : null,
+        prevlink: result.hasPrevPage ? prevLink : null,
+        nextLink: result.hasNextPage ? nextLink : null,
       },
     };
   } catch (error) {
@@ -93,12 +93,12 @@ router.put("/:id", async (req, res) => {
     const id = req.params.id;
     const productUpdate = req.body;
     const result = await pm.updateProduct(id, productUpdate);
-    const products = await pm.getProduct();
     if (typeof result === "string") {
       return res
         .status(404)
         .json({ status: "error", error: "ID does not exists" });
     }
+    const products = await pm.getProduct();
     req.io.emit("updateProduct", products);
     res.status(200).json({ status: "succes", payload: result });
   } catch (error) {

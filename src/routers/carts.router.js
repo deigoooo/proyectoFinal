@@ -25,10 +25,10 @@ export const getProductsFromCart = async (req, res) => {
       statusCode: 200,
       response: { status: "success", payload: result },
     };
-  } catch (err) {
+  } catch (error) {
     return {
       statusCode: 500,
-      response: { status: "error", error: err.message },
+      response: { status: "error", error: error.message },
     };
   }
 };
