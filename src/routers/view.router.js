@@ -29,7 +29,6 @@ router.get("/", async (req, res) => {
       }
       totalPages.push({ page: index, link });
     }
-    console.log(result);
     res.render("home", {
       products: result.response.payload,
       paginateInfo: {
