@@ -3,6 +3,7 @@ import ProductManager from "../dao/DB/productManager.js";
 import { getProductsFromCart } from "./carts.router.js";
 import { getProducts } from "./products.router.js";
 import { PORT } from "../app.js";
+import { auth } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 const pm = new ProductManager(/* "./src/dao/fileSystem/products.txt" */);
@@ -12,7 +13,7 @@ router.get("/home", async (req, res) => {
   res.render("home", { product });
 });
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   const result = await getProducts(req, res);
   if (result.statusCode === 200) {
     const totalPages = [];
