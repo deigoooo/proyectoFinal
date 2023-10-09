@@ -11,6 +11,9 @@ router.get("/", async (req, res) => {
 router.get("/register", (req, res) => {
   res.render("register");
 });
+router.get("/failRegister", (req, res) => {
+  res.send({ erro: "Passport Register Fail" });
+});
 
 router.get("/logout", (req, res) => {});
 

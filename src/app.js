@@ -6,10 +6,14 @@ import mongoose from "mongoose";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
+
 const app = express();
 
 //declaro la url de conexion
-const URI_MONGO = "mongodb://0.0.0.0:27017";
+const URI_MONGO =
+  "mongodb+srv://deigoooo:d1i9e8g8o@dfr-test.bfhq0ur.mongodb.net/";
 const DBNAME_MONGO = "ecommerce";
 export const PORT = 8080;
 
@@ -31,6 +35,11 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+//configuro passport
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 //configuro handlebars
 app.engine("handlebars", handlebars.engine());

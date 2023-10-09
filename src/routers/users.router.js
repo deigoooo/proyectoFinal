@@ -1,6 +1,7 @@
 import { Router } from "express";
 import userModel from "../dao/models/user.model.js";
-import { createHash, isValidPassword } from "../util.js";
+import { isValidPassword } from "../util.js";
+import passport from "passport";
 
 const router = Router();
 
@@ -39,8 +40,11 @@ router.post("/user", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
-  try {
+router.post(
+  "/",
+  passport.authenticate("register", { failureRedirect: "/login/failRegister" }),
+  async (req, res) => {
+    /* try {
     const user = req.body;
     if (Object.keys(req.body).length === 0)
       return res.status(404).json({ status: "error", error: "Body is empty" });
@@ -49,8 +53,9 @@ router.post("/", async (req, res) => {
     res.status(201).json({ status: "success", payload: newUser });
   } catch (error) {
     res.status(500).json({ status: "error", error: error.message });
+  } */
   }
-});
+);
 
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
