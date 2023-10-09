@@ -1,13 +1,7 @@
 import express from "express";
 import handlebars from "express-handlebars";
-import productsRouter from "./routers/products.router.js";
-import cartsRouter from "./routers/carts.router.js";
-import viewRouter from "./routers/view.router.js";
-import chatRouter from "./routers/messages.router.js";
-import userRouter from "./routers/users.router.js";
-import loginRouter from "./routers/login.router.js";
 import { Server } from "socket.io";
-import initializeSocketIoServer from "./socket.js";
+import run from "./run.js";
 import mongoose from "mongoose";
 import session from "express-session";
 import MongoStore from "connect-mongo";
@@ -29,8 +23,8 @@ app.use(express.static("./src/public"));
 app.use(
   session({
     store: MongoStore.create({
-      mongoUrl: "mongodb://0.0.0.0:27017",
-      dbName: "sessions",
+      mongoUrl: `${URI_MONGO}`,
+      dbName: `${DBNAME_MONGO}`,
     }),
     secret: "victoriasecret",
     resave: true,
@@ -55,23 +49,9 @@ try {
   const httpServer = app.listen(PORT, () =>
     console.log(`Server Running in port ${httpServer.address().port}`)
   );
-  const io = new Server(httpServer);
-  app.use((req, res, next) => {
-    req.io = io;
-    next();
-  });
+  const socket = new Server(httpServer);
 
-  //Dispongo las rutas de los endpoints
-  app.get("/", (req, res) => res.render("index"));
-  app.use("/api/products", productsRouter);
-  app.use("/api/carts", cartsRouter);
-  app.use("/api/users", userRouter);
-  app.use("/products", viewRouter);
-  app.use("/carts", viewRouter);
-  app.use("/login", loginRouter);
-  app.use("/chat", chatRouter);
-
-  initializeSocketIoServer(io);
+  run(socket, app);
 
   //hasta aca
 } catch (error) {
