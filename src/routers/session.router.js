@@ -48,6 +48,22 @@ router.get("/failLogin", (req, res) =>
   res.send({ error: "Passport login failed" })
 );
 
+router.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] }),
+  (req, res) => {}
+);
+
+router.get(
+  "/githubcallback",
+  passport.authenticate("github", { failureRedirect: "/session/login" }),
+  async (req, res) => {
+    console.log("Callback: ", req.user);
+    req.session.user = req.user;
+    res.redirect("/products");
+  }
+);
+
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
