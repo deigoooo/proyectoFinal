@@ -64,6 +64,24 @@ router.get(
   }
 );
 
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] }),
+  (req, res) => {}
+);
+
+router.get(
+  "/googlecallback",
+  passport.authenticate("google", {
+    failureRedirect: "/failure",
+    /* successRedirect: "/products", */
+  }),
+  async (req, res) => {
+    req.session.user = req.user;
+    res.redirect("/products");
+  }
+);
+
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
