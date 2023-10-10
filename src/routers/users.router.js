@@ -5,8 +5,24 @@ import passport from "passport";
 
 const router = Router();
 
-router.post("/user", async (req, res) => {
-  try {
+router.post(
+  "/user",
+  passport.authenticate("login", { failureRedirect: "/login/failLogin" }),
+  async (req, res) => {
+    if (!req.user) {
+      return res
+        .status(400)
+        .send({ status: "error", error: "Invalid credentials" });
+    }
+    const isValid = {
+      firstname: req.user.firstname,
+      lastname: req.user.lastname,
+      email: req.user.email,
+      age: req.user.age,
+    };
+    req.session.user = isValid;
+    res.status(200).json({ status: "success", payload: isValid });
+    /* try {
     const user = req.body;
     if (
       user.email === "adminCoder@coder.com" &&
@@ -31,14 +47,13 @@ router.post("/user", async (req, res) => {
       return res
         .status(401)
         .json({ status: "error", error: "Contraseña incorrecta" });
-    }
+    } */
 
-    req.session.user = isValid;
-    res.status(200).json({ status: "success", payload: isValid });
-  } catch (error) {
+    /* } catch (error) {
     res.status(500).json({ status: "error", error: error.message });
+  } */
   }
-});
+);
 
 router.post(
   "/",

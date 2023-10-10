@@ -15,6 +15,10 @@ router.get("/failRegister", (req, res) => {
   res.send({ erro: "Passport Register Fail" });
 });
 
+router.get("/failLogin", (req, res) => {
+  res.send({ erro: "Passport Login Fail" });
+});
+
 router.get("/logout", (req, res) => {});
 
 export default router;

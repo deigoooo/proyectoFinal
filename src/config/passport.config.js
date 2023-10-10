@@ -1,7 +1,7 @@
 import passport from "passport";
 import local from "passport-local";
 import userModel from "../dao/models/user.model.js";
-import { createHash } from "../util.js";
+import { createHash, isValidPassword } from "../util.js";
 
 const localStrategy = local.Strategy;
 
@@ -36,7 +36,24 @@ const initializePassport = () => {
     )
   );
 
-  //passport.use("login");
+  passport.use(
+    "login",
+    new localStrategy(
+      {
+        usernameField: "email",
+      },
+      async (username, password, done) => {
+        try {
+          const user = await userModel.findOne({ email: username });
+          if (!user) {
+            return done(null, user);
+          }
+          if (!isValidPassword(user, password)) return done(null, false);
+          return done(null, user);
+        } catch (error) {}
+      }
+    )
+  );
 
   passport.serializeUser((user, done) => {
     done(null, user._id);
