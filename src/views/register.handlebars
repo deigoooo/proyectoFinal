@@ -17,20 +17,28 @@
           justify-content: center;
           flex-direction: column;
         "
+    action="/session/register"
+    method="post"
   >
     <h2>Registrarse</h2>
     <label for="firstname" style="display: block"> Nombre</label>
-    <input type="text" id="firstname" style="display: block; width: 240px" />
+    <input type="text" name="firstname" style="display: block; width: 240px" />
     <label for="lastname" style="display: block"> Apellido</label>
-    <input type="text" id="lastname" style="display: block; width: 240px" />
+    <input type="text" name="lastname" style="display: block; width: 240px" />
+    <label for="age" style="display: block"> Edad</label>
+    <input type="text" name="age" style="display: block; width: 240px" />
     <label for="email" style="display: block"> Email</label>
-    <input type="email" id="email" style="display: block; width: 240px" />
+    <input type="email" name="email" style="display: block; width: 240px" />
     <label for="password" style="display: block"> Contraseña</label>
-    <input type="password" id="password" style="display: block; width: 240px" />
+    <input
+      type="password"
+      name="password"
+      style="display: block; width: 240px"
+    />
     <div style="display: flex">
       <button
         id="register"
-        type="button"
+        type="submit"
         class="btn btn-danger m-2"
         style="width: 110px; height: 40px"
       >
@@ -39,16 +47,3 @@
     </div>
   </form>
 </div>
-<script>
-  document.getElementById("register").addEventListener("click", () => {
-  console.log("entro aca"); const body = { firstname:
-  document.getElementById("firstname").value, lastname:
-  document.getElementById("lastname").value, email:
-  document.getElementById("email").value, password:
-  document.getElementById("password").value, }; fetch("/api/users/", { method:
-  "post", body: JSON.stringify(body), headers: { "Content-Type":
-  "application/json" }, }) .then((result) => result.json()) .then((result) => {
-  if (result.status === "error") throw new Error(result.error);
-  window.location.href = `/products`; }) .catch((error) => alert(`Ocurrio un
-  error:\n${error}`) ); });
-</script>

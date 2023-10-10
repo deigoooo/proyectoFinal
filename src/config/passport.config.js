@@ -15,6 +15,9 @@ const initializePassport = () => {
       },
       async (req, username, password, done) => {
         const { firstname, lastname, email, age } = req.body;
+        /* console.log(
+          `firstname: ${firstname}, lastname: ${lastname}, email:${email}, age: ${age}`
+        ); */
         try {
           const user = await userModel.findOne({ email: username });
           if (user) {
@@ -48,9 +51,13 @@ const initializePassport = () => {
           if (!user) {
             return done(null, user);
           }
-          if (!isValidPassword(user, password)) return done(null, false);
+          if (!isValidPassword(user, password)) {
+            return done(false, false);
+          }
           return done(null, user);
-        } catch (error) {}
+        } catch (error) {
+          return done(err);
+        }
       }
     )
   );

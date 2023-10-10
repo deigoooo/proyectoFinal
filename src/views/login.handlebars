@@ -17,16 +17,22 @@
           justify-content: center;
           flex-direction: column;
         "
+    action="/session/login"
+    method="post"
   >
     <h2>Iniciar sesion</h2>
     <label for="email" style="display: block"> Email</label>
-    <input type="email" id="email" style="display: block; width: 240px" />
+    <input type="email" name="email" style="display: block; width: 240px" />
     <label for="password" style="display: block"> Contraseña</label>
-    <input type="password" id="password" style="display: block; width: 240px" />
+    <input
+      type="password"
+      name="password"
+      style="display: block; width: 240px"
+    />
     <div style="display: flex">
       <button
         id="login"
-        type="button"
+        type="submit"
         class="btn btn-primary m-2"
         style="width: 110px; height: 40px"
       >
@@ -38,9 +44,12 @@
         class="btn btn-danger m-2"
         style="width: 110px; height: 40px"
       >
-        Registrarse
+        <a
+          href="/session/register"
+          style="text-decoration: none;color:white;"
+        >Registrarse</a>
+
       </button>
     </div>
   </form>
 </div>
-<script src="/js/login.js"></script>
