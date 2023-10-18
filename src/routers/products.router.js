@@ -24,7 +24,6 @@ export const getProducts = async (req, res) => {
     let prevLink;
     if (!req.query.page) {
       prevLink = `http://${req.hostname}:${PORT}${req.originalUrl}&page=${result.prevPage}`;
-      console.log(prevLink);
     } else {
       const modifiedUrl = req.originalUrl.replace(
         `page=${req.query.page}`,

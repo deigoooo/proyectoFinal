@@ -59,7 +59,7 @@ router.get(
   "/githubcallback",
   passport.authenticate("github", { failureRedirect: "/session/login" }),
   async (req, res) => {
-    console.log("Callback: ", req.user);
+    //console.log("Callback: ", req.user);
     req.session.user = req.user;
     res.redirect("/products");
   }
@@ -78,6 +78,7 @@ router.get(
     /* successRedirect: "/products", */
   }),
   async (req, res) => {
+    console.log(req.user);
     req.session.user = req.user;
     res.redirect("/products");
   }

@@ -1,4 +1,27 @@
-<h2>Products</h2>
+<div style="display: flex; width:100%; justify-content: space-around;">
+<h2>Bienvenido {{user.firstname}}</h2>
+<button 
+  class="btn btn-danger" 
+  style="
+  position: relative;
+  display: inline-block;
+  width:120px;
+  color: #fff;
+  border: none;"> 
+    <a 
+      href="/session/logout"
+      style="
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: transparent;
+      text-decoration: none;
+      color: white;
+      line-height: 1;">
+      Cerrar session
+</button>
+</div>
 <hr />
 <div align="center">
   {{#if paginateInfo.hasPrevPage}}

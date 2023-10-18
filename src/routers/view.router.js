@@ -31,7 +31,9 @@ router.get("/", auth, async (req, res) => {
       }
       totalPages.push({ page: index, link });
     }
+    console.log(req.session.user);
     res.render("home", {
+      user: req.session.user,
       products: result.response.payload,
       paginateInfo: {
         hasPrevPage: result.response.hasPrevPage,
@@ -51,6 +53,7 @@ router.get("/", auth, async (req, res) => {
 router.get("/realTimeProducts", async (req, res) => {
   const result = await getProducts(req, res);
   if (result.statusCode === 200) {
+    //console.log(result.response);
     res.render("realTimeProducts", { products: result.response.payload });
   } else {
     res
