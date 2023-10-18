@@ -17,6 +17,7 @@ router.get("/", auth, async (req, res) => {
   const result = await getProducts(req, res);
   if (result.statusCode === 200) {
     const totalPages = [];
+
     let link;
     for (let index = 1; index <= result.response.totalPages; index++) {
       if (!req.query.page) {

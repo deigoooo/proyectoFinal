@@ -35,10 +35,11 @@ router.post(
         .send({ status: "error", error: "Invalid credentials" });
     }
     req.session.user = {
-      first_name: req.user.first_name,
-      last_name: req.user.last_name,
+      firstname: req.user.first_name,
+      lastname: req.user.last_name,
       email: req.user.email,
       age: req.user.age,
+      role: req.user.role,
     };
     res.redirect("/products");
   }

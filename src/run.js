@@ -34,7 +34,7 @@ const run = (socketServer, app) => {
     });
   });
 
-  app.use("/", (req, res) => res.send("HOME"));
+  app.use("/", (req, res) => res.redirect("session/login"));
 };
 
 export default run;

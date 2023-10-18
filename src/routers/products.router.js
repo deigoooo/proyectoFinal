@@ -9,8 +9,7 @@ const pm = new ProductManager(/* "./src/dao/fileSystem/products.txt" */);
 
 export const getProducts = async (req, res) => {
   try {
-    const limit = req.query.limit || 10;
-    const page = req.query.page || 1;
+    const { limit = 10, page = 1 } = req.query;
 
     const filterOption = {};
     if (req.query.stock) filterOption.stock = req.query.stock;
@@ -24,7 +23,8 @@ export const getProducts = async (req, res) => {
 
     let prevLink;
     if (!req.query.page) {
-      prevLink = `http://${req.hostname}:${PORT}${req.originalUrl}?page=${result.prevPage}`;
+      prevLink = `http://${req.hostname}:${PORT}${req.originalUrl}&page=${result.prevPage}`;
+      console.log(prevLink);
     } else {
       const modifiedUrl = req.originalUrl.replace(
         `page=${req.query.page}`,
@@ -35,7 +35,7 @@ export const getProducts = async (req, res) => {
 
     let nextLink;
     if (!req.query.page) {
-      nextLink = `http://${req.hostname}:${PORT}${req.originalUrl}?page=${result.nextPage}`;
+      nextLink = `http://${req.hostname}:${PORT}${req.originalUrl}&page=${result.nextPage}`;
     } else {
       const modifiedUrl = req.originalUrl.replace(
         `page=${req.query.page}`,
@@ -43,7 +43,6 @@ export const getProducts = async (req, res) => {
       );
       nextLink = `http://${req.hostname}:${PORT}${modifiedUrl}`;
     }
-
     return {
       statusCode: 200,
       response: {
@@ -55,7 +54,7 @@ export const getProducts = async (req, res) => {
         page: result.page,
         hasPrevPage: result.hasPrevPage,
         hasNextPage: result.hasNextPage,
-        prevlink: result.hasPrevPage ? prevLink : null,
+        prevLink: result.hasPrevPage ? prevLink : null,
         nextLink: result.hasNextPage ? nextLink : null,
       },
     };
