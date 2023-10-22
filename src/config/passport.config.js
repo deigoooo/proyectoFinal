@@ -17,13 +17,12 @@ const initializePassport = () => {
       },
       async (req, username, password, done) => {
         const { firstname, lastname, email, age } = req.body;
-        /* console.log(
-          `firstname: ${firstname}, lastname: ${lastname}, email:${email}, age: ${age}`
-        ); */
         try {
           const user = await userModel.findOne({ email: username });
           if (user) {
-            return done(null, false);
+            return done(null, false, {
+              message: "El nombre de usuario ya existe",
+            });
           }
           const newUser = {
             firstname,

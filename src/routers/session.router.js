@@ -13,13 +13,14 @@ router.post(
     failureRedirect: "/session/failRegister",
   }),
   async (req, res) => {
+    //console.log(req.flash("error")[0]);
     res.redirect("/session/login");
   }
 );
 
-router.get("/failRegister", (req, res) =>
-  res.send({ error: "Passport register failed" })
-);
+router.get("/failRegister", (req, res) => {
+  res.send({ error: `El usuario ya existe` });
+});
 
 router.get("/login", (req, res) => {
   res.render("login");
