@@ -48,6 +48,19 @@ const initializePassport = () => {
       },
       async (username, password, done) => {
         try {
+          const admin = await userModel.findOne({
+            email: "adminCoder@coder.com",
+          });
+          if (!admin) {
+            const newAdmin = {
+              firstname: "CoderHouse",
+              lastname: "Academia",
+              email: "adminCoder@coder.com",
+              password: createHash("adminCod3r123"),
+              role: "admin",
+            };
+            await userModel.create(newAdmin);
+          }
           const user = await userModel.findOne({ email: username });
           if (!user) {
             return done(null, user);

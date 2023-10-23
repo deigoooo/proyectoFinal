@@ -23,7 +23,7 @@ export const getProducts = async (req, res) => {
 
     let prevLink;
     if (!req.query.page) {
-      prevLink = `http://${req.hostname}:${PORT}${req.originalUrl}&page=${result.prevPage}`;
+      prevLink = `http://${req.hostname}:${PORT}${req.originalUrl}?page=${result.prevPage}`;
     } else {
       const modifiedUrl = req.originalUrl.replace(
         `page=${req.query.page}`,
@@ -34,7 +34,7 @@ export const getProducts = async (req, res) => {
 
     let nextLink;
     if (!req.query.page) {
-      nextLink = `http://${req.hostname}:${PORT}${req.originalUrl}&page=${result.nextPage}`;
+      nextLink = `http://${req.hostname}:${PORT}${req.originalUrl}?page=${result.nextPage}`;
     } else {
       const modifiedUrl = req.originalUrl.replace(
         `page=${req.query.page}`,

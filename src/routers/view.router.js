@@ -31,7 +31,6 @@ router.get("/", auth, async (req, res) => {
       }
       totalPages.push({ page: index, link });
     }
-    console.log(req.session.user);
     res.render("home", {
       user: req.session.user,
       products: result.response.payload,

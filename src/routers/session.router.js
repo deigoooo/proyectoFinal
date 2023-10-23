@@ -35,13 +35,9 @@ router.post(
         .status(400)
         .send({ status: "error", error: "Invalid credentials" });
     }
-    req.session.user = {
-      firstname: req.user.first_name,
-      lastname: req.user.last_name,
-      email: req.user.email,
-      age: req.user.age,
-      role: req.user.role,
-    };
+    req.session.user = req.user;
+
+    console.log(`este es el user en session ${req.session.user}`);
     res.redirect("/products");
   }
 );
@@ -79,7 +75,6 @@ router.get(
     /* successRedirect: "/products", */
   }),
   async (req, res) => {
-    console.log(req.user);
     req.session.user = req.user;
     res.redirect("/products");
   }
