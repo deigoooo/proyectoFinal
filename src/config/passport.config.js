@@ -16,7 +16,7 @@ const initializePassport = () => {
         usernameField: "email",
       },
       async (req, username, password, done) => {
-        const { firstname, lastname, email, age } = req.body;
+        const { first_name, last_name, email, age } = req.body;
         try {
           const user = await userModel.findOne({ email: username });
           if (user) {
@@ -25,8 +25,8 @@ const initializePassport = () => {
             });
           }
           const newUser = {
-            firstname,
-            lastname,
+            first_name,
+            last_name,
             email,
             age,
             password: createHash(password),
@@ -53,8 +53,8 @@ const initializePassport = () => {
           });
           if (!admin) {
             const newAdmin = {
-              firstname: "CoderHouse",
-              lastname: "Academia",
+              first_name: "CoderHouse",
+              last_name: "Academia",
               email: "adminCoder@coder.com",
               password: createHash("adminCod3r123"),
               role: "admin",
@@ -92,8 +92,8 @@ const initializePassport = () => {
             return done(null, user);
           }
           const newUser = await userModel.create({
-            firstname: profile._json.name,
-            lastname: "",
+            first_name: profile._json.name,
+            last_name: "",
             age: "",
             email: profile._json.email,
             password: "",
@@ -120,8 +120,8 @@ const initializePassport = () => {
           const user = await userModel.findOne({ email: profile._json.email });
           if (user) return done(null, user);
           const newUser = await userModel.create({
-            firstname: profile._json.name,
-            lastname: "",
+            first_name: profile._json.name,
+            last_name: "",
             age: "",
             email: profile._json.email,
             password: "",
