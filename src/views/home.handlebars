@@ -1,13 +1,56 @@
-<div style="display: flex; width:100%; justify-content: space-around;">
-<h2>Bienvenido {{user.firstname}}</h2>
-<button 
+<style type="text/css">
+.navbar{
+  display: flex; 
+  width:100%; 
+  justify-content: flex-start; 
+  background-color:#969696;
+  align-items: center;
+}
+ul li {
+  list-style: none;
+}
+ul li a{
+  margin: 0px 30px 0px 0px;
+  padding: 0px;
+}
+.profile li ul{
+  display: none;
+  position: absolute;
+  min-width: 140px;
+  background-color: #969696;
+  z-index: 1;
+}
+.profile{
+  margin: 0px;
+  padding: 0px;
+}
+.icono-grande{
+  margin-left: 20px;
+  font-size: 35px;
+}
+.profile li:hover >ul{
+  display: block;
+}
+
+</style>
+
+<div class="navbar">
+  <ul class="profile">
+    <li><i class="fa-solid fa-id-card icono-grande"></i>
+      <ul>
+        <li><a>Hola <b>{{user.firstname}}</b></a></li>
+        <li><a>{{user.email}}</a></li>
+        <li><a>Rol: {{user.role}}</a></li>
+        <li><button 
   class="btn btn-danger" 
   style="
   position: relative;
   display: inline-block;
   width:120px;
+  height:30px;
   color: #fff;
-  border: none;"> 
+  border: none;
+  margin-bottom: 10px;"> 
     <a 
       href="/session/logout"
       style="
@@ -19,8 +62,11 @@
       text-decoration: none;
       color: white;
       line-height: 1;">
-      Cerrar session
-</button>
+      Salir
+</button></a></li>
+      </ul>
+    </li>
+  </ul>
 </div>
 <hr />
 <div align="center">
