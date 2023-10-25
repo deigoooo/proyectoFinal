@@ -36,8 +36,6 @@ router.post(
         .send({ status: "error", error: "Invalid credentials" });
     }
     req.session.user = req.user;
-
-    console.log(`este es el user en session ${req.session.user}`);
     res.redirect("/products");
   }
 );
