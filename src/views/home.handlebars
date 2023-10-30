@@ -38,6 +38,7 @@ ul li a{
   <ul class="profile">
     <li><i class="fa-solid fa-id-card icono-grande"></i>
       <ul>
+        <li><a id="cid" data-cid="{{user.cart}}">ID: <b>{{user._id}}</b></a></li>  
         <li><a>Hola <b>{{user.first_name}}</b></a></li>
         <li><a>{{user.email}}</a></li>
         <li><a>Rol: {{user.role}}</a></li>
@@ -98,7 +99,7 @@ ul li a{
       <tr>
         <td><button
             class="btn btn-primary"
-            onclick="addProductToCart('{{this._id}}')"
+            onclick="addProductToCart({{user._id}},{{this._id}})"
           >AddToCart</button></td>
         <td>{{this.title}}</td>
         <td>{{this.description}}</td>
@@ -112,6 +113,7 @@ ul li a{
 </table>
 
 <script>
+
   addProductToCart = (pid) => { fetch(`/api/carts`, { method: 'post' })
   .then(result => result.json()) .then(result => { if (result.status ===
   'error') throw new Error(result.error) return result.payload._id }) .then(cid

@@ -8,11 +8,6 @@ import { auth } from "../middlewares/auth.middleware.js";
 const router = Router();
 const pm = new ProductManager(/* "./src/dao/fileSystem/products.txt" */);
 
-router.get("/home", async (req, res) => {
-  const product = await pm.getProduct();
-  res.render("home", { product });
-});
-
 router.get("/", auth, async (req, res) => {
   const result = await getProducts(req, res);
   if (result.statusCode === 200) {
@@ -31,6 +26,7 @@ router.get("/", auth, async (req, res) => {
       }
       totalPages.push({ page: index, link });
     }
+    /* console.log(req.session.user); */
     res.render("home", {
       user: req.session.user,
       products: result.response.payload,

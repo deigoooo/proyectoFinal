@@ -42,7 +42,7 @@ document.getElementById("createBtn").addEventListener("click", () => {
     .catch((error) => alert(`Ocurrio un error:\n${error}`));
 });
 
-deleteProduct = (id) => {
+const deleteProduct = (id) => {
   fetch(`/api/products/${id}`, {
     method: "delete",
   })
