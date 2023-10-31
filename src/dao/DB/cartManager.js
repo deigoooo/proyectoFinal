@@ -34,7 +34,6 @@ class CartManager {
   async addProductToCart(cid, pid) {
     try {
       const cart = await cartModel.findById(cid);
-      const product = await productModel.findById(pid);
       const productIndex = cart.products.findIndex(
         (element) => element.product == pid
       );

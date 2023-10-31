@@ -3,11 +3,15 @@ import local from "passport-local";
 import GitHubStrategy from "passport-github2";
 import GoogleStrategy from "passport-google-oauth20";
 import userModel from "../dao/models/user.model.js";
+import cartManager from "../dao/DB/cartManager.js";
 import { createHash, isValidPassword } from "../util.js";
+
+const cm = new cartManager();
 
 const localStrategy = local.Strategy;
 
 const initializePassport = () => {
+  //registro con pasport local
   passport.use(
     "register",
     new localStrategy(
@@ -24,13 +28,16 @@ const initializePassport = () => {
               message: "El nombre de usuario ya existe",
             });
           }
+          const newCart = await cm.addCart();
           const newUser = {
             first_name,
             last_name,
             email,
             age,
             password: createHash(password),
+            cart: [{ cart: newCart._id }],
           };
+
           const result = await userModel.create(newUser);
           return done(null, result);
         } catch (error) {
@@ -40,6 +47,7 @@ const initializePassport = () => {
     )
   );
 
+  //login con passport local
   passport.use(
     "login",
     new localStrategy(
@@ -76,6 +84,7 @@ const initializePassport = () => {
     )
   );
 
+  //login con github
   passport.use(
     "github",
     new GitHubStrategy(
@@ -91,12 +100,14 @@ const initializePassport = () => {
           if (user !== null) {
             return done(null, user);
           }
+          const newCart = await cm.addCart();
           const newUser = await userModel.create({
             first_name: profile._json.name,
             last_name: "",
             age: "",
             email: profile._json.email,
             password: "",
+            cart: [{ cart: newCart._id }],
           });
           return done(null, newUser);
         } catch (err) {
@@ -105,7 +116,7 @@ const initializePassport = () => {
       }
     )
   );
-
+  //login con google
   passport.use(
     "google",
     new GoogleStrategy(
@@ -119,12 +130,14 @@ const initializePassport = () => {
         try {
           const user = await userModel.findOne({ email: profile._json.email });
           if (user) return done(null, user);
+          const newCart = await cm.addCart();
           const newUser = await userModel.create({
             first_name: profile._json.name,
             last_name: "",
             age: "",
             email: profile._json.email,
             password: "",
+            cart: [{ cart: newCart._id }],
           });
           return done(null, newUser);
         } catch (err) {

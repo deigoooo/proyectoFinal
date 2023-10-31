@@ -38,7 +38,7 @@ router.get("/", async (req, res) => {
   const carts = await cm.getCart();
   const newCarts = [];
   if (!limit) {
-    res.status(200).json({ status: "succes", payload: await carts });
+    res.status(200).json({ status: "succes", payload: carts });
   } else {
     for (let i = 0; i < limit && i < carts.length; i++) {
       newCarts.push(carts[i]);
