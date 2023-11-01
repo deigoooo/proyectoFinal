@@ -40,7 +40,7 @@ const initializePassport = () => {
             email,
             age,
             password: createHash(password),
-            cart: [{ cart: newCart._id }],
+            carts: [{ cart: newCart._id }],
           };
 
           const result = await userModel.create(newUser);
@@ -65,12 +65,14 @@ const initializePassport = () => {
             email: "adminCoder@coder.com",
           });
           if (!admin) {
+            const newCart = await cm.addCart();
             const newAdmin = {
               first_name: "CoderHouse",
               last_name: "Academia",
               email: "adminCoder@coder.com",
               password: createHash("adminCod3r123"),
               role: "admin",
+              carts: [{ cart: newCart._id }],
             };
             await userModel.create(newAdmin);
           }
@@ -100,8 +102,10 @@ const initializePassport = () => {
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
-          const user = await userModel.findOne({ email: profile._json.email });
-
+          const user = await userModel
+            .findOne({ email: profile._json.email })
+            .populate("carts.cart")
+            .lean();
           if (user !== null) {
             return done(null, user);
           }
@@ -112,7 +116,7 @@ const initializePassport = () => {
             age: "",
             email: profile._json.email,
             password: "",
-            cart: [{ cart: newCart._id }],
+            carts: [{ cart: newCart._id }],
           });
           return done(null, newUser);
         } catch (err) {
@@ -143,7 +147,7 @@ const initializePassport = () => {
             age: "",
             email: profile._json.email,
             password: "",
-            cart: [{ cart: newCart._id }],
+            carts: [{ cart: newCart._id }],
           });
           return done(null, newUser);
         } catch (err) {

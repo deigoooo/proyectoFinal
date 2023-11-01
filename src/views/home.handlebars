@@ -38,7 +38,7 @@ ul li a{
   <ul class="profile">
     <li><i class="fa-solid fa-id-card icono-grande"></i>
       <ul>
-        <li><a id="cid" data-cid="{{user.cart}}">ID: <b>{{user._id}}</b></a></li>  
+        <li><a id="cid" data-cid="{{user.carts}}">ID: <b>{{user._id}}</b></a></li>  
         <li><a>Hola <b>{{user.first_name}}</b></a></li>
         <li><a>{{user.email}}</a></li>
         <li><a>Rol: {{user.role}}</a></li>
@@ -99,7 +99,7 @@ ul li a{
       <tr>
         <td><button
             class="btn btn-primary"
-            onclick="addProductToCart({{user._id}},{{this._id}})"
+            onclick="addProductToCart('{{this._id}}')"
           >AddToCart</button></td>
         <td>{{this.title}}</td>
         <td>{{this.description}}</td>
@@ -111,15 +111,17 @@ ul li a{
     {{/each}}
   </tbody>
 </table>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-
-  addProductToCart = (pid) => { fetch(`/api/carts`, { method: 'post' })
-  .then(result => result.json()) .then(result => { if (result.status ===
-  'error') throw new Error(result.error) return result.payload._id }) .then(cid
-  => fetch(`/api/carts/${cid}/product/${pid}`, { method: 'post' }) )
-  .then(result => result.json()) .then(result => { if (result.status ===
-  'error') throw new Error(result.error) alert(`Ok. Todo salió bien! :)\nEl
-  producto se agregó al carrito con id=${result.payload._id}!`) }) .catch(err =>
-  alert(`Ocurrió un error :(\n${err}`)) }
+const addProductToCart = async (pid) => {
+  let cartId = document.getElementById("cid");
+  let cid = cartId.getAttribute("data-cid");
+  const response = await fetch(`/api/carts/${cid}/product/${pid}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  Swal.fire(`Producto agregado`)
+};
 </script>
