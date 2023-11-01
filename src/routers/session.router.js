@@ -4,21 +4,6 @@ import userModel from "../dao/models/user.model.js";
 
 const router = Router();
 
-/* 
-pequeña prueba para ver el populate en user
-router.get("/cartfromuser/:cid", async (req, res) => {
-  try {
-    const id = req.params.cid;
-    const result = await userModel.findById(id).populate("cart.cart").lean();
-    if (result === null) {
-      return res.status(404).json({ status: "error", error: "Not found" });
-    }
-    return res.status(200).json({ status: "succes", payload: result });
-  } catch (error) {
-    res.send(500).json({ status: "error", error: error.message });
-  }
-}); */
-
 router.get("/register", (req, res) => {
   res.render("register");
 });
@@ -29,7 +14,6 @@ router.post(
     failureRedirect: "/session/failRegister",
   }),
   async (req, res) => {
-    //console.log(req.flash("error")[0]);
     res.redirect("/session/login");
   }
 );
@@ -51,7 +35,9 @@ router.post(
         .status(400)
         .send({ status: "error", error: "Invalid credentials" });
     }
+    //con session
     req.session.user = req.user;
+
     res.redirect("/products");
   }
 );

@@ -6,6 +6,10 @@ import mongoose from "mongoose";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 
+//importo cookies
+/* import cookieParser from "cookie-parser"; */
+
+//importo passport
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 
@@ -19,6 +23,9 @@ export const PORT = 8080;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//configuro el cookieparser
+/* app.use(cookieParser("secret")); */
 
 //configuro la carpeta publica
 app.use(express.static("./src/public"));
@@ -39,6 +46,8 @@ app.use(
 //configuro passport
 initializePassport();
 app.use(passport.initialize());
+
+//inicializa las sessions
 app.use(passport.session());
 
 //configuro handlebars

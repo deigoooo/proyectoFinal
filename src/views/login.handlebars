@@ -17,6 +17,7 @@
           justify-content: center;
           flex-direction: column;
         "
+    {{! action="/session/jwt" }}
     action="/session/login"
     method="post"
   >
@@ -55,9 +56,11 @@
       <a href="/session/github" style="margin-right: 10px;">Login with github
       </a>
       |
-      <a href="/session/google" style="margin-left: 10px;">
-        Login with Google</a>
-
+      <a
+        href="/session/google"
+        style="margin-left: 10px; margin-right:10px;"
+      >Login with Google
+      </a>
     </div>
   </form>
 </div>
