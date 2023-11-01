@@ -170,7 +170,6 @@ router.post("/:cid/product/:pid", async (req, res) => {
   try {
     const cid = req.params.cid;
     const pid = req.params.pid;
-    console.log(`llego aca: ${pid}-${cid}`);
     const newCart = await cm.addProductToCart(cid, pid);
     if (typeof newCart === "string") {
       return res.status(404).json({ status: "error", error: newCart });
