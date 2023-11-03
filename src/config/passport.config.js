@@ -78,10 +78,10 @@ const initializePassport = () => {
           }
           const user = await userModel.findOne({ email: username });
           if (!user) {
-            return done(null, user);
+            return done("Usuario Inexistente", null);
           }
           if (!isValidPassword(user, password)) {
-            return done(false, false);
+            return done("Contraseña Incorrecta", false);
           }
           return done(null, user);
         } catch (error) {
@@ -151,7 +151,7 @@ const initializePassport = () => {
           });
           return done(null, newUser);
         } catch (err) {
-          return done("Error to login with github");
+          return done("Error to login with google");
         }
       }
     )

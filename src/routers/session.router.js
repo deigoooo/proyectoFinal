@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import userModel from "../dao/models/user.model.js";
+import Swal from "sweetalert2";
 
 const router = Router();
 
@@ -28,14 +29,12 @@ router.get("/login", (req, res) => {
 
 router.post(
   "/login",
-  passport.authenticate("login", { failureRedirect: "/session/failLogin" }),
+  passport.authenticate("login", { failureRedirect: false }),
   async (req, res) => {
     if (!req.user) {
-      return res
-        .status(400)
-        .send({ status: "error", error: "Invalid credentials" });
+      console.log(`entro aca`);
+      return res.status(400).send({ status: "error", error: req.user });
     }
-    //con session
     let id;
     for (let cart of req.user.carts) {
       id = cart.cart._id;
@@ -68,7 +67,7 @@ router.get(
 
 router.get(
   "/githubcallback",
-  passport.authenticate("github", { failureRedirect: "/session/login" }),
+  passport.authenticate("github", { failureRedirect: "/session/failLogin" }),
   async (req, res) => {
     let id;
     for (let cart of req.user.carts) {
@@ -99,7 +98,7 @@ router.get(
 router.get(
   "/googlecallback",
   passport.authenticate("google", {
-    failureRedirect: "/failure",
+    failureRedirect: "/session/failLogin",
     /* successRedirect: "/products", */
   }),
   async (req, res) => {
