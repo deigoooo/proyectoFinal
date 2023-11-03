@@ -1,5 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import passport from "passport";
+
+export const JWT_PRIVATE_KEY = "secret";
+export const JWT_COOKIE_NAME = "myCookie";
 
 //crea el hash
 export const createHash = (password) =>
@@ -11,16 +15,23 @@ export const isValidPassword = (user, password) =>
 
 //Genera token
 export const generateToken = (user) =>
-  jwt.sign({ user }, "secret", { expiresIn: "24h" });
+  jwt.sign({ user }, JWT_PRIVATE_KEY, { expiresIn: "24h" });
+
+//extractor de cookies
+export const extractCookie = (req) =>
+  req && req.cookies ? req.cookies[JWT_COOKIE_NAME] : null;
 
 //autentica el token
-export const authToken = (req, res, next) => {
-  // const token = req.headers.auth
-  const token = req.signedCookies["jwt-coder"];
-  if (!token) return res.status(401).send({ error: "Not Auth" });
-  jwt.verify(token, "secret", (error, credentials) => {
-    if (error) return res.status(403).send({ error: "Not Authorized" });
-    req.user = credentials.user;
-    next();
-  });
+export const passportCall = (strategy) => {
+  return async (req, res, next) => {
+    passport.authenticate(strategy, function (err, user, info) {
+      if (err) return next(err);
+      if (!user)
+        return res
+          .status(401)
+          .render("errors/base", { error: "No tengo token!" });
+      req.user = user;
+      next();
+    })(req, res, next);
+  };
 };

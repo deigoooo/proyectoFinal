@@ -29,7 +29,7 @@ router.get("/login", (req, res) => {
 
 router.post(
   "/login",
-  passport.authenticate("login", { failureRedirect: false }),
+  passport.authenticate("login", { failureRedirect: "/session/failLogin" }),
   async (req, res) => {
     if (!req.user) {
       console.log(`entro aca`);
