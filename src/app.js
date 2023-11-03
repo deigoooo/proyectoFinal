@@ -7,7 +7,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 
 //importo cookies
-/* import cookieParser from "cookie-parser"; */
+import cookieParser from "cookie-parser";
 
 //importo passport
 import passport from "passport";
@@ -15,17 +15,17 @@ import initializePassport from "./config/passport.config.js";
 
 const app = express();
 
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+
+//configuro el cookieparser
+
 //declaro la url de conexion
 const URI_MONGO =
   "mongodb+srv://deigoooo:d1i9e8g8o@dfr-test.bfhq0ur.mongodb.net/";
 const DBNAME_MONGO = "ecommerce";
 export const PORT = 8080;
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-//configuro el cookieparser
-/* app.use(cookieParser("secret")); */
 
 //configuro la carpeta publica
 app.use(express.static("./src/public"));

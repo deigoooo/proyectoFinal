@@ -1,7 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
-import userModel from "../dao/models/user.model.js";
 import Swal from "sweetalert2";
+import { JWT_COOKIE_NAME } from "../util.js";
 
 const router = Router();
 
@@ -29,17 +29,15 @@ router.get("/login", (req, res) => {
 
 router.post(
   "/login",
-  passport.authenticate("login", { failureRedirect: false }),
+  passport.authenticate("login", { failureRedirect: "/session/failLogin" }),
   async (req, res) => {
     if (!req.user) {
-      console.log(`entro aca`);
       return res.status(400).send({ status: "error", error: req.user });
     }
     let id;
     for (let cart of req.user.carts) {
       id = cart.cart._id;
     }
-
     req.session.user = {
       _id: req.user._id,
       first_name: req.user.first_name,
@@ -51,7 +49,7 @@ router.post(
       role: req.user.role,
       __v: req.user.__v,
     };
-    res.redirect("/products");
+    res.cookie(JWT_COOKIE_NAME, req.user.token).redirect("/products");
   }
 );
 
@@ -85,7 +83,7 @@ router.get(
       role: req.user.role,
       __v: req.user.__v,
     };
-    res.redirect("/products");
+    res.cookie(JWT_COOKIE_NAME, req.user.token).redirect("/products");
   }
 );
 
@@ -118,16 +116,17 @@ router.get(
       role: req.user.role,
       __v: req.user.__v,
     };
-    res.redirect("/products");
+    res.cookie(JWT_COOKIE_NAME, req.user.token).redirect("/products");
   }
 );
 
 router.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err);
-      res.status(500).render("errors/base", { error: err });
-    } else res.redirect("/session/login");
-  });
+  try {
+    req.session.destroy;
+    res.clearCookie(JWT_COOKIE_NAME);
+    res.redirect("/");
+  } catch (error) {
+    res.status(500).render("errors/base", { error: error });
+  }
 });
 export default router;

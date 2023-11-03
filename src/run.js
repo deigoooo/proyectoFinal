@@ -4,6 +4,7 @@ import cartsRouter from "./routers/carts.router.js";
 import viewRouter from "./routers/view.router.js";
 import chatRouter from "./routers/messages.router.js";
 import sessionRouter from "./routers/session.router.js";
+import { passportCall } from "./util.js";
 
 //hardcodeo el modelo de message
 const message = new MessageManager();
@@ -16,7 +17,7 @@ const run = (socketServer, app) => {
   });
 
   //endpoints
-  app.use("/products", viewRouter);
+  app.use("/products", passportCall("jwt"), viewRouter);
   app.use("/carts", viewRouter);
   app.use("/chat", chatRouter);
   app.use("/session", sessionRouter);

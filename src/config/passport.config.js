@@ -2,16 +2,21 @@ import passport from "passport";
 import local from "passport-local";
 import GitHubStrategy from "passport-github2";
 import GoogleStrategy from "passport-google-oauth20";
-import jwt, { ExtractJwt } from "passport-jwt";
+import passport_jwt from "passport-jwt";
 import userModel from "../dao/models/user.model.js";
 import cartManager from "../dao/DB/cartManager.js";
-import { createHash, isValidPassword } from "../util.js";
+import {
+  createHash,
+  isValidPassword,
+  extractCookie,
+  JWT_PRIVATE_KEY,
+  generateToken,
+} from "../util.js";
 
 const cm = new cartManager();
-
 const localStrategy = local.Strategy;
+const JWTStrategy = passport_jwt.Strategy;
 
-const JWTStrategy = jwt.Strategy;
 const cookieExtractor = (req) =>
   req && req.signedCookies ? req.signedCookies["jwt-user"] : null;
 
@@ -83,6 +88,8 @@ const initializePassport = () => {
           if (!isValidPassword(user, password)) {
             return done("Contraseña Incorrecta", false);
           }
+          const token = generateToken(user);
+          user.token = token;
           return done(null, user);
         } catch (error) {
           return done(err);
@@ -162,16 +169,11 @@ const initializePassport = () => {
     "jwt",
     new JWTStrategy(
       {
-        jwtFromRequest: jwt.ExtractJwt.fromExtractors([cookieExtractor]),
-        secretOrKey: "secret",
+        jwtFromRequest: passport_jwt.ExtractJwt.fromExtractors([extractCookie]),
+        secretOrKey: JWT_PRIVATE_KEY,
       },
       async (jwt_payload, done) => {
-        try {
-          console.log(jwt_payload);
-          return done(null, jwt_payload);
-        } catch (error) {
-          return done(error);
-        }
+        done(null, jwt_payload);
       }
     )
   );
