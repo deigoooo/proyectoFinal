@@ -2,18 +2,16 @@ import passport from "passport";
 import local from "passport-local";
 import GitHubStrategy from "passport-github2";
 import GoogleStrategy from "passport-google-oauth20";
-import jwt, { ExtractJwt } from "passport-jwt";
 import userModel from "../dao/models/user.model.js";
 import cartManager from "../dao/DB/cartManager.js";
 import { createHash, isValidPassword } from "../util.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const cm = new cartManager();
 
 const localStrategy = local.Strategy;
-
-const JWTStrategy = jwt.Strategy;
-const cookieExtractor = (req) =>
-  req && req.signedCookies ? req.signedCookies["jwt-user"] : null;
 
 const initializePassport = () => {
   //registro con pasport local
@@ -96,9 +94,9 @@ const initializePassport = () => {
     "github",
     new GitHubStrategy(
       {
-        clientID: "Iv1.d204e627d3471f21",
-        clientSecret: "ed99006c67f403364f08177af187300827e6d761",
-        callbackURL: "http://localhost:8080/session/githubcallback",
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: process.env.GITHUB_CALLBACK_URL,
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
@@ -131,10 +129,9 @@ const initializePassport = () => {
     "google",
     new GoogleStrategy(
       {
-        clientID:
-          "857467492399-o7t38sq453jvhv2eb6qnms7fmhjlvceh.apps.googleusercontent.com",
-        clientSecret: "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",
-        callbackURL: "http://localhost:8080/session/googlecallback",
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: process.env.GOOGLE_CALLBACK_URL,
       },
       async function (accessToken, refreshToken, profile, done) {
         try {
@@ -152,25 +149,6 @@ const initializePassport = () => {
           return done(null, newUser);
         } catch (err) {
           return done("Error to login with google");
-        }
-      }
-    )
-  );
-
-  //login con jwt
-  passport.use(
-    "jwt",
-    new JWTStrategy(
-      {
-        jwtFromRequest: jwt.ExtractJwt.fromExtractors([cookieExtractor]),
-        secretOrKey: "secret",
-      },
-      async (jwt_payload, done) => {
-        try {
-          console.log(jwt_payload);
-          return done(null, jwt_payload);
-        } catch (error) {
-          return done(error);
         }
       }
     )

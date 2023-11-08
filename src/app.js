@@ -5,27 +5,37 @@ import run from "./run.js";
 import mongoose from "mongoose";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import dotenv from "dotenv";
+import { Command } from "commander";
 
-//importo cookies
-/* import cookieParser from "cookie-parser"; */
+//inicializo comander
+const program = new Command();
+
+program.option("-p <port>", "puerto del server", 8080);
+program.option("--mode <mode>", "puerto del server", "production");
+program.parse();
+
+//creo la variable PORT y la exporto
+export const PORT = program.opts().p;
+const MODE = program.opts().mode;
+
+//inicializo dot env
+dotenv.config({
+  path: MODE === "production" ? "./.env.production" : "./.env.development",
+});
 
 //importo passport
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 
+//inicializo el server
 const app = express();
 
-//declaro la url de conexion
-const URI_MONGO =
-  "mongodb+srv://deigoooo:d1i9e8g8o@dfr-test.bfhq0ur.mongodb.net/";
-const DBNAME_MONGO = "ecommerce";
-export const PORT = 8080;
+const URI_MONGO = process.env.URI_MONGO;
+const DBNAME_MONGO = process.env.DBNAME_MONGO;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-//configuro el cookieparser
-/* app.use(cookieParser("secret")); */
 
 //configuro la carpeta publica
 app.use(express.static("./src/public"));
@@ -37,7 +47,7 @@ app.use(
       mongoUrl: `${URI_MONGO}`,
       dbName: `${DBNAME_MONGO}`,
     }),
-    secret: "victoriasecret",
+    secret: `${process.env.secret}`,
     resave: true,
     saveUninitialized: true,
   })
@@ -65,7 +75,7 @@ try {
 
   //desde aca
   const httpServer = app.listen(PORT, () =>
-    console.log(`Server Running in port ${httpServer.address().port}`)
+    console.log(`Server Running in port ${PORT} on ${MODE} mode`)
   );
   const socket = new Server(httpServer);
 
