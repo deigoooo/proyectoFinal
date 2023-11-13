@@ -8,7 +8,7 @@ import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
 import { Command } from "commander";
 
-//inicializo comander
+//inicializo commander
 const program = new Command();
 
 program.option("-p <port>", "puerto del server", 8080);

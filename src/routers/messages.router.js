@@ -1,9 +1,8 @@
 import { Router } from "express";
+import { getMessageController } from "../controller/messages.controller.js";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.render("chat", {});
-});
+router.get("/", getMessageController);
 
 export default router;

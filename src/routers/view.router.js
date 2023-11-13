@@ -1,7 +1,7 @@
 import { Router } from "express";
 import ProductManager from "../dao/DB/productManager.js";
-import { getProductsFromCart } from "./carts.router.js";
-import { getProducts } from "./products.router.js";
+import { getProductsFromCart } from "../controller/carts.controller.js";
+import { getProducts } from "../controller/products.controller.js";
 import { PORT } from "../app.js";
 import { auth } from "../middlewares/auth.middleware.js";
 
