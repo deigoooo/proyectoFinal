@@ -1,8 +1,6 @@
-import ProductManager from "../dao/DB/productManager.js";
 import { getProductsFromCart } from "./carts.controller.js";
 import { getProducts } from "./products.controller.js";
 import { PORT } from "../app.js";
-import { auth } from "../middlewares/auth.middleware.js";
 
 export const getViewController = async (req, res) => {
   const result = await getProducts(req, res);
