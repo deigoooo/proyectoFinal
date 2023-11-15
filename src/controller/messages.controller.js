@@ -1,3 +1,3 @@
-export const getMessageController = async (res, req) => {
+export const getMessageController = (req, res) => {
   res.render("chat", {});
 };

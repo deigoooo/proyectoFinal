@@ -1,133 +1,61 @@
 import { Router } from "express";
 import passport from "passport";
-import userModel from "../dao/models/user.model.js";
-import Swal from "sweetalert2";
+import {
+  sessionCallbackController,
+  sessionFailController,
+  postRegisterController,
+  getRegisterController,
+  getLoginController,
+  logoutSessionController,
+  sessionController,
+} from "../controller/session.controller.js";
 
 const router = Router();
 
-router.get("/register", (req, res) => {
-  res.render("register");
-});
+router.get("/register", getRegisterController);
 
 router.post(
   "/register",
   passport.authenticate("register", {
     failureRedirect: "/session/failRegister",
   }),
-  async (req, res) => {
-    res.redirect("/session/login");
-  }
+  postRegisterController
 );
 
-router.get("/failRegister", (req, res) => {
-  res.send({ error: `El usuario ya existe` });
-});
+router.get("/failRegister", sessionFailController);
+router.get("/failLogin", sessionFailController);
 
-router.get("/login", (req, res) => {
-  res.render("login");
-});
+router.get("/login", getLoginController);
 
 router.post(
   "/login",
   passport.authenticate("login", { failureRedirect: "/session/failLogin" }),
-  async (req, res) => {
-    if (!req.user) {
-      console.log(`entro aca`);
-      return res.status(400).send({ status: "error", error: req.user });
-    }
-    let id;
-    for (let cart of req.user.carts) {
-      id = cart.cart._id;
-    }
-
-    req.session.user = {
-      _id: req.user._id,
-      first_name: req.user.first_name,
-      last_name: req.user.last_name,
-      email: req.user.email,
-      age: req.user.age,
-      password: req.user.password,
-      carts: id,
-      role: req.user.role,
-      __v: req.user.__v,
-    };
-    res.redirect("/products");
-  }
-);
-
-router.get("/failLogin", (req, res) =>
-  res.send({ error: "Passport login failed" })
+  sessionCallbackController
 );
 
 router.get(
   "/github",
   passport.authenticate("github", { scope: ["user:email"] }),
-  (req, res) => {}
-);
-
-router.get(
-  "/githubcallback",
-  passport.authenticate("github", { failureRedirect: "/session/failLogin" }),
-  async (req, res) => {
-    let id;
-    for (let cart of req.user.carts) {
-      id = cart.cart._id;
-    }
-
-    req.session.user = {
-      _id: req.user._id,
-      first_name: req.user.first_name,
-      last_name: req.user.last_name,
-      email: req.user.email,
-      age: req.user.age,
-      password: req.user.password,
-      carts: id,
-      role: req.user.role,
-      __v: req.user.__v,
-    };
-    res.redirect("/products");
-  }
+  sessionController
 );
 
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] }),
-  (req, res) => {}
+  sessionController
+);
+
+router.get(
+  "/githubcallback",
+  passport.authenticate("github", { failureRedirect: "/session/failLogin" }),
+  sessionCallbackController
 );
 
 router.get(
   "/googlecallback",
-  passport.authenticate("google", {
-    failureRedirect: "/session/failLogin",
-    /* successRedirect: "/products", */
-  }),
-  async (req, res) => {
-    let id;
-    for (let cart of req.user.carts) {
-      id = cart.cart._id;
-    }
-
-    req.session.user = {
-      _id: req.user._id,
-      first_name: req.user.first_name,
-      last_name: req.user.last_name,
-      email: req.user.email,
-      age: req.user.age,
-      password: req.user.password,
-      carts: id,
-      role: req.user.role,
-      __v: req.user.__v,
-    };
-    res.redirect("/products");
-  }
+  passport.authenticate("google", { failureRedirect: "/session/failLogin" }),
+  sessionCallbackController
 );
 
-router.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err);
-      res.status(500).render("errors/base", { error: err });
-    } else res.redirect("/session/login");
-  });
-});
+router.get("/logout", logoutSessionController);
 export default router;

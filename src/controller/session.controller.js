@@ -1,21 +1,17 @@
-import passport from "passport";
-
-export const getRenderRegisterController = async (res, req) => {
+export const getRegisterController = async (req, res) => {
   res.render("register");
 };
-export const getRenderLoginController = async (res, req) => {
+export const getLoginController = async (req, res) => {
   res.render("login");
 };
-export const postRegisterController = async (res, req) => {
+export const postRegisterController = async (req, res) => {
   res.redirect("/session/login");
 };
-export const sessionFailController = async (res, req) => {
-  console.log(`entro aca`);
-  res.send({ error: `El usuario ya existe ${req.user}` });
+export const sessionFailController = async (req, res) => {
+  res.send({ error: `${req.user}` });
 };
 
-export const sessionCallbackController = async (res, req) => {
-  console.log(`El usuario ya existe ${req.user}`);
+export const sessionCallbackController = async (req, res) => {
   let id;
   for (let cart of req.user.carts) {
     id = cart.cart._id;
@@ -34,7 +30,7 @@ export const sessionCallbackController = async (res, req) => {
   };
   res.redirect("/products");
 };
-export const logoutSessionController = async (res, req) => {
+export const logoutSessionController = async (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.log(err);
@@ -42,6 +38,4 @@ export const logoutSessionController = async (res, req) => {
     } else res.redirect("/session/login");
   });
 };
-//export const getRenderController = async (res, req) => {};
-//export const getRenderController = async (res, req) => {};
-//export const getRenderController = async (res, req) => {};
+export const sessionController = async (req, res) => {};

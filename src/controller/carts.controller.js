@@ -107,7 +107,7 @@ export const updateCartController = async (req, res) => {
   }
 };
 
-export const updateProductOnCartController = async (res, req) => {
+export const updateProductOnCartController = async (req, res) => {
   try {
     const cid = req.params.cid;
     const pid = req.params.pid;
@@ -158,7 +158,7 @@ export const updateProductOnCartController = async (res, req) => {
   }
 };
 
-export const addCartController = async (res, req) => {
+export const addCartController = async (req, res) => {
   try {
     const newcart = await cm.addCart();
     if (typeof newcart === "string") {
@@ -172,7 +172,7 @@ export const addCartController = async (res, req) => {
   }
 };
 
-export const addProductToCartController = async (res, req) => {
+export const addProductToCartController = async (req, res) => {
   try {
     const cid = req.params.cid;
     const pid = req.params.pid;
@@ -186,7 +186,7 @@ export const addProductToCartController = async (res, req) => {
   }
 };
 
-export const deleteCartController = async (res, req) => {
+export const deleteCartController = async (req, res) => {
   try {
     const id = req.params.cid;
     const find = await cm.getCartById(id);
@@ -203,7 +203,7 @@ export const deleteCartController = async (res, req) => {
   }
 };
 
-export const deleteProductFromCart = async (res, req) => {
+export const deleteProductFromCart = async (req, res) => {
   try {
     const cid = req.params.cid;
     const pid = req.params.pid;
