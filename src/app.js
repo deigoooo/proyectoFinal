@@ -7,6 +7,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
 import { Command } from "commander";
+import flash from "express-flash";
 
 //inicializo commander
 const program = new Command();
@@ -59,6 +60,9 @@ app.use(passport.initialize());
 
 //inicializa las sessions
 app.use(passport.session());
+
+//inicializo flash
+app.use(flash());
 
 //configuro handlebars
 app.engine("handlebars", handlebars.engine());

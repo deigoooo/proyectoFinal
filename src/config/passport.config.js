@@ -27,9 +27,11 @@ const initializePassport = () => {
         try {
           const user = await userModel.findOne({ email: username });
           if (user) {
-            return done(null, false, {
-              message: "El nombre de usuario ya existe",
-            });
+            return done(
+              null,
+              false,
+              req.flash("error", "El nombre de usuario ya está en uso.")
+            );
           }
           const newCart = await cm.addCart();
           const newUser = {
@@ -76,13 +78,17 @@ const initializePassport = () => {
           }
           const user = await userModel.findOne({ email: username });
           if (!user) {
-            return done("Usuario Inexistente", null);
+            return done(null, false, {
+              message: "Nombre de usuario no registrado",
+            });
           }
           if (!isValidPassword(user, password)) {
-            return done("Contraseña Incorrecta", false);
+            return done(null, false, {
+              message: "Contraseña Incorrecta",
+            });
           }
           return done(null, user);
-        } catch (error) {
+        } catch (err) {
           return done(err);
         }
       }

@@ -18,6 +18,7 @@ router.post(
   "/register",
   passport.authenticate("register", {
     failureRedirect: "/session/failRegister",
+    failureFlash: true,
   }),
   postRegisterController
 );
@@ -29,7 +30,10 @@ router.get("/login", getLoginController);
 
 router.post(
   "/login",
-  passport.authenticate("login", { failureRedirect: "/session/failLogin" }),
+  passport.authenticate("login", {
+    failureRedirect: "/session/failLogin",
+    failureFlash: true,
+  }),
   sessionCallbackController
 );
 

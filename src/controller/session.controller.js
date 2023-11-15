@@ -8,7 +8,7 @@ export const postRegisterController = async (req, res) => {
   res.redirect("/session/login");
 };
 export const sessionFailController = async (req, res) => {
-  res.send({ error: `${req.user}` });
+  res.send({ error: `${req.flash("error")}` });
 };
 
 export const sessionCallbackController = async (req, res) => {
