@@ -13,7 +13,16 @@ const userSchema = new mongoose.Schema({
   },
   password: String,
   carts: {
-    type: [
+    type: {
+      _id: false,
+      cart: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "carts",
+      },
+    },
+
+    default: {},
+    /* type: [
       {
         _id: false,
         cart: {
@@ -22,7 +31,7 @@ const userSchema = new mongoose.Schema({
         },
       },
     ],
-    default: [],
+    default: [], */
   },
   role: {
     type: String,

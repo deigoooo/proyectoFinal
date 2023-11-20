@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { auth } from "../middlewares/auth.middleware.js";
+//import { auth } from "../middlewares/auth.middleware.js";
 import {
   getViewController,
   realTimeController,
@@ -8,7 +8,7 @@ import {
 
 const router = Router();
 
-router.get("/", auth, getViewController);
+router.get("/", getViewController);
 
 router.get("/realTimeProducts", realTimeController);
 

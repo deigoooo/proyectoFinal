@@ -12,11 +12,6 @@ export const sessionFailController = async (req, res) => {
 };
 
 export const sessionCallbackController = async (req, res) => {
-  let id;
-  for (let cart of req.user.carts) {
-    id = cart.cart._id;
-  }
-
   req.session.user = {
     _id: req.user._id,
     first_name: req.user.first_name,
@@ -24,7 +19,7 @@ export const sessionCallbackController = async (req, res) => {
     email: req.user.email,
     age: req.user.age,
     password: req.user.password,
-    carts: id,
+    carts: req.user.carts.cart._id,
     role: req.user.role,
     __v: req.user.__v,
   };

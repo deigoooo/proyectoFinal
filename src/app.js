@@ -13,12 +13,20 @@ import flash from "express-flash";
 const program = new Command();
 
 program.option("-p <port>", "puerto del server", 8080);
-program.option("--mode <mode>", "puerto del server", "production");
+program.option("--mode <mode>", "modo del server", "production");
+program.option(
+  "--persistance <persistance>",
+  "persistencia del server",
+  "MONGO"
+);
 program.parse();
 
-//creo la variable PORT y la exporto
+//creo y exporto la variable PORT
 export const PORT = program.opts().p;
-const MODE = program.opts().mode;
+//creo y exporto la variable PERSISTANCE
+export const PERSISTENCE = program.opts().persistance;
+//creo y exporto la variable MODE
+export const MODE = program.opts().mode;
 
 //inicializo dot env
 dotenv.config({
