@@ -1,35 +1,38 @@
-import cartModel from "../models/cart.model.js";
+import cartModel from "./models/cart.model.js";
 
-class CartManager {
+export default class CartMongoDao {
   constructor() {}
-
-  async getAll() {
+  getAll = async () => await cartModel.find().lean().exec();
+  getById = async (id) => await cartModel.findById(id).lean().exec();
+  create = async (data) => {
     try {
-      const response = await cartModel.find();
+      const response = await cartModel.create(data);
       return response;
     } catch (error) {
       return `[ERROR]: ${error.message}`;
     }
-  }
-
-  async getById(id) {
+  };
+  delete = async (id) => {
     try {
-      const response = await cartModel.findOne({ _id: id });
+      const response = await cartModel.findByIdAndDelete(id);
       return response;
     } catch (error) {
       return `[ERROR]: ${error.message}`;
     }
-  }
-
-  async create() {
+  };
+  update = async (id, data) => {
     try {
-      const response = await cartModel.create({ products: [] });
-      return response;
+      const result = await cartModel.findByIdAndUpdate(id, data, {
+        returnDocument: "after",
+      });
+      if (result === null) {
+        return `[ERROR]: ${id} does not exist`;
+      }
+      return result;
     } catch (error) {
       return `[ERROR]: ${error.message}`;
     }
-  }
-
+  };
   async addProductToCart(cid, pid) {
     try {
       const cart = await cartModel.findById(cid);
@@ -49,16 +52,6 @@ class CartManager {
       return `[ERROR]: ${error.message}`;
     }
   }
-
-  async delete(id) {
-    try {
-      const response = await cartModel.deleteOne({ _id: id });
-      return response;
-    } catch (error) {
-      return `[ERROR]: ${error.message}`;
-    }
-  }
-
   async deleteProductFromCart(cid, pid) {
     try {
       const cartToUpdate = await cartModel.findById(cid);
@@ -81,20 +74,28 @@ class CartManager {
       return `[ERROR]: ${error.message}`;
     }
   }
-
-  async update(id, newCart) {
+  getProductsFromCart = async (req, res) => {
     try {
-      const result = await cartModel.findByIdAndUpdate(id, newCart, {
-        returnDocument: "after",
-      });
+      const id = req.params.cid;
+      const result = await cartModel
+        .findById(id)
+        .populate("products.product")
+        .lean();
       if (result === null) {
-        return `[ERROR]: ${id} does not exist`;
+        return {
+          statusCode: 404,
+          response: { status: "error", error: "Not found" },
+        };
       }
-      return result;
+      return {
+        statusCode: 200,
+        response: { status: "success", payload: result },
+      };
     } catch (error) {
-      return `[ERROR]: ${error.message}`;
+      return {
+        statusCode: 500,
+        response: { status: "error", error: error.message },
+      };
     }
-  }
+  };
 }
-
-export default CartManager;

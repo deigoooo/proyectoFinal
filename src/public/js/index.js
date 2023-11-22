@@ -2,7 +2,7 @@ const socketClient = io();
 let table = document.getElementById("realProduct");
 let getProduct = document.getElementById("getProducts");
 
-document.getElementById("createBtn").addEventListener("click", () => {
+document.getElementById("createBtn").addEventListener("click", async () => {
   const body = {
     title: document.getElementById("title").value,
     description: document.getElementById("description").value,
@@ -13,7 +13,7 @@ document.getElementById("createBtn").addEventListener("click", () => {
     category: document.getElementById("category").value,
   };
   //este fetch  es de metod post para enviarle el nuevo producto en el body
-  fetch("/api/products", {
+  await fetch("/api/products", {
     method: "post",
     body: JSON.stringify(body),
     headers: {
@@ -42,8 +42,8 @@ document.getElementById("createBtn").addEventListener("click", () => {
     .catch((error) => alert(`Ocurrio un error:\n${error}`));
 });
 
-const deleteProduct = (id) => {
-  fetch(`/api/products/${id}`, {
+const deleteProduct = async (id) => {
+  await fetch(`/api/products/${id}`, {
     method: "delete",
   })
     .then((result) => result.json())

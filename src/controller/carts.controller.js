@@ -1,48 +1,9 @@
-import cartModel from "../dao/models/cart.model.js";
-import CartManager from "../dao/DB/cartManager.js";
-import ProductManager from "../dao/DB/productManager.js";
-
-const cm = new CartManager();
-const pm = new ProductManager();
-
-export const getProductsFromCart = async (req, res) => {
-  try {
-    const id = req.params.cid;
-    const result = await cartModel
-      .findById(id)
-      .populate("products.product")
-      .lean();
-    if (result === null) {
-      return {
-        statusCode: 404,
-        response: { status: "error", error: "Not found" },
-      };
-    }
-    return {
-      statusCode: 200,
-      response: { status: "success", payload: result },
-    };
-  } catch (error) {
-    return {
-      statusCode: 500,
-      response: { status: "error", error: error.message },
-    };
-  }
-};
+import { cartService, productService } from "../services/Factory.js";
 
 export const getCartsController = async (req, res) => {
   try {
-    const limit = req.query.limit;
-    const carts = await cm.getCart();
-    const newCarts = [];
-    if (!limit) {
-      res.status(200).json({ status: "succes", payload: carts });
-    } else {
-      for (let i = 0; i < limit && i < carts.length; i++) {
-        newCarts.push(carts[i]);
-      }
-      res.status(200).json({ status: "succes", payload: newCarts });
-    }
+    const carts = await cartService.getAll();
+    res.status(200).json({ status: "succes", payload: carts });
   } catch (error) {
     res.status(500).json({ status: "error", error: error });
   }
@@ -50,7 +11,7 @@ export const getCartsController = async (req, res) => {
 
 export const getCartController = async (req, res) => {
   try {
-    const result = await getProductsFromCart(req, res);
+    const result = await cartService.getProductsFromCart(req, res);
     res.status(result.statusCode).json(result.response);
   } catch (error) {
     res.status(500).json({ status: "error", error: error });
@@ -60,7 +21,7 @@ export const getCartController = async (req, res) => {
 export const updateCartController = async (req, res) => {
   try {
     const cid = req.params.cid;
-    const cartToUpdate = await cm.getCartById(cid);
+    const cartToUpdate = await cartService.getById(cid);
     if (typeof cartToUpdate === "string") {
       return res.status(404).json({ status: "error", error: cartToUpdate });
     }
@@ -91,7 +52,10 @@ export const updateCartController = async (req, res) => {
           .status(400)
           .json({ status: "error", error: "product's quantity cannot be 0" });
       }
-      const productToAdd = await productModel.findById(products[index].product);
+      //ver esta linea aplicar servicios
+      const productToAdd = await productService.getById(
+        products[index].product
+      );
       if (productToAdd === null) {
         return res.status(400).json({
           status: "error",
@@ -100,7 +64,7 @@ export const updateCartController = async (req, res) => {
       }
     }
     cartToUpdate.products = products;
-    const result = await cm.updateCart(cid, cartToUpdate);
+    const result = await cartService.update(cid, cartToUpdate);
     res.status(200).json({ status: "success", payload: result });
   } catch (error) {
     res.status(500).json({ status: "error", error: error });
@@ -111,13 +75,13 @@ export const updateProductOnCartController = async (req, res) => {
   try {
     const cid = req.params.cid;
     const pid = req.params.pid;
-    const cartToUpdate = await cm.getCartById(cid);
+    const cartToUpdate = await cartService.getById(cid);
     if (typeof cartToUpdate === "string") {
       return res
         .status(404)
         .json({ status: "error", error: `Cart with id=${cid} Not found` });
     }
-    const productToUpdate = await pm.getProductById(pid);
+    const productToUpdate = await productService.getById(pid);
     if (typeof productToUpdate === "string") {
       return res
         .status(404)
@@ -151,7 +115,7 @@ export const updateProductOnCartController = async (req, res) => {
     } else {
       cartToUpdate.products[productIndex].quantity = quantity;
     }
-    const result = await cm.updateCart(cid, cartToUpdate);
+    const result = await cartService.update(cid, cartToUpdate);
     res.status(200).json({ status: "success", payload: result });
   } catch (error) {
     res.status(500).json({ status: "error", error: error });
@@ -160,7 +124,7 @@ export const updateProductOnCartController = async (req, res) => {
 
 export const addCartController = async (req, res) => {
   try {
-    const newcart = await cm.addCart();
+    const newcart = await cartService.create();
     if (typeof newcart === "string") {
       return res
         .status(404)
@@ -176,7 +140,7 @@ export const addProductToCartController = async (req, res) => {
   try {
     const cid = req.params.cid;
     const pid = req.params.pid;
-    const newCart = await cm.addProductToCart(cid, pid);
+    const newCart = await cartService.addProductToCart(cid, pid);
     if (typeof newCart === "string") {
       return res.status(404).json({ status: "error", error: newCart });
     }
@@ -189,14 +153,14 @@ export const addProductToCartController = async (req, res) => {
 export const deleteCartController = async (req, res) => {
   try {
     const id = req.params.cid;
-    const find = await cm.getCartById(id);
+    const find = await cartService.getById(id);
     if (typeof find === "string") {
       return res
         .status(404)
         .json({ status: "error", error: "ID does not exist" });
     }
     find.products = [];
-    const newCart = await cm.updateCart(id, find);
+    const newCart = await cartService.update(id, find);
     res.status(200).json({ status: "success", payload: newCart });
   } catch (error) {
     res.status(500).json({ status: "error", error: error });
@@ -207,7 +171,7 @@ export const deleteProductFromCart = async (req, res) => {
   try {
     const cid = req.params.cid;
     const pid = req.params.pid;
-    const result = await cm.deleteProductFromCart(cid, pid);
+    const result = await cartService.deleteProductFromCart(cid, pid);
     if (typeof result === "string") {
       return res.status(404).json({ status: "error", error: result });
     }

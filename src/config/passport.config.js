@@ -33,7 +33,7 @@ const initializePassport = () => {
               req.flash("error", "El nombre de usuario ya está en uso.")
             );
           }
-          const newCart = await cm.addCart();
+          const newCart = await cm.create();
           const newUser = {
             first_name,
             last_name,
@@ -66,14 +66,14 @@ const initializePassport = () => {
             email: "adminCoder@coder.com",
           });
           if (!admin) {
-            const newCart = await cm.addCart();
+            const newCart = await cm.create();
             const newAdmin = {
               first_name: "CoderHouse",
               last_name: "Academia",
               email: "adminCoder@coder.com",
               password: createHash("adminCod3r123"),
               role: "admin",
-              carts: [{ cart: newCart._id }],
+              carts: { cart: newCart._id },
             };
             await userModel.create(newAdmin);
           }
@@ -114,14 +114,14 @@ const initializePassport = () => {
           if (user !== null) {
             return done(null, user);
           }
-          const newCart = await cm.addCart();
+          const newCart = await cm.create();
           const newUser = await userModel.create({
             first_name: profile._json.name,
             last_name: "",
             age: "",
             email: profile._json.email,
             password: "",
-            carts: [{ cart: newCart._id }],
+            carts: { cart: newCart._id },
           });
           return done(null, newUser);
         } catch (err) {
@@ -144,14 +144,14 @@ const initializePassport = () => {
         try {
           const user = await userModel.findOne({ email: profile._json.email });
           if (user) return done(null, user);
-          const newCart = await cm.addCart();
+          const newCart = await cm.create();
           const newUser = await userModel.create({
             first_name: profile._json.name,
             last_name: "",
             age: "",
             email: profile._json.email,
             password: "",
-            carts: [{ cart: newCart._id }],
+            carts: { cart: newCart._id },
           });
           return done(null, newUser);
         } catch (err) {

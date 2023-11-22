@@ -1,9 +1,11 @@
-import { getProductsFromCart } from "./carts.controller.js";
-import { getProducts } from "./products.controller.js";
+//import { getProductsFromCart } from "./carts.controller.js";
+import { cartService } from "../services/Factory.js";
+//import { getProducts } from "./products.controller.js";
+import { productService } from "../services/Factory.js";
 import { PORT } from "../app.js";
 
 export const getViewController = async (req, res) => {
-  const result = await getProducts(req, res);
+  const result = await productService.getAllPaginate(req, PORT);
   if (result.statusCode === 200) {
     const totalPages = [];
 
@@ -40,9 +42,8 @@ export const getViewController = async (req, res) => {
 };
 
 export const realTimeController = async (req, res) => {
-  const result = await getProducts(req, res);
+  const result = await productService.getAllPaginate(req, PORT);
   if (result.statusCode === 200) {
-    //console.log(result.response);
     res.render("realTimeProducts", { products: result.response.payload });
   } else {
     res
@@ -52,7 +53,7 @@ export const realTimeController = async (req, res) => {
 };
 
 export const getProductViewController = async (req, res) => {
-  const result = await getProductsFromCart(req, res);
+  const result = await cartService.getProductsFromCart(req, res);
   if (result.statusCode === 200) {
     res.render("productsFromCart", { cart: result.response.payload });
   } else {

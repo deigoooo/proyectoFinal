@@ -97,8 +97,8 @@
           <td>{{this.code}}</td>
           <td>{{this.category}}</td>
           <td><button
+              onclick="deleteProduct('{{this._id}}')"
               class="btn btn-danger"
-              onclick="deleteProduct({{this._id}})"
             >Eliminar</button></td>
         </tr>
       {{/each}}

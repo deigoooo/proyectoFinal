@@ -5,7 +5,7 @@ import run from "./run.js";
 import mongoose from "mongoose";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import dotenv from "dotenv";
+//import dotenv from "dotenv";
 import { Command } from "commander";
 import flash from "express-flash";
 
@@ -29,9 +29,9 @@ export const PERSISTENCE = program.opts().persistance;
 export const MODE = program.opts().mode;
 
 //inicializo dot env
-dotenv.config({
+/* dotenv.config({
   path: MODE === "production" ? "./.env.production" : "./.env.development",
-});
+}); */
 
 //importo passport
 import passport from "passport";

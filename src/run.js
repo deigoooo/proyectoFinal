@@ -4,6 +4,7 @@ import cartsRouter from "./routers/carts.router.js";
 import viewRouter from "./routers/view.router.js";
 import chatRouter from "./routers/messages.router.js";
 import sessionRouter from "./routers/session.router.js";
+//import users from "./routers/user.js";
 
 //hardcodeo el modelo de message
 const message = new MessageManager();
@@ -23,6 +24,9 @@ const run = (socketServer, app) => {
 
   app.use("/api/products", productsRouter);
   app.use("/api/carts", cartsRouter);
+
+  //prueba
+  // app.use("/users", users);
 
   //configuracion del socket
   socketServer.on("connection", async (socket) => {
