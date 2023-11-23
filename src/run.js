@@ -1,4 +1,4 @@
-import MessageManager from "./dao/DB/messageManager.js";
+import { messageService } from "./services/Factory.js";
 import productsRouter from "./routers/products.router.js";
 import cartsRouter from "./routers/carts.router.js";
 import viewRouter from "./routers/view.router.js";
@@ -7,7 +7,7 @@ import sessionRouter from "./routers/session.router.js";
 //import users from "./routers/user.js";
 
 //hardcodeo el modelo de message
-const message = new MessageManager();
+//const message = new MessageManager();
 
 //middleware de SocketIO
 const run = (socketServer, app) => {
@@ -30,14 +30,14 @@ const run = (socketServer, app) => {
 
   //configuracion del socket
   socketServer.on("connection", async (socket) => {
-    socketServer.emit("logs", await message.getMessage());
+    socketServer.emit("logs", await messageService.getAll());
     console.log(`Nuevo cliente conectado: ${socket.id}`);
     socket.on("productList", (data) => {
       socketServer.emit("updateProduct", data);
     });
     socket.on("message", async (data) => {
-      message.addMessage(data);
-      socketServer.emit("logs", await message.getMessage());
+      messageService.create(data);
+      socketServer.emit("logs", await messageService.getAll());
     });
   });
 

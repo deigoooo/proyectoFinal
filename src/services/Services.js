@@ -19,3 +19,8 @@ export class CartService extends Repository {
   getProductsFromCart = async (req, res) =>
     await this.dao.getProductsFromCart(req, res);
 }
+export class MessageService extends Repository {
+  constructor(dao) {
+    super(dao);
+  }
+}

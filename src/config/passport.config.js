@@ -3,13 +3,11 @@ import local from "passport-local";
 import GitHubStrategy from "passport-github2";
 import GoogleStrategy from "passport-google-oauth20";
 import userModel from "../dao/models/user.model.js";
-import cartManager from "../dao/DB/cartManager.js";
+import { cartService } from "../services/Factory.js";
 import { createHash, isValidPassword } from "../util.js";
 import dotenv from "dotenv";
 
 dotenv.config();
-
-const cm = new cartManager();
 
 const localStrategy = local.Strategy;
 
@@ -33,7 +31,7 @@ const initializePassport = () => {
               req.flash("error", "El nombre de usuario ya está en uso.")
             );
           }
-          const newCart = await cm.create();
+          const newCart = await cartService.create();
           const newUser = {
             first_name,
             last_name,
@@ -66,7 +64,7 @@ const initializePassport = () => {
             email: "adminCoder@coder.com",
           });
           if (!admin) {
-            const newCart = await cm.create();
+            const newCart = await cartService.create();
             const newAdmin = {
               first_name: "CoderHouse",
               last_name: "Academia",
@@ -114,7 +112,7 @@ const initializePassport = () => {
           if (user !== null) {
             return done(null, user);
           }
-          const newCart = await cm.create();
+          const newCart = await cartService.create();
           const newUser = await userModel.create({
             first_name: profile._json.name,
             last_name: "",
@@ -144,7 +142,7 @@ const initializePassport = () => {
         try {
           const user = await userModel.findOne({ email: profile._json.email });
           if (user) return done(null, user);
-          const newCart = await cm.create();
+          const newCart = await cartService.create();
           const newUser = await userModel.create({
             first_name: profile._json.name,
             last_name: "",

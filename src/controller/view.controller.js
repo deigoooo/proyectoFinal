@@ -1,6 +1,4 @@
-//import { getProductsFromCart } from "./carts.controller.js";
 import { cartService } from "../services/Factory.js";
-//import { getProducts } from "./products.controller.js";
 import { productService } from "../services/Factory.js";
 import { PORT } from "../app.js";
 
