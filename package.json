@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "type": "module",
   "scripts": {
-    "start": "node . -p 3030 --mode production",
+    "start": "nodemon . -p 8080 --mode production",
     "dev": "nodemon . -p 8080 --mode development"
   },
   "keywords": [],

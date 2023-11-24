@@ -4,7 +4,7 @@ export const privateRoutes = (req, res, next) => {
 };
 
 export const publicRoutes = (req, res, next) => {
-  if (!req.session.user) return res.redirect("/");
+  if (!req.session.user) return res.redirect("/session/login");
   next();
 };
 

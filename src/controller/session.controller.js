@@ -1,3 +1,5 @@
+import UserDTO from "../dto/user.dto.js";
+
 export const getRegisterController = async (req, res) => {
   res.render("register");
 };
@@ -12,7 +14,8 @@ export const sessionFailController = async (req, res) => {
 };
 
 export const sessionCallbackController = async (req, res) => {
-  req.session.user = {
+  req.session.user = new UserDTO(req.user);
+  /* req.session.user = {
     _id: req.user._id,
     first_name: req.user.first_name,
     last_name: req.user.last_name,
@@ -22,7 +25,7 @@ export const sessionCallbackController = async (req, res) => {
     carts: req.user.carts.cart._id,
     role: req.user.role,
     __v: req.user.__v,
-  };
+  }; */
   res.redirect("/products");
 };
 export const logoutSessionController = async (req, res) => {
