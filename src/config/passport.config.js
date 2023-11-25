@@ -99,7 +99,7 @@ const initializePassport = () => {
       {
         clientID: config.github.github_client_id,
         clientSecret: config.github.github_client_secret,
-        callbackURL: config.github.github_callback_url,
+        callbackURL: `http://localhost:${config.PORT}/session/githubcallback`,
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
@@ -134,7 +134,7 @@ const initializePassport = () => {
       {
         clientID: config.google.google_client_id,
         clientSecret: config.google.google_client_secret,
-        callbackURL: config.google.google_callback,
+        callbackURL: `http://localhost:${config.PORT}/session/googlecallback`,
       },
       async function (accessToken, refreshToken, profile, done) {
         try {
