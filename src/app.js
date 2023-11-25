@@ -5,33 +5,9 @@ import run from "./run.js";
 import mongoose from "mongoose";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-//import dotenv from "dotenv";
-import { Command } from "commander";
 import flash from "express-flash";
 
-//inicializo commander
-const program = new Command();
-
-program.option("-p <port>", "puerto del server", 8080);
-program.option("--mode <mode>", "modo del server", "production");
-program.option(
-  "--persistance <persistance>",
-  "persistencia del server",
-  "MONGO"
-);
-program.parse();
-
-//creo y exporto la variable PORT
-export const PORT = program.opts().p;
-//creo y exporto la variable PERSISTANCE
-export const PERSISTENCE = program.opts().persistance;
-//creo y exporto la variable MODE
-export const MODE = program.opts().mode;
-
-//inicializo dot env
-/* dotenv.config({
-  path: MODE === "production" ? "./.env.production" : "./.env.development",
-}); */
+import config from "./config/config.js";
 
 //importo passport
 import passport from "passport";
@@ -39,6 +15,8 @@ import initializePassport from "./config/passport.config.js";
 
 //inicializo el server
 const app = express();
+
+export const PORT = config.PORT;
 
 const URI_MONGO = process.env.URI_MONGO;
 const DBNAME_MONGO = process.env.DBNAME_MONGO;
@@ -87,7 +65,7 @@ try {
 
   //desde aca
   const httpServer = app.listen(PORT, () =>
-    console.log(`Server Running in port ${PORT} on ${MODE} mode`)
+    console.log(`Server Running in port ${PORT} on ${config.MODE} mode`)
   );
   const socket = new Server(httpServer);
 

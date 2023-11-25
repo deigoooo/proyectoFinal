@@ -3,10 +3,20 @@ import { Command } from "commander";
 
 const program = new Command();
 
-const MODE = program.opts().mode;
+program.option("-p <port>", "puerto del server", 8080);
+program.option("--mode <mode>", "modo del server", "production");
+program.option(
+  "--persistance <persistance>",
+  "persistencia del server",
+  "MONGO"
+);
+program.parse();
 
 dotenv.config({
-  path: MODE === "production" ? "./.env.production" : "./.env.development",
+  path:
+    program.opts().mode === "production"
+      ? ".env.production"
+      : ".env.development",
 });
 
 export default {
@@ -28,4 +38,6 @@ export default {
     google_client_secret: process.env.GOOGLE_CLIENT_SECRET,
     google_callback_url: process.env.GOOGLE_CALLBACK_URL,
   },
+  PORT: program.opts().p,
+  MODE: program.opts().mode,
 };

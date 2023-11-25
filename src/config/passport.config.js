@@ -5,9 +5,7 @@ import GoogleStrategy from "passport-google-oauth20";
 import userModel from "../dao/models/user.model.js";
 import { cartService } from "../services/Factory.js";
 import { createHash, isValidPassword } from "../util.js";
-import dotenv from "dotenv";
-
-dotenv.config();
+import config from "../config/config.js";
 
 const localStrategy = local.Strategy;
 
@@ -99,9 +97,9 @@ const initializePassport = () => {
     "github",
     new GitHubStrategy(
       {
-        clientID: process.env.GITHUB_CLIENT_ID,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: process.env.GITHUB_CALLBACK_URL,
+        clientID: config.github.github_client_id,
+        clientSecret: config.github.github_client_secret,
+        callbackURL: config.github.github_callback_url,
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
@@ -134,9 +132,9 @@ const initializePassport = () => {
     "google",
     new GoogleStrategy(
       {
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.GOOGLE_CALLBACK_URL,
+        clientID: config.google.google_client_id,
+        clientSecret: config.google.google_client_secret,
+        callbackURL: config.google.google_callback,
       },
       async function (accessToken, refreshToken, profile, done) {
         try {
