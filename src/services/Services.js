@@ -24,3 +24,8 @@ export class MessageService extends Repository {
     super(dao);
   }
 }
+export class TicketService extends Repository {
+  constructor(dao) {
+    super(dao);
+  }
+}

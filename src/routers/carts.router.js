@@ -8,13 +8,14 @@ import {
   addProductToCartController,
   deleteCartController,
   deleteProductFromCart,
+  purchaseController,
 } from "../controller/carts.controller.js";
 
 const router = Router();
 
 router.get("/", getCartsController);
 router.get("/:cid", getCartController);
-//router.get('/:cid/purchase', purchaseController)
+router.get("/:cid/purchase", purchaseController);
 router.put("/:cid", updateCartController);
 router.put("/:cid/product/:pid", updateProductOnCartController);
 router.post("/", addCartController);
