@@ -8,7 +8,7 @@ import {
 import ProductMongoDao from "../dao/product.mongo.dao.js";
 import CartMongoDao from "../dao/cart.mongo.dao.js";
 import MessageMongoDao from "../dao/message.dao.js";
-import TicketMongoDao from "../dao/ticket.mongo.dao.js";
+import TicketMongoDao from "../dao/ticket.dao.mongo.js";
 
 let daoProduct;
 let daoCart;
