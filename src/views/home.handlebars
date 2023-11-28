@@ -1,36 +1,11 @@
 <style type="text/css">
-.navbar{
-  display: flex; 
-  width:100%; 
-  justify-content: flex-start; 
-  background-color:#969696;
-  align-items: center;
-}
-ul li {
-  list-style: none;
-}
-ul li a{
-  margin: 0px 30px 0px 0px;
-  padding: 0px;
-}
-.profile li ul{
-  display: none;
-  position: absolute;
-  min-width: 140px;
-  background-color: #969696;
-  z-index: 1;
-}
-.profile{
-  margin: 0px;
-  padding: 0px;
-}
-.icono-grande{
-  margin-left: 20px;
-  font-size: 35px;
-}
-.profile li:hover >ul{
-  display: block;
-}
+  .navbar{ display: flex; width:100%; justify-content: space-between;
+  background-color:#969696; align-items: center; padding-left: 10px;
+  padding-right: 10px;} ul li { list-style: none; } ul li a{ margin: 0px 30px
+  0px 0px; padding: 0px; } .profile li ul{ display: none; position: absolute;
+  min-width: 140px; background-color: #969696; z-index: 1; } .profile{ margin:
+  0px; padding: 0px; } .icono-grande{ margin-left: 0px; font-size: 35px; }
+  .profile li:hover >ul{ display: block; }
 
 </style>
 
@@ -38,23 +13,25 @@ ul li a{
   <ul class="profile">
     <li><i class="fa-solid fa-id-card icono-grande"></i>
       <ul>
-        <li><a id="cid" data-cid="{{user.carts}}">ID: <b>{{user._id}}</b></a></li>  
+        <li><a id="cid" data-cid="{{user.carts}}">ID:
+            <b>{{user._id}}</b></a></li>
         <li><a>Hola <b>{{user.first_name}}</b></a></li>
         <li><a>{{user.email}}</a></li>
         <li><a>Rol: {{user.role}}</a></li>
-        <li><button 
-  class="btn btn-danger" 
-  style="
+        <li><button
+            class="btn btn-danger"
+            style="
   position: relative;
   display: inline-block;
   width:120px;
   height:30px;
   color: #fff;
   border: none;
-  margin-bottom: 10px;"> 
-    <a 
-      href="/session/logout"
-      style="
+  margin-bottom: 10px;"
+          >
+            <a
+              href="/session/logout"
+              style="
       position: absolute;
       top: 50%;
       left: 50%;
@@ -62,12 +39,14 @@ ul li a{
       background-color: transparent;
       text-decoration: none;
       color: white;
-      line-height: 1;">
-      Salir
-</button></a></li>
+      line-height: 1;"
+            >
+              Salir
+            </a></button></li>
       </ul>
     </li>
   </ul>
+  <i class="fa-solid fa-cart-shopping icono-grande"></i>
 </div>
 <hr />
 <div align="center">
@@ -113,15 +92,9 @@ ul li a{
 </table>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-const addProductToCart = async (pid) => {
-  let cartId = document.getElementById("cid");
-  let cid = cartId.getAttribute("data-cid");
-  const response = await fetch(`/api/carts/${cid}/product/${pid}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  Swal.fire(`Producto agregado`)
-};
+  const addProductToCart = async (pid) => { let cartId =
+  document.getElementById("cid"); let cid = cartId.getAttribute("data-cid");
+  const response = await fetch(`/api/carts/${cid}/product/${pid}`, { method:
+  "POST", headers: { "Content-Type": "application/json", }, });
+  Swal.fire(`Producto agregado`) };
 </script>

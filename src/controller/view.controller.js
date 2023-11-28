@@ -42,7 +42,31 @@ export const getViewController = async (req, res) => {
 export const realTimeController = async (req, res) => {
   const result = await productService.getAllPaginate(req, PORT);
   if (result.statusCode === 200) {
-    res.render("realTimeProducts", { products: result.response.payload });
+    const totalPages = [];
+
+    let link;
+    for (let index = 1; index <= result.response.totalPages; index++) {
+      if (!req.query.page) {
+        link = `http://${req.hostname}:${PORT}${req.originalUrl}?page=${index}`;
+      } else {
+        const modifiedUrl = req.originalUrl.replace(
+          `page=${req.query.page}`,
+          `page=${index}`
+        );
+        link = `http://${req.hostname}:${PORT}${modifiedUrl}`;
+      }
+      totalPages.push({ page: index, link });
+    }
+    res.render("realTimeProducts", {
+      products: result.response.payload,
+      paginateInfo: {
+        hasPrevPage: result.response.hasPrevPage,
+        hasNextPage: result.response.hasNextPage,
+        prevLink: result.response.prevLink,
+        nextLink: result.response.nextLink,
+        totalPages,
+      },
+    });
   } else {
     res
       .status(result.statusCode)

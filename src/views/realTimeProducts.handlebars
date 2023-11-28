@@ -71,7 +71,19 @@
     </div>
     <button id="createBtn" class="btn btn-primary">Agregar Producto</button>
   </form>
-
+  <hr />
+  <div align="center">
+    {{#if paginateInfo.hasPrevPage}}
+      <a href="{{paginateInfo.prevLink}}">Anterior</a>
+    {{/if}}
+    {{#each paginateInfo.totalPages}}
+      <a href="{{this.link}}">{{this.page}}</a>
+    {{/each}}
+    {{#if paginateInfo.hasNextPage}}
+      <a href="{{paginateInfo.nextLink}}">Siguiente</a>
+    {{/if}}
+  </div>
+  <hr />
   <table class="table table-dark table-striped m-5" id="realProduct">
     <thead>
       <tr>
