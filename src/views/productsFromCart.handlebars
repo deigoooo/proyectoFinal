@@ -1,4 +1,4 @@
-<h2>Products from Cart with id={{cart._id}}</h2>
+<h2 id="cid" data-cid="{{cart._id}}">Products from Cart with id={{cart._id}}</h2>
 <hr />
 <table class="table table-dark table-striped">
   <thead>
@@ -9,6 +9,7 @@
       <td><strong>Código</strong></td>
       <td><strong>Stock</strong></td>
       <td><strong>Cantidad</strong></td>
+      <td></td>
     </tr>
   </thead>
   <tbody>
@@ -20,7 +21,30 @@
         <td>{{this.product.code}}</td>
         <td>{{this.product.stock}}</td>
         <td>{{this.quantity}}</td>
+        <td><button
+            class="btn btn-danger"
+            onclick="deleteProductFromCart('{{this.product._id}}')"
+          >Eliminar</button></td>
       </tr>
     {{/each}}
   </tbody>
 </table>
+<button
+  class="btn btn-danger"
+  style="
+  text-align: center;
+  width:120px;
+  color: #fff;
+  border: none;
+  margin-bottom: 10px;"
+>Comprar</button>
+<script>
+  async function deleteProductFromCart(pid) { let cartId =
+  document.getElementById("cid"); let cid = cartId.getAttribute("data-cid");
+  console.log(`entro aca ${cid} y ${pid}`); await
+  fetch(`/api/carts/${cid}/product/${pid}`, { method: "delete"
+  }).then((result)=> result.json()) .then((result) => { if (result.status ===
+  "error") throw new Error(result.error); alert(`El product fue eliminado
+  \nVista actualizada`);location.reload(); }) .catch((error) => alert(`Ocurrio
+  un error:\n${error}`));}
+</script>

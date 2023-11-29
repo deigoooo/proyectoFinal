@@ -54,6 +54,18 @@ const deleteProduct = async (id) => {
     })
     .catch((error) => alert(`Ocurrio un error:\n${error}`));
 };
+async function deleteProductFromCart(pid) {
+  let cid = cartId.getAttribute("data-cid");
+  console.log(`entro aca ${cid}`);
+  await fetch(`/api/cart/${cid}/product/${pid}`, { method: "delete" })
+    .then((result) => result.json())
+    .then((result) => {
+      if (result.status === "error") throw new Error(result.error);
+      socketClient.emit("productList", result.payload);
+      alert(`El product fue eliminado \nVista actualizada`);
+    })
+    .catch((error) => alert(`Ocurrio un error:\n${error}`));
+}
 
 socketClient.on("updateProduct", (data) => {
   table.innerHTML = `<tr>
