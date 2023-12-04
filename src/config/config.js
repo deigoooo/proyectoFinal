@@ -38,6 +38,10 @@ export default {
     google_client_secret: process.env.GOOGLE_CLIENT_SECRET,
     google_callback_url: process.env.GOOGLE_CALLBACK_URL,
   },
+  nodemailer: {
+    nodemailer_user: process.env.NODEMAILER_USER,
+    nodemailer_password: process.env.NODEMAILER_PASS,
+  },
   PORT: program.opts().p,
   MODE: program.opts().mode,
 };
