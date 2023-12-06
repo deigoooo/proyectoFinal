@@ -1,8 +1,9 @@
 import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
-import config from "./config.js";
+import config from "../config/config.js";
+import ticketModel from "../dao/models/ticket.model.js";
 
-const mailController = async (ticket) => {
+const mailServices = async (ticket) => {
   const destinatario = ticket.purchaser;
   const numeroPedido = ticket.code;
   let nodemailerConfig = {
@@ -24,25 +25,36 @@ const mailController = async (ticket) => {
     body: {
       intro: "Your bill has arrived!",
       table: {
-        data: ticket.products,
-        amount: ticket.amount,
+        data: [],
       },
-      outro: "Looking forward to do more business",
+      outro: `The total amount is ${ticket.amount}`,
     },
   };
+  const allProducts = await ticketModel
+    .findById(ticket._id)
+    .populate("products.product")
+    .lean();
+
+  for (let index = 0; index < allProducts.products.length; index++) {
+    response.body.table.data.push({
+      Product: allProducts.products[index].product.title,
+      Price: allProducts.products[index].product.price,
+      Quantity: ticket.products[index].quantity,
+    });
+  }
   let mail = Mailgenerator.generate(response);
 
   let message = {
     from: "Dpto Ventas - Diego Shop <df.ramirezz@gmail.com>",
     to: destinatario,
-    subject: `Compra ${numeroPedido} realizada con éxito`,
+    subject: `Compra realizada con éxito, tu codigo es: ${numeroPedido} `,
     html: mail,
   };
   transporter
     .sendMail(message)
     .then(() => {
-      return res.status(200).json({ message: "Yo have received an email" });
+      return `USTED A RECIBIDO UN CORREO`;
     })
-    .catch((err) => res.status(500).json({ err }));
+    .catch((err) => `[ERROR]: ${err.message}`);
 };
-export default mailController;
+export default mailServices;

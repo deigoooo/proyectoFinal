@@ -37,6 +37,7 @@
   color: #fff;
   border: none;
   margin-bottom: 10px;"
+  onclick="purchase('{{cart._id}}')"
 >Comprar</button>
 <script>
   async function deleteProductFromCart(pid) { let cartId =
@@ -46,5 +47,7 @@
   }).then((result)=> result.json()) .then((result) => { if (result.status ===
   "error") throw new Error(result.error); alert(`El product fue eliminado
   \nVista actualizada`);location.reload(); }) .catch((error) => alert(`Ocurrio
-  un error:\n${error}`));}
+  un error:\n${error}`));} async function purchase(cid) { console.log(`entro a
+  la funcion compra`); const response = await
+  fetch(`/api/carts/${cid}/purchase`); }
 </script>

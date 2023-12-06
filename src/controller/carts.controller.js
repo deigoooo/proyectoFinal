@@ -3,6 +3,9 @@ import {
   productService,
   ticketService,
 } from "../services/Factory.js";
+import mailServices from "../services/nodemailer.services.js";
+//import ticketModel from "../dao/models/ticket.model.js";
+import shortid from "shortid";
 
 export const getCartsController = async (req, res) => {
   try {
@@ -237,12 +240,16 @@ export const purchaseController = async (req, res) => {
       { returnDocument: "after" }
     );
     //creamos el Ticket
-    const result = await ticketService.create({
+    const newTicket = {
       code: shortid.generate(),
       products: productsToTicket,
       amount,
       purchaser: req.session.user.email,
-    });
+    };
+    const result = await ticketService.create(newTicket);
+    //mandamos el mail
+
+    mailServices(result);
     return res.status(201).json({ status: "success", payload: result });
   } catch (err) {
     return res.status(500).json({ status: "error", error: err.message });

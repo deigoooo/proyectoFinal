@@ -33,4 +33,18 @@ export default class TicketMongoDao {
       return `[ERROR]: ${error.message}`;
     }
   };
+  getProductsFromTicket = async (id) => {
+    try {
+      const result = await ticketModel
+        .findById(id)
+        .populate("products.product")
+        .lean();
+      if (result === null) {
+        return `[ERROR]: ticket does not have products`;
+      }
+      return result;
+    } catch (error) {
+      return `[ERROR]: ${error.message}`;
+    }
+  };
 }

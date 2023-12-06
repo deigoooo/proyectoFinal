@@ -54,10 +54,15 @@ const deleteProduct = async (id) => {
     })
     .catch((error) => alert(`Ocurrio un error:\n${error}`));
 };
+
+async function purchase(cid) {
+  console.log(`entro a la funcion compra`);
+  const response = await fetch(`/api/carts/${cid}/purchase`);
+}
+
 async function deleteProductFromCart(pid) {
   let cartId = document.getElementById("cid");
   let cid = cartId.getAttribute("data-cid");
-  console.log(`entro aca ${cid} y ${pid}`);
   await fetch(`/api/carts/${cid}/product/${pid}`, { method: "delete" })
     .then((result) => result.json())
     .then((result) => {

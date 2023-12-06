@@ -28,4 +28,7 @@ export class TicketService extends Repository {
   constructor(dao) {
     super(dao);
   }
+  getProductsFromTicket = async (id) => {
+    await this.dao.getProductsFromTicket(id);
+  };
 }
