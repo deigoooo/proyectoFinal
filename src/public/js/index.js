@@ -56,8 +56,17 @@ const deleteProduct = async (id) => {
 };
 
 async function purchase(cid) {
-  console.log(`entro a la funcion compra`);
   const response = await fetch(`/api/carts/${cid}/purchase`);
+  Swal.fire({
+    title: "Compra Realizada",
+    text: "¡Gracias por tu compra!",
+    icon: "success",
+    confirmButtonText: "Ir a productos",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = "/products";
+    }
+  });
 }
 
 async function deleteProductFromCart(pid) {

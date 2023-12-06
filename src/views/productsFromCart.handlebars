@@ -39,6 +39,7 @@
   margin-bottom: 10px;"
   onclick="purchase('{{cart._id}}')"
 >Comprar</button>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
   async function deleteProductFromCart(pid) { let cartId =
   document.getElementById("cid"); let cid = cartId.getAttribute("data-cid");
@@ -47,7 +48,9 @@
   }).then((result)=> result.json()) .then((result) => { if (result.status ===
   "error") throw new Error(result.error); alert(`El product fue eliminado
   \nVista actualizada`);location.reload(); }) .catch((error) => alert(`Ocurrio
-  un error:\n${error}`));} async function purchase(cid) { console.log(`entro a
-  la funcion compra`); const response = await
-  fetch(`/api/carts/${cid}/purchase`); }
+  un error:\n${error}`));} async function purchase(cid) {console.log(`entro`)
+  const response = await fetch(`/api/carts/${cid}/purchase`); Swal.fire({ title:
+  "Compra Realizada", text: "¡Gracias por tu compra!", icon: "success",
+  confirmButtonText: "Ir a productos", }).then((result) => { if
+  (result.isConfirmed) { window.location.href = "/products"; } }); }
 </script>
