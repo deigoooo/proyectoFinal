@@ -247,9 +247,10 @@ export const purchaseController = async (req, res) => {
       purchaser: req.session.user.email,
     };
     const result = await ticketService.create(newTicket);
-    //mandamos el mail
 
+    //mandamos el mail
     mailServices(result);
+
     return res.status(201).json({ status: "success", payload: result });
   } catch (err) {
     return res.status(500).json({ status: "error", error: err.message });

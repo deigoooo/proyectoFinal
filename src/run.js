@@ -4,6 +4,7 @@ import cartsRouter from "./routers/carts.router.js";
 import viewRouter from "./routers/view.router.js";
 import chatRouter from "./routers/messages.router.js";
 import sessionRouter from "./routers/session.router.js";
+import mockingRouter from "./routers/mocking.router.js";
 //import users from "./routers/user.js";
 
 //hardcodeo el modelo de message
@@ -21,6 +22,7 @@ const run = (socketServer, app) => {
   app.use("/carts", viewRouter);
   app.use("/chat", chatRouter);
   app.use("/session", sessionRouter);
+  app.use("/mockingproducts", mockingRouter);
 
   app.use("/api/products", productsRouter);
   app.use("/api/carts", cartsRouter);

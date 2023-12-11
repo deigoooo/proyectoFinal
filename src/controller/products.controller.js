@@ -1,9 +1,9 @@
 import { productService } from "../services/Factory.js";
-import { PORT } from "../app.js";
+import config from "../config/config.js";
 
 export const getProductsController = async (req, res) => {
   try {
-    const result = await productService.getAllPaginate(req, PORT);
+    const result = await productService.getAllPaginate(req, config.PORT);
     res.status(result.statusCode).json(result.response);
   } catch (error) {
     res.status(500).json({ status: "error", error: error });

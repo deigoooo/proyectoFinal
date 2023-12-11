@@ -16,7 +16,7 @@ import initializePassport from "./config/passport.config.js";
 //inicializo el server
 const app = express();
 
-export const PORT = config.PORT;
+const PORT = config.PORT;
 
 const URI_MONGO = process.env.URI_MONGO;
 const DBNAME_MONGO = process.env.DBNAME_MONGO;

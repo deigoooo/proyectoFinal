@@ -1,22 +1,22 @@
 import { cartService } from "../services/Factory.js";
 import { productService } from "../services/Factory.js";
-import { PORT } from "../app.js";
+import config from "../config/config.js";
 
 export const getViewController = async (req, res) => {
-  const result = await productService.getAllPaginate(req, PORT);
+  const result = await productService.getAllPaginate(req, config.PORT);
   if (result.statusCode === 200) {
     const totalPages = [];
 
     let link;
     for (let index = 1; index <= result.response.totalPages; index++) {
       if (!req.query.page) {
-        link = `http://${req.hostname}:${PORT}${req.originalUrl}?page=${index}`;
+        link = `http://${req.hostname}:${config.PORT}${req.originalUrl}?page=${index}`;
       } else {
         const modifiedUrl = req.originalUrl.replace(
           `page=${req.query.page}`,
           `page=${index}`
         );
-        link = `http://${req.hostname}:${PORT}${modifiedUrl}`;
+        link = `http://${req.hostname}:${config.PORT}${modifiedUrl}`;
       }
       totalPages.push({ page: index, link });
     }
@@ -40,20 +40,20 @@ export const getViewController = async (req, res) => {
 };
 
 export const realTimeController = async (req, res) => {
-  const result = await productService.getAllPaginate(req, PORT);
+  const result = await productService.getAllPaginate(req, config.PORT);
   if (result.statusCode === 200) {
     const totalPages = [];
 
     let link;
     for (let index = 1; index <= result.response.totalPages; index++) {
       if (!req.query.page) {
-        link = `http://${req.hostname}:${PORT}${req.originalUrl}?page=${index}`;
+        link = `http://${req.hostname}:${config.PORT}${req.originalUrl}?page=${index}`;
       } else {
         const modifiedUrl = req.originalUrl.replace(
           `page=${req.query.page}`,
           `page=${index}`
         );
-        link = `http://${req.hostname}:${PORT}${modifiedUrl}`;
+        link = `http://${req.hostname}:${config.PORT}${modifiedUrl}`;
       }
       totalPages.push({ page: index, link });
     }
