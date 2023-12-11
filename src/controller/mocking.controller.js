@@ -15,8 +15,7 @@ export const getMockingController = async (req, res) => {
         category: faker.commerce.department(),
       });
     }
-    const result = await productService.create(newProduct);
-    console.log(result);
+    await productService.create(newProduct);
     res
       .status(200)
       .json({ status: "success", message: `The products was created` });
