@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import flash from "express-flash";
+import cors from "cors";
+import compression from "express-compression";
 
 import config from "./config/config.js";
 
@@ -16,13 +18,18 @@ import initializePassport from "./config/passport.config.js";
 //inicializo el server
 const app = express();
 
-const PORT = config.PORT;
-
-const URI_MONGO = process.env.URI_MONGO;
-const DBNAME_MONGO = process.env.DBNAME_MONGO;
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//configuramos los cors
+app.use(cors());
+
+//configuramos compression
+app.use(
+  compression({
+    brotli: { enabled: true, zlib: {} },
+  })
+);
 
 //configuro la carpeta publica
 app.use(express.static("./src/public"));
@@ -31,10 +38,10 @@ app.use(express.static("./src/public"));
 app.use(
   session({
     store: MongoStore.create({
-      mongoUrl: `${URI_MONGO}`,
-      dbName: `${DBNAME_MONGO}`,
+      mongoUrl: `${config.mongo.url}`,
+      dbName: `${config.mongo.db_name}`,
     }),
-    secret: `${process.env.secret}`,
+    secret: `${config.mongo.secret}`,
     resave: true,
     saveUninitialized: true,
   })
@@ -57,15 +64,15 @@ app.set("view engine", "handlebars");
 
 try {
   //conecto la base de datos
-  await mongoose.connect(URI_MONGO, {
-    dbName: `${DBNAME_MONGO}`,
+  await mongoose.connect(config.mongo.url, {
+    dbName: `${config.mongo.db_name}`,
     useUnifiedTopology: true,
   });
   console.log(`DB connected`);
 
   //desde aca
-  const httpServer = app.listen(PORT, () =>
-    console.log(`Server Running in port ${PORT} on ${config.MODE} mode`)
+  const httpServer = app.listen(config.PORT, () =>
+    console.log(`Server Running in port ${config.PORT} on ${config.MODE} mode`)
   );
   const socket = new Server(httpServer);
 
