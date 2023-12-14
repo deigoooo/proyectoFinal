@@ -14,7 +14,6 @@ const run = (socketServer, app) => {
     next();
   });
 
-  app.use(errorHandler);
   //endpoints
   app.use("/products", viewRouter);
   app.use("/carts", viewRouter);
@@ -39,6 +38,7 @@ const run = (socketServer, app) => {
   });
 
   app.use("/", (req, res) => res.redirect("session/login"));
+  app.use(errorHandler);
 };
 
 export default run;

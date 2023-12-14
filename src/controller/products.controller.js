@@ -50,7 +50,7 @@ export const updateProductsController = async (req, res) => {
     res.status(500).json({ status: "error", error: error.message });
   }
 };
-export const addProductsController = async (req, res) => {
+export const addProductsController = async (req, res, next) => {
   try {
     const { title, description, price, thumbnail, stock, code, category } =
       req.body;
@@ -63,8 +63,7 @@ export const addProductsController = async (req, res) => {
       !code ||
       !category
     ) {
-      /*       console.log(`entro al error`); */
-      CustomError.createError({
+      throw CustomError.createError({
         name: "Add product error",
         cause: generateErrorInfo({
           title,
@@ -76,7 +75,7 @@ export const addProductsController = async (req, res) => {
           category,
         }),
         message: "Body is empty",
-        code: EError.INVALID_TYPES_ERROR,
+        code: EError.BODY_EMPTY,
       });
       /* return res.status(404).json({ status: "error", error: error.code }); */
     }
@@ -91,7 +90,8 @@ export const addProductsController = async (req, res) => {
     });
     res.status(201).json({ status: "success", payload: newProduct });
   } catch (error) {
-    res.status(500).json({ status: "error", error: error.message });
+    next(error);
+    /* res.status(500).json({ status: "error", error: error.message }); */
   }
 };
 export const deleteProductsController = async (req, res) => {
