@@ -5,10 +5,7 @@ import viewRouter from "./routers/view.router.js";
 import chatRouter from "./routers/messages.router.js";
 import sessionRouter from "./routers/session.router.js";
 import mockingRouter from "./routers/mocking.router.js";
-//import users from "./routers/user.js";
-
-//hardcodeo el modelo de message
-//const message = new MessageManager();
+import errorHandler from "./middlewares/error.js";
 
 //middleware de SocketIO
 const run = (socketServer, app) => {
@@ -17,6 +14,7 @@ const run = (socketServer, app) => {
     next();
   });
 
+  app.use(errorHandler);
   //endpoints
   app.use("/products", viewRouter);
   app.use("/carts", viewRouter);
@@ -26,9 +24,6 @@ const run = (socketServer, app) => {
 
   app.use("/api/products", productsRouter);
   app.use("/api/carts", cartsRouter);
-
-  //prueba
-  // app.use("/users", users);
 
   //configuracion del socket
   socketServer.on("connection", async (socket) => {

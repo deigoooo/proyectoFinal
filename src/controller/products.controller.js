@@ -1,5 +1,8 @@
 import { productService } from "../services/Factory.js";
 import config from "../config/config.js";
+import CustomError from "../services/errors/custom_error.js";
+import EError from "../services/errors/enums.js";
+import { generateErrorInfo } from "../services/errors/info.js";
 
 export const getProductsController = async (req, res) => {
   try {
@@ -32,9 +35,13 @@ export const updateProductsController = async (req, res) => {
     const productUpdate = req.body;
     const result = await productService.update(id, productUpdate);
     if (typeof result === "string") {
-      return res
-        .status(404)
-        .json({ status: "error", error: "ID does not exists" });
+      const error = CustomError.createError({
+        name: "Products update error",
+        cause: generateErrorInfo(result),
+        message: "ID does not exist",
+        code: EError.DATABASES_ERROR,
+      });
+      return res.status(404).json({ status: "error", error: error.code });
     }
     const products = await productService.getAll();
     req.io.emit("updateProduct", products);
@@ -45,10 +52,43 @@ export const updateProductsController = async (req, res) => {
 };
 export const addProductsController = async (req, res) => {
   try {
-    const product = req.body;
-    if (Object.keys(req.body).length === 0)
-      return res.status(404).json({ status: "error", error: "Body is empty" });
-    const newProduct = await productService.create(product);
+    const { title, description, price, thumbnail, stock, code, category } =
+      req.body;
+    if (
+      !title ||
+      !description ||
+      !price ||
+      !thumbnail ||
+      !stock ||
+      !code ||
+      !category
+    ) {
+      /*       console.log(`entro al error`); */
+      CustomError.createError({
+        name: "Add product error",
+        cause: generateErrorInfo({
+          title,
+          description,
+          price,
+          thumbnail,
+          stock,
+          code,
+          category,
+        }),
+        message: "Body is empty",
+        code: EError.INVALID_TYPES_ERROR,
+      });
+      /* return res.status(404).json({ status: "error", error: error.code }); */
+    }
+    const newProduct = await productService.create({
+      title,
+      description,
+      price,
+      thumbnail,
+      stock,
+      code,
+      category,
+    });
     res.status(201).json({ status: "success", payload: newProduct });
   } catch (error) {
     res.status(500).json({ status: "error", error: error.message });

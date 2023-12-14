@@ -26,7 +26,14 @@ const initializePassport = () => {
             return done(
               null,
               false,
-              req.flash("error", "El nombre de usuario ya está en uso.")
+              req.flash("error", "The email has already been registered")
+            );
+          }
+          if (!password) {
+            return done(
+              null,
+              false,
+              req.flash("error", "The user must have a password")
             );
           }
           const newCart = await cartService.create();
@@ -36,7 +43,6 @@ const initializePassport = () => {
             email,
             age,
             password: createHash(password),
-            //carts: [{ cart: newCart._id }],
             carts: { cart: newCart._id },
           };
 

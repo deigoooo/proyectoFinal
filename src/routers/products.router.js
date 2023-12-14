@@ -10,9 +10,13 @@ import { handlePolicies } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.get("/", handlePolicies(["USER,ADMIN"]), getProductsController);
+router.get("/", handlePolicies(["USER", "ADMIN"]), getProductsController);
 
-router.get("/:id", handlePolicies(["USER,ADMIN"]), getProductsByIdController);
+router.get(
+  "/:id",
+  handlePolicies(["USER", "ADMIN"]),
+  getProductsByIdController
+);
 
 router.put("/:id", handlePolicies(["ADMIN"]), updateProductsController);
 

@@ -8,6 +8,7 @@ import MongoStore from "connect-mongo";
 import flash from "express-flash";
 import cors from "cors";
 import compression from "express-compression";
+import errorHandler from "./middlewares/error.js";
 
 import config from "./config/config.js";
 
@@ -56,6 +57,7 @@ app.use(passport.session());
 
 //inicializo flash
 app.use(flash());
+app.use(errorHandler);
 
 //configuro handlebars
 app.engine("handlebars", handlebars.engine());

@@ -10,22 +10,13 @@ export const postRegisterController = async (req, res) => {
   res.redirect("/session/login");
 };
 export const sessionFailController = async (req, res) => {
-  res.send({ error: `${req.flash("error")}` });
+  //console.log(`aca en el session controller${req.flash("error")}`);
+  const newError = req.flash("error");
+  res.send({ error: `${newError}` });
 };
 
 export const sessionCallbackController = async (req, res) => {
   req.session.user = new UserDTO(req.user);
-  /* req.session.user = {
-    _id: req.user._id,
-    first_name: req.user.first_name,
-    last_name: req.user.last_name,
-    email: req.user.email,
-    age: req.user.age,
-    password: req.user.password,
-    carts: req.user.carts.cart._id,
-    role: req.user.role,
-    __v: req.user.__v,
-  }; */
   res.redirect("/products");
 };
 export const logoutSessionController = async (req, res) => {
