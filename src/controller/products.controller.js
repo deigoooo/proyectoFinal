@@ -13,41 +13,43 @@ export const getProductsController = async (req, res) => {
   }
 };
 
-export const getProductsByIdController = async (req, res) => {
+export const getProductsByIdController = async (req, res, next) => {
   try {
     const id = req.params.id;
     const result = await productService.getById(id);
     if (typeof result === "string") {
-      return res
-        .status(404)
-        .json({ status: "error", error: "ID does not exists" });
+      throw CustomError.createError({
+        name: "Delete product error",
+        cause: generateErrorInfo(id),
+        message: `ID: ${id} does not exist`,
+        code: EError.DATABASES_ERROR,
+      });
     } else {
       res.status(200).json({ status: "succes", payload: result });
     }
   } catch (error) {
-    res.status(500).json({ status: "error", error: error.message });
+    next(error);
   }
 };
 
-export const updateProductsController = async (req, res) => {
+export const updateProductsController = async (req, res, next) => {
   try {
     const id = req.params.id;
     const productUpdate = req.body;
     const result = await productService.update(id, productUpdate);
     if (typeof result === "string") {
-      const error = CustomError.createError({
-        name: "Products update error",
-        cause: generateErrorInfo(result),
-        message: "ID does not exist",
+      throw CustomError.createError({
+        name: "Update products error",
+        cause: generateErrorInfo(id),
+        message: `ID: ${id} does not exist`,
         code: EError.DATABASES_ERROR,
       });
-      return res.status(404).json({ status: "error", error: error.code });
     }
     const products = await productService.getAll();
     req.io.emit("updateProduct", products);
     res.status(200).json({ status: "succes", payload: result });
   } catch (error) {
-    res.status(500).json({ status: "error", error: error.message });
+    next(error);
   }
 };
 export const addProductsController = async (req, res, next) => {
@@ -77,7 +79,6 @@ export const addProductsController = async (req, res, next) => {
         message: "Body is empty",
         code: EError.BODY_EMPTY,
       });
-      /* return res.status(404).json({ status: "error", error: error.code }); */
     }
     const newProduct = await productService.create({
       title,
@@ -91,22 +92,25 @@ export const addProductsController = async (req, res, next) => {
     res.status(201).json({ status: "success", payload: newProduct });
   } catch (error) {
     next(error);
-    /* res.status(500).json({ status: "error", error: error.message }); */
   }
 };
-export const deleteProductsController = async (req, res) => {
+export const deleteProductsController = async (req, res, next) => {
   try {
     const id = req.params.id;
     const products = await productService.getAll();
     const exist = products.find((product) => product._id == id);
-    if (!exist)
-      return res
-        .status(404)
-        .json({ status: "error", error: "ID does not exist" });
+    if (!exist) {
+      throw CustomError.createError({
+        name: "Delete product error",
+        cause: generateErrorInfo(id),
+        message: `ID: ${id} does not exist`,
+        code: EError.DATABASES_ERROR,
+      });
+    }
     const newProducts = await productService.delete(id);
     req.io.emit("updateProduct", await productService.getAll());
     res.status(200).json({ status: "success", payload: newProducts });
   } catch (error) {
-    res.status(500).json({ status: "error", error: error.message });
+    next(error);
   }
 };

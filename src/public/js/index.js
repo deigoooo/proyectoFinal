@@ -98,7 +98,6 @@ socketClient.on("updateProduct", (data) => {
       <td></td>
     </tr>`;
   for (product of data) {
-    console.log(product);
     let tr = document.createElement("tr");
     tr.innerHTML = `<td>${product._id}</td>
       <td>${product.title}</td>
