@@ -6,6 +6,7 @@ import chatRouter from "./routers/messages.router.js";
 import sessionRouter from "./routers/session.router.js";
 import mockingRouter from "./routers/mocking.router.js";
 import errorHandler from "./middlewares/error.middleware.js";
+import logger from "./config/logger.config.js";
 
 //middleware de SocketIO
 const run = (socketServer, app) => {
@@ -27,7 +28,7 @@ const run = (socketServer, app) => {
   //configuracion del socket
   socketServer.on("connection", async (socket) => {
     socketServer.emit("logs", await messageService.getAll());
-    console.log(`Nuevo cliente conectado: ${socket.id}`);
+    logger.info(`Nuevo cliente conectado: ${socket.id}`);
     socket.on("productList", (data) => {
       socketServer.emit("updateProduct", data);
     });

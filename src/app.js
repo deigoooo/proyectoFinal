@@ -8,7 +8,7 @@ import MongoStore from "connect-mongo";
 import flash from "express-flash";
 import cors from "cors";
 import compression from "express-compression";
-// import errorHandler from "./middlewares/error.js";
+import logger from "./config/logger.config.js";
 
 import config from "./config/config.js";
 
@@ -57,7 +57,6 @@ app.use(passport.session());
 
 //inicializo flash
 app.use(flash());
-// app.use(errorHandler);
 
 //configuro handlebars
 app.engine("handlebars", handlebars.engine());
@@ -70,11 +69,11 @@ try {
     dbName: `${config.mongo.db_name}`,
     useUnifiedTopology: true,
   });
-  console.log(`DB connected`);
+  logger.info(`DB connected`);
 
   //desde aca
   const httpServer = app.listen(config.PORT, () =>
-    console.log(`Server Running in port ${config.PORT} on ${config.MODE} mode`)
+    logger.info(`Server Running in port ${config.PORT} on ${config.MODE} mode`)
   );
   const socket = new Server(httpServer);
 
@@ -82,6 +81,6 @@ try {
 
   //hasta aca
 } catch (error) {
-  console.log(`No se pudo conectar con la BD error: ${error.message}`);
+  logger.error(`No se pudo conectar con la BD error: ${error.message}`);
   process.exit(-1);
 }
