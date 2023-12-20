@@ -5,7 +5,7 @@ import viewRouter from "./routers/view.router.js";
 import chatRouter from "./routers/messages.router.js";
 import sessionRouter from "./routers/session.router.js";
 import mockingRouter from "./routers/mocking.router.js";
-import errorHandler from "./middlewares/error.js";
+import errorHandler from "./middlewares/error.middleware.js";
 
 //middleware de SocketIO
 const run = (socketServer, app) => {
@@ -38,6 +38,8 @@ const run = (socketServer, app) => {
   });
 
   app.use("/", (req, res) => res.redirect("session/login"));
+
+  //aplico el middleware de error
   app.use(errorHandler);
 };
 

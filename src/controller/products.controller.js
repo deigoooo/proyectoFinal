@@ -2,14 +2,14 @@ import { productService } from "../services/Factory.js";
 import config from "../config/config.js";
 import CustomError from "../services/errors/custom_error.js";
 import EError from "../services/errors/enums.js";
-import { generateErrorInfo } from "../services/errors/info.js";
+import { generateProductsErrorInfo } from "../services/errors/info.js";
 
 export const getProductsController = async (req, res) => {
   try {
     const result = await productService.getAllPaginate(req, config.PORT);
     res.status(result.statusCode).json(result.response);
   } catch (error) {
-    res.status(500).json({ status: "error", error: error });
+    next(error);
   }
 };
 
@@ -20,7 +20,7 @@ export const getProductsByIdController = async (req, res, next) => {
     if (typeof result === "string") {
       throw CustomError.createError({
         name: "Delete product error",
-        cause: generateErrorInfo(id),
+        cause: generateProductsErrorInfo(id),
         message: `ID: ${id} does not exist`,
         code: EError.DATABASES_ERROR,
       });
@@ -40,7 +40,7 @@ export const updateProductsController = async (req, res, next) => {
     if (typeof result === "string") {
       throw CustomError.createError({
         name: "Update products error",
-        cause: generateErrorInfo(id),
+        cause: generateProductsErrorInfo(id),
         message: `ID: ${id} does not exist`,
         code: EError.DATABASES_ERROR,
       });
@@ -67,7 +67,7 @@ export const addProductsController = async (req, res, next) => {
     ) {
       throw CustomError.createError({
         name: "Add product error",
-        cause: generateErrorInfo({
+        cause: generateProductsErrorInfo({
           title,
           description,
           price,
@@ -102,7 +102,7 @@ export const deleteProductsController = async (req, res, next) => {
     if (!exist) {
       throw CustomError.createError({
         name: "Delete product error",
-        cause: generateErrorInfo(id),
+        cause: generateProductsErrorInfo(id),
         message: `ID: ${id} does not exist`,
         code: EError.DATABASES_ERROR,
       });

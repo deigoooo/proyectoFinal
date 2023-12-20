@@ -1,4 +1,4 @@
-export const generateErrorInfo = (products) => {
+export const generateProductsErrorInfo = (products) => {
   if (typeof products === "object") {
     return `
     Uno o mas properties están incompletos o son inválidos.
@@ -17,5 +17,21 @@ export const generateErrorInfo = (products) => {
   Uno o mas properties están incompletos o son inválidos.
   Lista de propiedades obligatorias:
       - id: Does not exist. (${products})`;
+  }
+};
+
+export const generateCartsErrorInfo = (carts) => {
+  if (typeof products === "object") {
+    return `
+    Uno o mas properties están incompletos o son inválidos.
+    Lista de propiedades obligatorias:
+        - Products: Must be a array. (${carts.products}),
+    `;
+  } else {
+    return `
+  Uno o mas properties están incompletos o son inválidos.
+  Lista de propiedades obligatorias:
+      - id: Does not exist. (${products});
+      - quantity: Must be number and never 0. (${products})`;
   }
 };
