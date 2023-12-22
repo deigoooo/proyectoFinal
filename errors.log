@@ -1,0 +1,20 @@
+{"level":"info","message":"DB connected"}
+{"level":"info","message":"Server Running in port 3030 on production mode"}
+{"level":"info","message":"DB connected"}
+{"level":"info","message":"DB connected"}
+{"level":"info","message":"DB connected"}
+{"level":"info","message":"Server Running in port 3030 on production mode"}
+{"level":"info","message":"DB connected"}
+{"level":"info","message":"Server Running in port 3030 on production mode"}
+{"level":"info","message":"DB connected"}
+{"level":"info","message":"Server Running in port 3030 on production mode"}
+{"level":"info","message":"DB connected"}
+{"level":"info","message":"Server Running in port 3030 on production mode"}
+{"level":"info","message":"DB connected"}
+{"level":"info","message":"Server Running in port 3030 on production mode"}
+{"level":"info","message":"DB connected"}
+{"level":"info","message":"Server Running in port 3030 on production mode"}
+{"level":"fatal","message":"prueba de logger para level fatal"}
+{"level":"error","message":"prueba de logger para level error"}
+{"level":"warning","message":"prueba de logger para level warning"}
+{"level":"info","message":"prueba de logger para level info"}
