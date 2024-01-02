@@ -22,20 +22,10 @@ const userSchema = new mongoose.Schema({
     },
 
     default: {},
-    /* type: [
-      {
-        _id: false,
-        cart: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "carts",
-        },
-      },
-    ],
-    default: [], */
   },
   role: {
     type: String,
-    enum: ["user", "admin"], //tipos de roles para usuarios
+    enum: ["user", "admin", "premium"], //tipos de roles para usuarios
     default: "user", // Valor por defecto: 'usuario'
   },
 });

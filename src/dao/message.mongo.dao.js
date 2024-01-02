@@ -1,4 +1,5 @@
-import messageModel from "./models/message.model.js";
+//import messageModel from "./models/message.model.js";
+import messageModel from "../models/message.model.js";
 
 class MessageMongoDao {
   constructor() {}

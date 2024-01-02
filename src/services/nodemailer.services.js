@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
 import config from "../config/config.js";
-import ticketModel from "../dao/models/ticket.model.js";
+import ticketModel from "../models/ticket.model.js";
 
 const mailServices = async (ticket) => {
   const destinatario = ticket.purchaser;
