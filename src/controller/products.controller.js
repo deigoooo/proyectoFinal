@@ -88,6 +88,7 @@ export const addProductsController = async (req, res, next) => {
       stock,
       code,
       category,
+      owner: req.session.user.email,
     });
     res.status(201).json({ status: "success", payload: newProduct });
   } catch (error) {

@@ -1,4 +1,3 @@
-// import cartModel from "./models/cart.model.js";
 import cartModel from "../models/cart.model.js";
 
 export default class CartMongoDao {

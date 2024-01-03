@@ -6,7 +6,6 @@ import sessionRouter from "./routers/session.router.js";
 import mockingRouter from "./routers/mocking.router.js";
 import loggerTestRouter from "./routers/loggerTest.router.js";
 import errorHandler from "./middlewares/error.middleware.js";
-import logger from "./config/logger.config.js";
 import { messageService } from "./services/Factory.js";
 
 //middleware de SocketIO
@@ -30,7 +29,7 @@ const run = (socketServer, app) => {
   //configuracion del socket
   socketServer.on("connection", async (socket) => {
     socketServer.emit("logs", await messageService.getAll());
-    logger.info(`Nuevo cliente conectado: ${socket.id}`);
+    console.log(`Nuevo cliente conectado: ${socket.id}`);
     socket.on("productList", (data) => {
       socketServer.emit("updateProduct", data);
     });

@@ -42,6 +42,6 @@ export default {
     nodemailer_user: process.env.NODEMAILER_USER,
     nodemailer_password: process.env.NODEMAILER_PASS,
   },
-  PORT: program.opts().p,
+  PORT: program.opts().p || 8080,
   MODE: program.opts().mode,
 };
