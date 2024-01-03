@@ -98,6 +98,17 @@ export const addProductsController = async (req, res, next) => {
 export const deleteProductsController = async (req, res, next) => {
   try {
     const id = req.params.id;
+    if (req.session.user.role === "premium") {
+      const product = await productService.getById(id);
+      if (product.owner !== req.session.user.email) {
+        throw CustomError.createError({
+          name: "Delete product error",
+          cause: generateProductsErrorInfo(id),
+          message: `The product does not belong to the user`,
+          code: EError.DATABASES_ERROR,
+        });
+      }
+    }
     const products = await productService.getAll();
     const exist = products.find((product) => product._id == id);
     if (!exist) {
