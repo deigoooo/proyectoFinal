@@ -3,6 +3,6 @@ import { putUserController } from "../controller/users.controller.js";
 
 const router = Router();
 
-router.get("/premium/:uid", putUserController);
+router.put("/premium/:uid", putUserController);
 
 export default router;
