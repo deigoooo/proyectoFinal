@@ -7,19 +7,19 @@ export default (error, req, res, next) => {
   switch (error.code) {
     case EErros.ROUTING_ERROR:
       logger.error(error.cause);
-      res.status(400).send({ status: "error", error: error.name });
+      res.status(400).send({ status: "error", error: error.message });
       break;
     case EErros.INVALID_TYPES_ERROR:
       logger.error(error.cause);
-      res.status(400).send({ status: "error", error: error.name });
+      res.status(400).send({ status: "error", error: error.message });
       break;
     case EErros.DATABASES_ERROR:
       logger.error(error.cause);
-      res.status(400).send({ status: "error", error: error.name });
+      res.status(400).send({ status: "error", error: error.message });
       break;
     case EErros.BODY_EMPTY:
       logger.error(error.cause);
-      res.status(400).send({ status: "error", error: error.name });
+      res.status(400).send({ status: "error", error: error.message });
       break;
     default:
       logger.error(error.cause);
