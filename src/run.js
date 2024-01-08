@@ -5,6 +5,7 @@ import chatRouter from "./routers/messages.router.js";
 import sessionRouter from "./routers/session.router.js";
 import mockingRouter from "./routers/mocking.router.js";
 import loggerTestRouter from "./routers/loggerTest.router.js";
+import usersRouter from "./routers/users.router.js";
 import errorHandler from "./middlewares/error.middleware.js";
 import { messageService } from "./services/Factory.js";
 
@@ -25,6 +26,7 @@ const run = (socketServer, app) => {
 
   app.use("/api/products", productsRouter);
   app.use("/api/carts", cartsRouter);
+  app.use("/api/users", usersRouter);
 
   //configuracion del socket
   socketServer.on("connection", async (socket) => {
