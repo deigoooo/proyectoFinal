@@ -227,9 +227,43 @@ export const addProductToCartController = async (req, res) => {
   try {
     const cid = req.params.cid;
     const pid = req.params.pid;
-    const newCart = await cartService.addProductToCart(cid, pid);
-    if (typeof newCart === "string") {
-      /* return res.status(404).json({ status: "error", error: newCart }); */
+
+    const cartToUpdate = await cartService.getById(cid);
+    if (cartToUpdate === null) {
+      throw CustomError.createError({
+        name: "Add Product to Cart error",
+        cause: generateCartsErrorInfo(cid),
+        message: `Cart with id=${cid} Not found`,
+        code: EError.DATABASES_ERROR,
+      });
+    }
+
+    const productToAdd = await productService.getById(pid);
+    if (productToAdd === null) {
+      throw CustomError.createError({
+        name: "Add Product to Cart error",
+        cause: generateCartsErrorInfo(pid),
+        message: `Product with id=${pid} Not found`,
+        code: EError.DATABASES_ERROR,
+      });
+    }
+
+    if (productToAdd.owner === req.session.user.email) {
+      return res
+        .status(400)
+        .json({ status: "error", error: "You cannot buy your own products" });
+    }
+    const productIndex = cartToUpdate.products.findIndex(
+      (item) => item.product == pid
+    );
+    if (productIndex > -1) {
+      cartToUpdate.products[productIndex].quantity += 1;
+    } else {
+      cartToUpdate.products.push({ product: pid, quantity: 1 });
+    }
+    const result = await cartService.update(cid, cartToUpdate);
+    res.status(201).json({ status: "success", payload: result });
+    /* if (typeof newCart === "string") {
       throw CustomError.createError({
         name: "Add Product to Cart error",
         cause: generateCartsErrorInfo(newCart),
@@ -237,7 +271,7 @@ export const addProductToCartController = async (req, res) => {
         code: EError.DATABASES_ERROR,
       });
     }
-    res.status(200).json({ status: "success", payload: newCart });
+    res.status(200).json({ status: "success", payload: newCart }); */
   } catch (error) {
     next(error);
   }
