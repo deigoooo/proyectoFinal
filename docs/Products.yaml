@@ -1,0 +1,87 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los Productos.
+      tag:
+        -Products
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Products'
+  /api/products/{id}:
+    get:
+      summary: Obtiene el producto con un Id determinado
+      tags: 
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id del producto
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Products'
+  
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        _id: 
+          type: ObjectId
+          description: Id autogenerado por MongoDB
+        title:
+          type: String
+          description: Nombre del Productos
+        description:
+          type: String
+          description: Descripcion breve del producto
+        price:
+          type: Number
+          description: Precio del producto
+        thumbnail:
+          type: Array
+          description: Arreglo de objetos donde se pueden cargar fotos del producto
+        stock:
+          type: Number
+          description: Cantidad de productos con mismo id
+        code:
+          type: String
+          description: Codigo unico asignado al producto
+        status:
+          type: Boolean
+          description: Estado del producto
+        category:
+          type: String
+          description: Categoria del producto
+        owner:
+          type: String
+          description: E-mail del creador del producto
+      required:
+        - title
+        - description
+        - price
+        - stock
+        - code
+        - status
+        - category
+        - owner
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: header
+      name: Cookie
+      description: 'Utiliza una cookie de sesión almacenada en MongoDB'
+
+        

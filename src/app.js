@@ -9,6 +9,8 @@ import flash from "express-flash";
 import cors from "cors";
 import compression from "express-compression";
 import logger from "./config/logger.config.js";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 
 import config from "./config/config.js";
 
@@ -21,6 +23,21 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//inicializo swagger
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.1",
+    info: {
+      title: "Documentacion del proyecto final de CoderHouse",
+      description:
+        "Este es un Ecommerce que forma parte de la entrega final de mi proyecto",
+    },
+  },
+  apis: ["./docs/**/*.yaml"],
+};
+const specs = swaggerJSDoc(swaggerOptions);
+app.use("/docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 //configuramos los cors
 app.use(cors());

@@ -38,6 +38,8 @@
     "passport-local": "^1.0.0",
     "shortid": "^2.2.16",
     "socket.io": "^4.7.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "sweetalert2": "^11.9.0",
     "winston": "^3.11.0"
   }

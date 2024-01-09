@@ -11,28 +11,28 @@ import { handlePolicies } from "../middlewares/auth.middleware.js";
 const router = Router();
 
 router.get(
-  "/",
-  handlePolicies(["USER", "ADMIN", "PREMIUM"]),
+  "/" /* ,
+  handlePolicies(["USER", "ADMIN", "PREMIUM"]) */,
   getProductsController
 );
 
 router.get(
-  "/:id",
-  handlePolicies(["USER", "ADMIN"]),
+  "/:id" /* ,
+  handlePolicies(["USER", "ADMIN"]) */,
   getProductsByIdController
 );
 
 router.put(
-  "/:id",
-  handlePolicies(["PREMIUM", "ADMIN"]),
+  "/:id" /* ,
+  handlePolicies(["PREMIUM", "ADMIN"]) */,
   updateProductsController
 );
 
-router.post("/", handlePolicies(["PREMIUM"]), addProductsController);
+router.post("/" /* , handlePolicies(["PREMIUM"]) */, addProductsController);
 
 router.delete(
-  "/:id",
-  handlePolicies(["PREMIUM", "ADMIN"]),
+  "/:id" /* ,
+  handlePolicies(["PREMIUM", "ADMIN"]) */,
   deleteProductsController
 );
 

@@ -1,0 +1,23 @@
+paths:
+  /api/carts:
+    get:
+      summary: Obtiene todos los Productos.
+      tag:
+        -Products
+      responses:
+        "200":
+          description: "Los productos fueron obtenidos satisfactoriamente de la base de datos"
+        "500":
+          description: "Error interno en el servidor"
+  
+components:
+  schemas:
+    Carts:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado por mongoDB
+        Products:
+          type: Array
+          description: Arreglo de productos y su cantidad que tiene un carro de compras
