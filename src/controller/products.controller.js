@@ -17,7 +17,7 @@ export const getProductsByIdController = async (req, res, next) => {
   try {
     const id = req.params.id;
     const result = await productService.getById(id);
-    if (typeof result === "string") {
+    if (result === null) {
       throw CustomError.createError({
         name: "Delete product error",
         cause: generateProductsErrorInfo(id),
@@ -90,6 +90,8 @@ export const addProductsController = async (req, res, next) => {
       category,
       owner: req.session.user.email,
     });
+    const products = await productService.getAll();
+    req.io.emit("updateProduct", products);
     res.status(201).json({ status: "success", payload: newProduct });
   } catch (error) {
     next(error);
