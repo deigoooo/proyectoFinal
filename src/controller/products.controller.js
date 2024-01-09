@@ -4,7 +4,7 @@ import CustomError from "../services/errors/custom_error.js";
 import EError from "../services/errors/enums.js";
 import { generateProductsErrorInfo } from "../services/errors/info.js";
 
-export const getProductsController = async (req, res) => {
+export const getProductsController = async (req, res, next) => {
   try {
     const result = await productService.getAllPaginate(req, config.PORT);
     res.status(result.statusCode).json(result.response);

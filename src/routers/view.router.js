@@ -14,19 +14,19 @@ const router = Router();
 router.get(
   "/",
   publicRoutes,
-  handlePolicies(["USER", "ADMIN"]),
+  handlePolicies(["USER", "ADMIN", "PREMIUM"]),
   getViewController
 );
 
 router.get(
   "/realTimeProducts",
-  handlePolicies(["USER", "ADMIN"]),
+  handlePolicies(["USER", "ADMIN", "PREMIUM"]),
   realTimeController
 );
 
 router.get(
   "/:cid",
-  handlePolicies(["USER", "ADMIN"]),
+  handlePolicies(["USER", "ADMIN", "PREMIUM"]),
   getProductViewController
 );
 

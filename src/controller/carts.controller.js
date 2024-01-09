@@ -9,7 +9,7 @@ import CustomError from "../services/errors/custom_error.js";
 import EError from "../services/errors/enums.js";
 import { generateCartsErrorInfo } from "../services/errors/info.js";
 
-export const getCartsController = async (req, res) => {
+export const getCartsController = async (req, res, next) => {
   try {
     const carts = await cartService.getAll();
     res.status(200).json({ status: "succes", payload: carts });
@@ -18,7 +18,7 @@ export const getCartsController = async (req, res) => {
   }
 };
 
-export const getCartController = async (req, res) => {
+export const getCartController = async (req, res, next) => {
   try {
     const result = await cartService.getProductsFromCart(req, res);
     res.status(result.statusCode).json(result.response);
@@ -27,11 +27,11 @@ export const getCartController = async (req, res) => {
   }
 };
 
-export const updateCartController = async (req, res) => {
+export const updateCartController = async (req, res, next) => {
   try {
     const cid = req.params.cid;
     const cartToUpdate = await cartService.getById(cid);
-    if (typeof cartToUpdate === "string") {
+    if (cartToUpdate === null) {
       /* return res.status(404).json({ status: "error", error: cartToUpdate }); */
       throw CustomError.createError({
         name: "Update Cart error",
@@ -116,12 +116,12 @@ export const updateCartController = async (req, res) => {
   }
 };
 
-export const updateProductOnCartController = async (req, res) => {
+export const updateProductOnCartController = async (req, res, next) => {
   try {
     const cid = req.params.cid;
     const pid = req.params.pid;
     const cartToUpdate = await cartService.getById(cid);
-    if (typeof cartToUpdate === "string") {
+    if (cartToUpdate === null) {
       /* return res
         .status(404)
         .json({ status: "error", error: `Cart with id=${cid} Not found` }); */
@@ -133,7 +133,7 @@ export const updateProductOnCartController = async (req, res) => {
       });
     }
     const productToUpdate = await productService.getById(pid);
-    if (typeof productToUpdate === "string") {
+    if (productToUpdate === null) {
       /* return res
         .status(404)
         .json({ status: "error", error: `Product with id=${pid} Not found` }); */
@@ -203,7 +203,7 @@ export const updateProductOnCartController = async (req, res) => {
   }
 };
 
-export const addCartController = async (req, res) => {
+export const addCartController = async (req, res, next) => {
   try {
     const newCart = await cartService.create();
     if (typeof newCart === "string") {
@@ -223,7 +223,7 @@ export const addCartController = async (req, res) => {
   }
 };
 
-export const addProductToCartController = async (req, res) => {
+export const addProductToCartController = async (req, res, next) => {
   try {
     const cid = req.params.cid;
     const pid = req.params.pid;
@@ -247,11 +247,13 @@ export const addProductToCartController = async (req, res) => {
         code: EError.DATABASES_ERROR,
       });
     }
-
     if (productToAdd.owner === req.session.user.email) {
-      return res
-        .status(400)
-        .json({ status: "error", error: "You cannot buy your own products" });
+      throw CustomError.createError({
+        name: "Add Product to Cart error",
+        cause: generateCartsErrorInfo(pid),
+        message: `Product with owner=${req.session.user.email} cant add the own product`,
+        code: EError.DATABASES_ERROR,
+      });
     }
     const productIndex = cartToUpdate.products.findIndex(
       (item) => item.product == pid
@@ -273,15 +275,16 @@ export const addProductToCartController = async (req, res) => {
     }
     res.status(200).json({ status: "success", payload: newCart }); */
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
 
-export const deleteCartController = async (req, res) => {
+export const deleteCartController = async (req, res, next) => {
   try {
     const cid = req.params.cid;
     const find = await cartService.getById(cid);
-    if (typeof find === "string") {
+    if (find === null) {
       /* return res
         .status(404)
         .json({ status: "error", error: "ID does not exist" }); */
@@ -300,7 +303,7 @@ export const deleteCartController = async (req, res) => {
   }
 };
 
-export const deleteProductFromCart = async (req, res) => {
+export const deleteProductFromCart = async (req, res, next) => {
   try {
     const cid = req.params.cid;
     const pid = req.params.pid;
@@ -320,7 +323,7 @@ export const deleteProductFromCart = async (req, res) => {
   }
 };
 
-export const purchaseController = async (req, res) => {
+export const purchaseController = async (req, res, next) => {
   try {
     const cid = req.params.cid;
     const cartToPurchase = await cartService.getById(cid);
