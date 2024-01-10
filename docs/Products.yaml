@@ -2,8 +2,8 @@ paths:
   /api/products:
     get:
       summary: Obtiene todos los Productos.
-      tag:
-        -Products
+      tags:
+        - Products
       responses:
         '200':
           description: Successful operation
@@ -13,13 +13,152 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Products'
-  /api/products/{id}:
+    post:
+        summary: Crea un nuevo Productos.
+        tags:
+          - Products
+        security:
+          - sessionAuth: []
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  title:
+                    type: String
+                    description: Nombre del Productos
+                  description:
+                    type: String
+                    description: Descripcion breve del producto
+                  price:
+                    type: Number
+                    description: Precio del producto
+                  thumbnail:
+                    type: Array
+                    description: Arreglo de objetos donde se pueden cargar fotos del producto
+                  stock:
+                    type: Number
+                    description: Cantidad de productos con mismo id
+                  code:
+                    type: String
+                    description: Codigo unico asignado al producto
+                  status:
+                    type: Boolean
+                    description: Estado del producto
+                  category:
+                    type: String
+                    description: Categoria del producto
+                  owner:
+                    type: String
+                    description: E-mail del creador del producto
+                required:
+                  - title
+                  - description
+                  - price
+                  - stock
+                  - code
+                  - category
+        responses:
+          '201':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Products'                
+  /api/products/{pid}:
     get:
       summary: Obtiene el producto con un Id determinado
       tags: 
         - Products
+      security:
+        - sessionAuth: []
       parameters:
-        - name: id
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Products'
+    put:
+      summary: Actualiza el producto con ID determinado
+      tags: 
+        - Products
+      security:
+          - sessionAuth: []
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto
+          schema:
+            type: string
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  title:
+                    type: String
+                    description: Nombre del Productos
+                  description:
+                    type: String
+                    description: Descripcion breve del producto
+                  price:
+                    type: Number
+                    description: Precio del producto
+                  thumbnail:
+                    type: Array
+                    description: Arreglo de objetos donde se pueden cargar fotos del producto
+                  stock:
+                    type: Number
+                    description: Cantidad de productos con mismo id
+                  code:
+                    type: String
+                    description: Codigo unico asignado al producto
+                  status:
+                    type: Boolean
+                    description: Estado del producto
+                  category:
+                    type: String
+                    description: Categoria del producto
+                  owner:
+                    type: String
+                    description: E-mail del creador del producto
+                required:
+                  - title
+                  - description
+                  - price
+                  - stock
+                  - code
+                  - category
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Products'
+    delete:
+      summary: Elimina el producto con un Id determinado
+      tags: 
+        - Products
+      security:
+          - sessionAuth: []
+      parameters:
+        - name: pid
           in: path
           required: true
           description: Id del producto
