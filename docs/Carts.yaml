@@ -1,14 +1,89 @@
 paths:
   /api/carts:
     get:
-      summary: Obtiene todos los Productos.
-      tag:
-        -Products
+      summary: Obtiene todos los Carritos.
+      tags:
+        - Carts
       responses:
-        "200":
-          description: "Los productos fueron obtenidos satisfactoriamente de la base de datos"
-        "500":
-          description: "Error interno en el servidor"
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Carts'
+    post:
+      summary: Crea un nuevo carrito.
+      tags:
+        - Carts
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Carts'
+  /api/carts/{cid}:
+    get:
+      summary: Obtiene el carrito con un Id determinado
+      tags: 
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carts'
+    put:
+      summary: Actualiza el carrito con un Id determinado
+      tags: 
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                products:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product:
+                        $ref: '#/components/schemas/products'
+                      quantity:
+                        type: integer  # Corregido a integer
+                        description: Cantidad de ese producto
+                required:
+                  - products
+                  - quantity
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carts'
+
   
 components:
   schemas:
@@ -18,6 +93,14 @@ components:
         _id:
           type: ObjectId
           description: Id autogenerado por mongoDB
-        Products:
-          type: Array
-          description: Arreglo de productos y su cantidad que tiene un carro de compras
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                description: "ID del producto"
+              quantity:
+                type: number
+                description: "Cantidad del producto"
