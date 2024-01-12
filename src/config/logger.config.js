@@ -23,32 +23,31 @@ const customWinstonLevels = {
 winston.addColors(customWinstonLevels.colors);
 
 const createLogger = (env) => {
+  const consoleTransport = new winston.transports.Console({
+    level: env === "production" ? "info" : "debug",
+    format: winston.format.combine(
+      winston.format.timestamp(),
+      winston.format.colorize(),
+      winston.format.simple()
+    ),
+  });
+
+  const fileTransport = new winston.transports.File({
+    filename: "errors.log",
+    level: "error",
+    format: winston.format.json(),
+  });
+
+  const loggerOptions = {
+    levels: customWinstonLevels.levels,
+    transports: [consoleTransport],
+  };
+
   if (env === "production") {
-    return winston.createLogger({
-      levels: customWinstonLevels.levels,
-      transports: [
-        new winston.transports.File({
-          filename: "errors.log",
-          level: "info",
-          format: winston.format.json(),
-        }),
-      ],
-    });
-  } else {
-    return winston.createLogger({
-      levels: customWinstonLevels.levels,
-      transports: [
-        new winston.transports.Console({
-          level: "debug",
-          format: winston.format.combine(
-            winston.format.timestamp(),
-            winston.format.colorize(),
-            winston.format.simple()
-          ),
-        }),
-      ],
-    });
+    loggerOptions.transports.push(fileTransport);
   }
+
+  return winston.createLogger(loggerOptions);
 };
 
 const logger = createLogger(config.MODE);
