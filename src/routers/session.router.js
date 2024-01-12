@@ -145,9 +145,17 @@ router.get("/verify-token/:token", async (req, res) => {
 router.post("/reset-password/:user", async (req, res) => {
   try {
     const user = await UserModel.findOne({ email: req.params.user });
+
+    if (compareHash(newPassword, user.password)) {
+      return res.status(400).json({
+        status: "error",
+        error: "La nueva contraseña no puede ser igual a la anterior",
+      });
+    }
     await UserModel.findByIdAndUpdate(user._id, {
       password: createHash(req.body.newPassword),
     });
+    await UserPasswordModel.deleteOne({ email: req.params.user });
     res.json({
       status: "success",
       message: "Se ha creado una nueva contraseña",
