@@ -4,7 +4,7 @@ import nodemailer from "nodemailer";
 import UserDTO from "../dto/user.dto.js";
 import UserModel from "../models/user.model.js";
 import UserPasswordModel from "../models/user-password.model.js";
-import { generateRandomString, createHash } from "../util.js";
+import { generateRandomString, createHash } from "../utils/util.js";
 import config from "../config/config.js";
 
 const router = Router();

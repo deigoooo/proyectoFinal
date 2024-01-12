@@ -1,13 +1,13 @@
-import productsRouter from "./routers/products.router.js";
-import cartsRouter from "./routers/carts.router.js";
-import viewRouter from "./routers/view.router.js";
-import chatRouter from "./routers/messages.router.js";
-import sessionRouter from "./routers/session.router.js";
-import mockingRouter from "./routers/mocking.router.js";
-import loggerTestRouter from "./routers/loggerTest.router.js";
-import usersRouter from "./routers/users.router.js";
-import errorHandler from "./middlewares/error.middleware.js";
-import { messageService } from "./services/Factory.js";
+import productsRouter from "../routers/products.router.js";
+import cartsRouter from "../routers/carts.router.js";
+import viewRouter from "../routers/view.router.js";
+import chatRouter from "../routers/messages.router.js";
+import sessionRouter from "../routers/session.router.js";
+import mockingRouter from "../routers/mocking.router.js";
+import loggerTestRouter from "../routers/loggerTest.router.js";
+import usersRouter from "../routers/users.router.js";
+import errorHandler from "../middlewares/error.middleware.js";
+import { messageService } from "../services/Factory.js";
 
 //middleware de SocketIO
 const run = (socketServer, app) => {

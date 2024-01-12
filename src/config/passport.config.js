@@ -4,7 +4,7 @@ import GitHubStrategy from "passport-github2";
 import GoogleStrategy from "passport-google-oauth20";
 import userModel from "../models/user.model.js";
 import { cartService } from "../services/Factory.js";
-import { createHash, isValidPassword } from "../util.js";
+import { createHash, isValidPassword } from "../utils/util.js";
 import config from "../config/config.js";
 
 const localStrategy = local.Strategy;
