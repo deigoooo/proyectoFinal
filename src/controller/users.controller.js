@@ -9,18 +9,15 @@ export const putUserController = async (req, res) => {
     } */
     let result;
 
-    if (user.role === "admin") {
+    if (user.role === "user") {
       user.role = "premium";
-      console.log(user);
-      result = await userModel.findByIdAndUpdate(uid, user, {
-        returnDocument: "after",
-      });
-    } else {
+    } else if (user.role === "premium") {
       user.role = "admin";
-      result = await userModel.findByIdAndUpdate(uid, user, {
-        returnDocument: "after",
-      });
     }
+
+    result = await userModel.findByIdAndUpdate(uid, user, {
+      returnDocument: "after",
+    });
     res.status(200).json({ status: "success", payload: result.role });
   } catch (error) {
     res.status(500).json({ status: "error", error: error.message });
