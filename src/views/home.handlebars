@@ -5,13 +5,13 @@
   0px 0px; padding: 0px; } .profile li ul{ display: none; position: absolute;
   min-width: 140px; background-color: #969696; z-index: 1; } .profile{ margin:
   0px; padding: 0px; } .icono-grande{ margin-left: 0px; font-size: 35px; }
-  .profile li:hover >ul{ display: block; }
+  .profile li:hover >ul{ display: block; } .my-icon{color:rgb(51, 51, 51)}
 
 </style>
 
 <div class="navbar">
   <ul class="profile">
-    <li><i class="fa-solid fa-id-card icono-grande"></i>
+    <li><i class="fa-solid fa-id-card icono-grande my-icon"></i>
       <ul>
         <li><a id="cid" data-cid="{{user.carts}}">ID:
             <b>{{user._id}}</b></a></li>
@@ -46,9 +46,15 @@
       </ul>
     </li>
   </ul>
-  <a href="/products/{{user.carts}}"><i
-      class="fa-solid fa-cart-shopping icono-grande"
-    ></i></a>
+  <div>
+    <a href="/products/realTimeProducts"><i
+        class="fa-solid fa-square-plus icono-grande my-icon"
+      ></i></a>
+    <a href="/products/{{user.carts}}"><i
+        class="fa-solid fa-cart-shopping icono-grande my-icon"
+      ></i></a>
+
+  </div>
 </div>
 <hr />
 <div align="center">
