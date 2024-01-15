@@ -45,3 +45,13 @@ export const generateRandomString = (num) => {
     .join("")
     .toUpperCase();
 };
+
+export const compareHash = async (passwordToCompare, hashedPassword) => {
+  try {
+    const match = await bcrypt.compare(passwordToCompare, hashedPassword);
+    return match;
+  } catch (error) {
+    console.error("Error al comparar contraseñas:", error);
+    throw error;
+  }
+};

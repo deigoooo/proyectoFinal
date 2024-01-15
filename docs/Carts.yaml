@@ -71,11 +71,22 @@ paths:
                       product:
                         $ref: '#/components/schemas/products'
                       quantity:
-                        type: integer  # Corregido a integer
+                        type: integer
                         description: Cantidad de ese producto
-                required:
-                  - products
-                  - quantity
+              required:
+                - products
+                - quantity
+    delete:
+      summary: Elimina los productos del carrito
+      tags: 
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito
+          schema:
+            type: string
       responses:
         '200':
           description: Successful operation
@@ -83,6 +94,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Carts'
+  /api/carts/{cid}/purchase:
+    get:
+      summary: Obtiene el ticket de un carrito determinado
+      tags: 
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito
+          schema:
+            type: string
+
 
   
 components:
