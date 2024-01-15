@@ -265,15 +265,6 @@ export const addProductToCartController = async (req, res, next) => {
     }
     const result = await cartService.update(cid, cartToUpdate);
     res.status(201).json({ status: "success", payload: result });
-    /* if (typeof newCart === "string") {
-      throw CustomError.createError({
-        name: "Add Product to Cart error",
-        cause: generateCartsErrorInfo(newCart),
-        message: `${newCart.message}`,
-        code: EError.DATABASES_ERROR,
-      });
-    }
-    res.status(200).json({ status: "success", payload: newCart }); */
   } catch (error) {
     console.error(error);
     next(error);
@@ -309,7 +300,6 @@ export const deleteProductFromCart = async (req, res, next) => {
     const pid = req.params.pid;
     const result = await cartService.deleteProductFromCart(cid, pid);
     if (typeof result === "string") {
-      /* return res.status(404).json({ status: "error", error: result }); */
       throw CustomError.createError({
         name: "Delete Product from Cart error",
         cause: generateCartsErrorInfo(cid),

@@ -106,8 +106,106 @@ paths:
           description: Id del carrito
           schema:
             type: string
-
-
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carts'
+  /api/carts/{cid}/product/{pid}:
+    put:
+      summary: Actualiza la cantidad de productos de un carrito
+      tags: 
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  description: Cantidad de ese producto
+              required:
+                - quantity
+      responses:
+        '200':
+          description: Éxito. El producto en el carrito ha sido actualizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carts'
+        '404':
+          description: No se encontró el carrito o el producto.
+        '400':
+          description: Error en la solicitud. La cantidad no puede ser cero o no es un número.
+        '500':
+          description: Error interno del servidor.
+    post:
+      summary: Agrega un producto en un carrito determinado
+      tags: 
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Producto añadido al carrito exitosamente.
+        '404':
+          description: No se encontró el carrito o el producto.
+        '400':
+          description: Error en la solicitud. Puede ocurrir si el propietario intenta agregar su propio producto.
+        '500':
+          description: Error interno del servidor.
+    delete:
+      summary: Eliminar un producto del carrito.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Producto eliminado del carrito exitosamente.
+        '404':
+          description: No se encontró el carrito o el producto.
+        '500':
+          description: Error interno del servidor.
   
 components:
   schemas:
