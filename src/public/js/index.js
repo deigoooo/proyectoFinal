@@ -1,6 +1,7 @@
 const socketClient = io();
 let table = document.getElementById("realProduct");
 let getProduct = document.getElementById("getProducts");
+let btnDelete = document.getElementById("btnDelete");
 
 document.getElementById("createBtn").addEventListener("click", async () => {
   const body = {

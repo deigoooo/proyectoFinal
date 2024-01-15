@@ -12,7 +12,7 @@ const productSchema = new mongoose.Schema({
   code: { type: String, required: true, unique: true },
   status: { type: Boolean, required: true, default: true },
   category: { type: String, required: true },
-  owner: { type: String, required: true },
+  owner: { type: String, required: true, default: "admin", ref: "users" },
 });
 productSchema.plugin(mongoosePaginate);
 const productModel = mongoose.model(productCollection, productSchema);

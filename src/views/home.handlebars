@@ -16,8 +16,11 @@
         <li><a id="cid" data-cid="{{user.carts}}">ID:
             <b>{{user._id}}</b></a></li>
         <li><a>Hola <b>{{user.first_name}}</b></a></li>
-        <li><a>{{user.email}}</a></li>
-        <li><a>Rol: {{user.role}}</a></li>
+        <li><a
+            id="userEmail"
+            data-useremail="{{user.email}}"
+          >{{user.email}}</a></li>
+        <li>Role: <a id="role">{{user.role}}</a></li>
         <li><button
             class="btn btn-danger"
             style="
@@ -47,7 +50,7 @@
     </li>
   </ul>
   <div>
-    <a href="/products/realTimeProducts"><i
+    <a id="btnAdmin" href="/products/realTimeProducts"><i
         class="fa-solid fa-square-plus icono-grande my-icon"
       ></i></a>
     <a href="/products/{{user.carts}}"><i
@@ -100,7 +103,10 @@
 </table>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-  const addProductToCart = async (pid) => { let cartId =
+  const btnAdmin= document.getElementById("btnAdmin"); const btnR =
+  document.getElementById('role'); const role = btnR.textContent ||
+  btnR.innerText; if(role==='user'){btnAdmin.style.display = "none";} ; const
+  addProductToCart = async (pid) => { let cartId =
   document.getElementById("cid"); let cid = cartId.getAttribute("data-cid");
   const response = await fetch(`/api/carts/${cid}/product/${pid}`, { method:
   "POST", headers: { "Content-Type": "application/json", }, });

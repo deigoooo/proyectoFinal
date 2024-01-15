@@ -12,7 +12,7 @@ export const putUserController = async (req, res) => {
     if (user.role === "user") {
       user.role = "premium";
     } else if (user.role === "premium") {
-      user.role = "admin";
+      user.role = "user";
     }
 
     result = await userModel.findByIdAndUpdate(uid, user, {
