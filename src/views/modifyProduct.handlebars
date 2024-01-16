@@ -16,7 +16,7 @@
   </div>
   <br />
   <form
-    id="addProduct"
+    id="updateProductForm"
     style="max-width: 600px; margin:auto; border-radius: 5px"
     class="border border-primary-subtle p-3"
   >
@@ -27,7 +27,7 @@
         type="text"
         class="form-control"
         id="title"
-        placeholder="Nombre del producto"
+        placeholder="{{product.title}}"
       />
     </div>
     <div class="mb-3">
@@ -36,7 +36,7 @@
         type="text"
         class="form-control"
         id="description"
-        placeholder="Descripcion del producto"
+        placeholder="{{product.description}}"
       />
     </div>
     <div class="mb-3">
@@ -45,7 +45,7 @@
         type="text"
         class="form-control"
         id="price"
-        placeholder="Precio del producto"
+        placeholder="{{product.price}}"
       />
     </div>
     <div class="mb-3">
@@ -54,7 +54,7 @@
         type="text"
         class="form-control"
         id="thumbnail"
-        placeholder="Imagen del producto"
+        placeholder="{{product.thumbnail}}"
       />
     </div>
     <div class="mb-3">
@@ -63,16 +63,26 @@
         type="text"
         class="form-control"
         id="stock"
-        placeholder="Stock del producto"
+        placeholder="{{product.stock}}"
       />
     </div>
+
     <div class="mb-3">
       <label for="code" class="form-label">Codigo</label>
       <input
         type="text"
         class="form-control"
         id="code"
-        placeholder="Codigo del producto"
+        placeholder="{{product.code}}"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="code" class="form-label">Status</label>
+      <input
+        type="boolean"
+        class="form-control"
+        id="status"
+        placeholder="{{product.status}}"
       />
     </div>
     <div class="mb-3">
@@ -81,9 +91,22 @@
         type="text"
         class="form-control"
         id="category"
-        placeholder="Categoria del producto"
+        placeholder="{{product.category}}"
       />
     </div>
-    <button id="createBtn" class="btn btn-primary">Agregar Producto</button>
+    <button id="updateBtn" class="btn btn-primary">Modificar Producto</button>
   </form>
 </div>
+<script>
+  document.getElementById('updateBtn').addEventListener('click', async ()=> {
+  const body = { title: document.getElementById("title").value,
+  description:document.getElementById("description").value, price:
+  document.getElementById("price").value, thumbnail:
+  document.getElementById("thumbnail").value, stock:
+  document.getElementById("stock").value, code:
+  document.getElementById("code").value, status:
+  document.getElementById("status").value, category:
+  document.getElementById("category").value, }; const result = await
+  fetch("/api/products",{ method:"put", body:JSON.stringify(body), headers:{
+  "Content-Type":"application/json", }, }) });
+</script>

@@ -88,5 +88,7 @@ export const getProductViewController = async (req, res) => {
 export const getModifyProductController = async (req, res) => {
   const pid = req.params.pid;
   const user = req.session.user;
-  res.render("modifyProduct", { pid: pid, user: user });
+
+  const product = await productService.getById(pid);
+  res.render("modifyProduct", { product: product, user: user });
 };
