@@ -176,6 +176,10 @@ paths:
       responses:
         '201':
           description: Producto añadido al carrito exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carts'
         '404':
           description: No se encontró el carrito o el producto.
         '400':
@@ -202,6 +206,10 @@ paths:
       responses:
         '200':
           description: Producto eliminado del carrito exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carts'
         '404':
           description: No se encontró el carrito o el producto.
         '500':

@@ -3,6 +3,7 @@ import {
   getViewController,
   realTimeController,
   getProductViewController,
+  getModifyProductController,
 } from "../controller/view.controller.js";
 import {
   handlePolicies,
@@ -29,5 +30,7 @@ router.get(
   handlePolicies(["USER", "ADMIN", "PREMIUM"]),
   getProductViewController
 );
+
+router.get("/modify/:pid", getModifyProductController);
 
 export default router;

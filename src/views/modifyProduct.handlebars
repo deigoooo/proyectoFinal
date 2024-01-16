@@ -1,14 +1,14 @@
 <style type="text/css">
   .navbar{ display: flex; width:100%; justify-content: flex-end;
-  background-color:#969696; align-items: center; padding-rigth: px;
-  padding-right: 10px; margin-bottom: 10px;} .icono-grande{ margin-right: 15px;
+  background-color:#969696; align-items: center; padding-left: 10px;
+  padding-right: 10px; margin-bottom: 10px;} .icono-grande{ margin-left: 0px;
   font-size: 35px; color:rgb(51, 51, 51); }
 </style>
 
 <div style="display: block; width:100vw; max-width: 100%;">
   <div class="navbar">
     <div>
-      <a id="btnAdmin" href="/products/"><i
+      <a id="btnAdmin" href="/products/realTimeProducts"><i
           class="fa-solid fa-backward icono-grande"
         ></i></a>
 
@@ -20,7 +20,7 @@
     style="max-width: 600px; margin:auto; border-radius: 5px"
     class="border border-primary-subtle p-3"
   >
-    <h2>Agregar Producto</h2>
+    <h2>Modificar Producto</h2>
     <div class="mb-3">
       <label for="title" class="form-label">Nombre</label>
       <input
@@ -86,65 +86,4 @@
     </div>
     <button id="createBtn" class="btn btn-primary">Agregar Producto</button>
   </form>
-  <hr />
-  <div align="center">
-    {{#if paginateInfo.hasPrevPage}}
-      <a href="{{paginateInfo.prevLink}}">Anterior</a>
-    {{/if}}
-    {{#each paginateInfo.totalPages}}
-      <a href="{{this.link}}">{{this.page}}</a>
-    {{/each}}
-    {{#if paginateInfo.hasNextPage}}
-      <a href="{{paginateInfo.nextLink}}">Siguiente</a>
-    {{/if}}
-  </div>
-  <hr />
-  <div style="max-width: 100%; overflow-x: auto;">
-    <table class="table table-dark table-striped" id="realProduct">
-      <thead>
-        <tr>
-          <th class="col-1">ID</th>
-          <th class="col-1">Nombre</th>
-          <th class="col-4">Descripcion</th>
-          <th class="col-1">Precio</th>
-          <th class="col-1">Stock</th>
-          <th class="col-1">Codigo</th>
-          <th class="col-1">Categoria</th>
-          <th class="col-1"></th>
-          <th class="col-1"></th>
-        </tr>
-      </thead>
-
-      <tbody id="getproducts">
-        {{#each products}}
-          <tr>
-            <td>{{this._id}}</td>
-            <td>{{this.title}}</td>
-            <td>{{this.description}}</td>
-            <td>{{this.price}}</td>
-            <td>{{this.stock}}</td>
-            <td>{{this.code}}</td>
-            <td>{{this.category}}</td>
-            <td><button
-                onclick="deleteProduct('{{this._id}}')"
-                class="btn btn-danger"
-                id=""
-              >Eliminar</button></td>
-            <td><button
-                {{!-- onclick="deleteProduct('{{this._id}}')" --}}
-                class="btn btn-Primary"
-                id=""
-              ><a
-                  style="color: white; text-decoration: none"
-                  href="/products/modify/{{this._id}}"
-                >Modificar</a></button></td>
-          </tr>
-        {{/each}}
-      </tbody>
-
-    </table>
-
-  </div>
 </div>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script>

@@ -84,3 +84,9 @@ export const getProductViewController = async (req, res) => {
       .json({ status: "error", error: result.response.error });
   }
 };
+
+export const getModifyProductController = async (req, res) => {
+  const pid = req.params.pid;
+  const user = req.session.user;
+  res.render("modifyProduct", { pid: pid, user: user });
+};
