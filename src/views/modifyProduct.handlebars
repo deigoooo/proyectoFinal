@@ -1,112 +1,99 @@
 <style type="text/css">
-  .navbar{ display: flex; width:100%; justify-content: flex-end;
-  background-color:#969696; align-items: center; padding-left: 10px;
-  padding-right: 10px; margin-bottom: 10px;} .icono-grande{ margin-left: 0px;
-  font-size: 35px; color:rgb(51, 51, 51); }
-</style>
+  .navbar {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    background-color: #969696;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+  }
 
-<div style="display: block; width:100vw; max-width: 100%;">
+  .icono-grande {
+    margin-left: 0px;
+    font-size: 35px;
+    color: rgb(51, 51, 51);
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div style="display: block; width:100vw; max-width: 100%; text-align: center;">
   <div class="navbar">
     <div>
-      <a id="btnAdmin" href="/products/realTimeProducts"><i
-          class="fa-solid fa-backward icono-grande"
-        ></i></a>
+      <a id="btnAdmin" href="/products/realTimeProducts"><i class="fa-solid fa-backward icono-grande"></i></a>
 
     </div>
   </div>
   <br />
-  <form
-    id="updateProductForm"
-    style="max-width: 600px; margin:auto; border-radius: 5px"
-    class="border border-primary-subtle p-3"
-  >
+  <form id="updateProductForm" style="max-width: 600px; margin:auto; border-radius: 5px"
+    class="border border-primary-subtle p-3">
     <h2>Modificar Producto</h2>
     <div class="mb-3">
       <label for="title" class="form-label">Nombre</label>
-      <input
-        type="text"
-        class="form-control"
-        id="title"
-        placeholder="{{product.title}}"
-      />
+      <input type="text" class="form-control" id="title" value="{{product.title}}" />
     </div>
     <div class="mb-3">
       <label for="description" class="form-label">Descipcion</label>
-      <input
-        type="text"
-        class="form-control"
-        id="description"
-        placeholder="{{product.description}}"
-      />
+      <input type="text" class="form-control" id="description" value="{{product.description}}" />
     </div>
     <div class="mb-3">
       <label for="price" class="form-label">Precio</label>
-      <input
-        type="text"
-        class="form-control"
-        id="price"
-        placeholder="{{product.price}}"
-      />
+      <input type="text" class="form-control" id="price" value="{{product.price}}" />
     </div>
     <div class="mb-3">
       <label for="thumbnail" class="form-label">Imagen</label>
-      <input
-        type="text"
-        class="form-control"
-        id="thumbnail"
-        placeholder="{{product.thumbnail}}"
-      />
+      <input type="text" class="form-control" id="thumbnail" value="{{product.thumbnail}}" />
     </div>
     <div class="mb-3">
       <label for="stock" class="form-label">Stock</label>
-      <input
-        type="text"
-        class="form-control"
-        id="stock"
-        placeholder="{{product.stock}}"
-      />
+      <input type="text" class="form-control" id="stock" value="{{product.stock}}" />
     </div>
 
     <div class="mb-3">
       <label for="code" class="form-label">Codigo</label>
-      <input
-        type="text"
-        class="form-control"
-        id="code"
-        placeholder="{{product.code}}"
-      />
+      <input type="text" class="form-control" id="code" value="{{product.code}}" />
     </div>
     <div class="mb-3">
       <label for="code" class="form-label">Status</label>
-      <input
-        type="boolean"
-        class="form-control"
-        id="status"
-        placeholder="{{product.status}}"
-      />
+      <input type="boolean" class="form-control" id="status" value="{{product.status}}" />
     </div>
     <div class="mb-3">
       <label for="category" class="form-label">Categoria</label>
-      <input
-        type="text"
-        class="form-control"
-        id="category"
-        placeholder="{{product.category}}"
-      />
+      <input type="text" class="form-control" id="category" value="{{product.category}}" />
     </div>
-    <button id="updateBtn" class="btn btn-primary">Modificar Producto</button>
   </form>
+  <button id="updateBtn" class="btn btn-primary m-1" onclick="updateProduct('{{product._id}}')">Modificar
+    Producto</button>
 </div>
 <script>
-  document.getElementById('updateBtn').addEventListener('click', async ()=> {
-  const body = { title: document.getElementById("title").value,
-  description:document.getElementById("description").value, price:
-  document.getElementById("price").value, thumbnail:
-  document.getElementById("thumbnail").value, stock:
-  document.getElementById("stock").value, code:
-  document.getElementById("code").value, status:
-  document.getElementById("status").value, category:
-  document.getElementById("category").value, }; const result = await
-  fetch("/api/products",{ method:"put", body:JSON.stringify(body), headers:{
-  "Content-Type":"application/json", }, }) });
+  const updateProduct = async (pid) => {
+    const body = {
+      title:
+        document.getElementById("title").value, description:
+        document.getElementById("description").value, price:
+        document.getElementById("price").value, thumbnail:
+        document.getElementById("thumbnail").value, stock:
+        document.getElementById("stock").value, code:
+        document.getElementById("code").value, status:
+        document.getElementById("status").value, category:
+        document.getElementById("category").value,
+    }; const response = await
+      fetch(`/api/products/${pid}`, {
+        method: "put", body: JSON.stringify(body),
+        headers: { "Content-Type": "application/json" },
+      }); 
+      if (response.status ==200) {
+          Swal.fire({
+            icon: "success", title: "Éxito", text: "Producto actualizado correctamente", 
+          });
+      }else {
+        const errorData = await response.json();
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: `Hubo un error: ${errorData.message}`,
+          });
+      }; 
+      }
 </script>

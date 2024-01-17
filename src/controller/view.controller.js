@@ -88,7 +88,12 @@ export const getProductViewController = async (req, res) => {
 export const getModifyProductController = async (req, res) => {
   const pid = req.params.pid;
   const user = req.session.user;
-
   const product = await productService.getById(pid);
-  res.render("modifyProduct", { product: product, user: user });
+
+  if (product.owner == user.email){
+    res.render("modifyProduct", { product: product, user: user });
+  }else{
+    res.status(404).json({status:'error', error:'You do not have permission to modify this product'});
+
+  }
 };

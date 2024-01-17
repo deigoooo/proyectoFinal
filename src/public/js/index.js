@@ -111,3 +111,34 @@ socketClient.on("updateProduct", (data) => {
     table.getElementsByTagName("tbody")[0].appendChild(tr);
   }
 });
+const updateProduct = async (pid) => {
+  const body = {
+    title: document.getElementById("title").value,
+    description: document.getElementById("description").value,
+    price: document.getElementById("price").value,
+    thumbnail: document.getElementById("thumbnail").value,
+    stock: document.getElementById("stock").value,
+    code: document.getElementById("code").value,
+    status: document.getElementById("status").value,
+    category: document.getElementById("category").value,
+  };
+  const response = await fetch(`/api/products/${pid}`, {
+    method: "put",
+    body: JSON.stringify(body),
+    headers: { "Content-Type": "application/json" },
+  });
+  if (response.status === 200) {
+    Swal.fire({
+      icon: "success",
+      title: "Éxito",
+      text: "Producto actualizado correctamente",
+    });
+  } else {
+    const errorData = await response.json();
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: `Hubo un error: ${errorData.message}`,
+    });
+  }
+};
