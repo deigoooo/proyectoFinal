@@ -142,3 +142,19 @@ const updateProduct = async (pid) => {
     });
   }
 };
+
+/* const btnAdmin = document.getElementById("btnAdmin");
+const btnR = document.getElementById("role");
+const role = btnR.textContent || btnR.innerText;
+if (role === "user") {
+  btnAdmin.style.display = "none";
+}
+const addProductToCart = async (pid) => {
+  let cartId = document.getElementById("cid");
+  let cid = cartId.getAttribute("data-cid");
+  const response = await fetch(`/api/carts/${cid}/product/${pid}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  });
+  Swal.fire(`Producto agregado`);
+}; */

@@ -1,12 +1,49 @@
 <style type="text/css">
-  .navbar{ display: flex; width:100%; justify-content: space-between;
-  background-color:#969696; align-items: center; padding-left: 10px;
-  padding-right: 10px;} ul li { list-style: none; } ul li a{ margin: 0px 30px
-  0px 0px; padding: 0px; } .profile li ul{ display: none; position: absolute;
-  min-width: 140px; background-color: #969696; z-index: 1; } .profile{ margin:
-  0px; padding: 0px; } .icono-grande{ margin-left: 0px; font-size: 35px; }
-  .profile li:hover >ul{ display: block; } .my-icon{color:rgb(51, 51, 51)}
+  .navbar {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    background-color: #969696;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 
+  ul li {
+    list-style: none;
+  }
+
+  ul li a {
+    margin: 0px 30px 0px 0px;
+    padding: 0px;
+  }
+
+  .profile li ul {
+    display: none;
+    position: absolute;
+    min-width: 140px;
+    background-color: #969696;
+    z-index: 1;
+  }
+
+  .profile {
+    margin:
+      0px;
+    padding: 0px;
+  }
+
+  .icono-grande {
+    margin-left: 0px;
+    font-size: 35px;
+  }
+
+  .profile li:hover>ul {
+    display: block;
+  }
+
+  .my-icon {
+    color: rgb(51, 51, 51)
+  }
 </style>
 
 <div class="navbar">
@@ -16,25 +53,17 @@
         <li><a id="cid" data-cid="{{user.carts}}">ID:
             <b>{{user._id}}</b></a></li>
         <li><a>Hola <b>{{user.first_name}}</b></a></li>
-        <li><a
-            id="userEmail"
-            data-useremail="{{user.email}}"
-          >{{user.email}}</a></li>
+        <li><a id="userEmail" data-useremail="{{user.email}}">{{user.email}}</a></li>
         <li>Role: <a id="role">{{user.role}}</a></li>
-        <li><button
-            class="btn btn-danger"
-            style="
+        <li><button class="btn btn-danger" style="
   position: relative;
   display: inline-block;
   width:120px;
   height:30px;
   color: #fff;
   border: none;
-  margin-bottom: 10px;"
-          >
-            <a
-              href="/session/logout"
-              style="
+  margin-bottom: 10px;">
+            <a href="/session/logout" style="
       position: absolute;
       top: 50%;
       left: 50%;
@@ -42,33 +71,28 @@
       background-color: transparent;
       text-decoration: none;
       color: white;
-      line-height: 1;"
-            >
+      line-height: 1;">
               Salir
             </a></button></li>
       </ul>
     </li>
   </ul>
   <div>
-    <a id="btnAdmin" href="/products/realTimeProducts"><i
-        class="fa-solid fa-square-plus icono-grande my-icon"
-      ></i></a>
-    <a href="/products/{{user.carts}}"><i
-        class="fa-solid fa-cart-shopping icono-grande my-icon"
-      ></i></a>
+    <a id="btnAdmin" href="/products/realTimeProducts"><i class="fa-solid fa-square-plus icono-grande my-icon"></i></a>
+    <a href="/products/{{user.carts}}"><i class="fa-solid fa-cart-shopping icono-grande my-icon"></i></a>
 
   </div>
 </div>
 <hr />
 <div align="center">
   {{#if paginateInfo.hasPrevPage}}
-    <a href="{{paginateInfo.prevLink}}">Anterior</a>
+  <a href="{{paginateInfo.prevLink}}">Anterior</a>
   {{/if}}
   {{#each paginateInfo.totalPages}}
-    <a href="{{this.link}}">{{this.page}}</a>
+  <a href="{{this.link}}">{{this.page}}</a>
   {{/each}}
   {{#if paginateInfo.hasNextPage}}
-    <a href="{{paginateInfo.nextLink}}">Siguiente</a>
+  <a href="{{paginateInfo.nextLink}}">Siguiente</a>
   {{/if}}
 </div>
 <hr />
@@ -86,29 +110,47 @@
   </thead>
   <tbody>
     {{#each products}}
-      <tr>
-        <td><button
-            class="btn btn-primary"
-            onclick="addProductToCart('{{this._id}}')"
-          >AddToCart</button></td>
-        <td>{{this.title}}</td>
-        <td>{{this.description}}</td>
-        <td>{{this.price}}</td>
-        <td>{{this.code}}</td>
-        <td>{{this.stock}}</td>
-        <td>{{this.category}}</td>
-      </tr>
+    <tr>
+      <td><button class="btn btn-primary" onclick="addProductToCart('{{this._id}}','{{this.owner}}')">AddToCart</button></td>
+      <td>{{this.title}}</td>
+      <td>{{this.description}}</td>
+      <td>{{this.price}}</td>
+      <td>{{this.code}}</td>
+      <td>{{this.stock}}</td>
+      <td>{{this.category}}</td>
+    </tr>
     {{/each}}
   </tbody>
 </table>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-  const btnAdmin= document.getElementById("btnAdmin"); const btnR =
-  document.getElementById('role'); const role = btnR.textContent ||
-  btnR.innerText; if(role==='user'){btnAdmin.style.display = "none";} ; const
-  addProductToCart = async (pid) => { let cartId =
-  document.getElementById("cid"); let cid = cartId.getAttribute("data-cid");
-  const response = await fetch(`/api/carts/${cid}/product/${pid}`, { method:
-  "POST", headers: { "Content-Type": "application/json", }, });
-  Swal.fire(`Producto agregado`) };
+  const btnAdmin = document.getElementById("btnAdmin");
+  const btnR = document.getElementById("role");
+  const role = btnR.textContent || btnR.innerText;
+  if (role === "user") {
+    btnAdmin.style.display = "none";
+  }
+  const addProductToCart = async (pid,owner) => {
+    const userEmail = document.getElementById("userEmail");
+    const email = userEmail.textContent || userEmail.innerText
+    let cartId = document.getElementById("cid");
+    let cid = cartId.getAttribute("data-cid");
+    if (email!=owner){
+      const response = await fetch(`/api/carts/${cid}/product/${pid}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+    Swal.fire({
+      icon: 'success', 
+      title: 'Producto Agregado',
+      text: 'El producto se ha agregado correctamente.',
+      });
+    }else{
+      Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'No se puede agregar un producto propio', 
+      });
+    }
+  };
 </script>
