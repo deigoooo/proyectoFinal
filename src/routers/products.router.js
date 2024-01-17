@@ -18,7 +18,7 @@ router.get(
 
 router.get(
   "/:id",
-  handlePolicies(["USER", "ADMIN"]),
+  handlePolicies(["USER", "ADMIN", "PREMIUM"]),
   getProductsByIdController
 );
 
