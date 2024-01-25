@@ -5,7 +5,7 @@ import run from "./utils/run.js";
 import mongoose from "mongoose";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import flash from "express-flash";
+import flash from "connect-flash";
 import cors from "cors";
 import compression from "express-compression";
 import logger from "./config/logger.config.js";

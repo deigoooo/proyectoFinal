@@ -24,13 +24,14 @@ router.post(
     failureFlash: true,
   }),
   async (req, res) => {
-    res.redirect("/session/login");
+
+    res.status(200).redirect("/session/login");
   }
 );
 
 router.get("/failRegister", async (req, res) => {
   const newError = req.flash("error");
-  res.send({ error: `${newError}` });
+  res.status(400).send({ error: `${newError}`, statusCode: 400 })
 });
 router.get("/failLogin", async (req, res) => {
   const newError = req.flash("error");
@@ -49,7 +50,7 @@ router.post(
   }),
   async (req, res) => {
     req.session.user = new UserDTO(req.user);
-    res.redirect("/products");
+    res.status(200).redirect("/products");
   }
 );
 
@@ -88,7 +89,7 @@ router.get("/logout", async (req, res) => {
     if (err) {
       console.log(err);
       res.status(500).render("errors/base", { error: err });
-    } else res.redirect("/session/login");
+    } else res.status(200).redirect("/session/login");
   });
 });
 

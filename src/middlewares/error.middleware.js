@@ -3,7 +3,6 @@ import logger from "../config/logger.config.js";
 
 export default (error, req, res, next) => {
   logger.error(`Control - ${error}`);
-
   switch (error.code) {
     case EErros.ROUTING_ERROR:
       logger.error(error.cause);
@@ -14,6 +13,7 @@ export default (error, req, res, next) => {
       res.status(401).send({ status: "error", error: error.message });
       break;
     case EErros.DATABASES_ERROR:
+      console.log(`entro al error`)
       logger.error(error.cause);
       res.status(403).send({ status: "error", error: error.message });
       break;

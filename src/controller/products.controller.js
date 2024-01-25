@@ -54,7 +54,7 @@ export const updateProductsController = async (req, res, next) => {
 };
 export const addProductsController = async (req, res, next) => {
   try {
-    const { title, description, price, thumbnail, stock, code, category } =
+    const { title, description, price, thumbnail, stock, code, category,owner } =
       req.body;
     if (
       !title ||
@@ -88,7 +88,7 @@ export const addProductsController = async (req, res, next) => {
       stock,
       code,
       category,
-      owner: req.session.user.email,
+      owner: req.session.user ? req.session.user.email : owner,
     });
     const products = await productService.getAll();
     req.io.emit("updateProduct", products);

@@ -28,7 +28,7 @@ router.put(
   updateProductsController
 );
 
-router.post("/", handlePolicies(["PREMIUM", "ADMIN"]), addProductsController);
+router.post("/" , handlePolicies(["PREMIUM", "ADMIN"]) , addProductsController);
 
 router.delete(
   "/:id",

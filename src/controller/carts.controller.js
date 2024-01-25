@@ -217,7 +217,7 @@ export const addCartController = async (req, res, next) => {
         code: EError.DATABASES_ERROR,
       });
     }
-    res.status(201).json({ status: "success", payload: newCart });
+    res.status(200).json({ status: "success", payload: newCart });
   } catch (error) {
     next(error);
   }
@@ -264,9 +264,8 @@ export const addProductToCartController = async (req, res, next) => {
       cartToUpdate.products.push({ product: pid, quantity: 1 });
     }
     const result = await cartService.update(cid, cartToUpdate);
-    res.status(201).json({ status: "success", payload: result });
+    res.status(200).json({ status: "success", payload: result });
   } catch (error) {
-    console.error(error);
     next(error);
   }
 };
@@ -276,9 +275,6 @@ export const deleteCartController = async (req, res, next) => {
     const cid = req.params.cid;
     const find = await cartService.getById(cid);
     if (find === null) {
-      /* return res
-        .status(404)
-        .json({ status: "error", error: "ID does not exist" }); */
       throw CustomError.createError({
         name: "Delete Cart error",
         cause: generateCartsErrorInfo(cid),
@@ -318,9 +314,6 @@ export const purchaseController = async (req, res, next) => {
     const cid = req.params.cid;
     const cartToPurchase = await cartService.getById(cid);
     if (cartToPurchase === null) {
-      /* return res
-        .status(404)
-        .json({ status: "error", error: `Cart with id=${cid} Not found` }); */
       throw CustomError.createError({
         name: "Purchase error",
         cause: generateCartsErrorInfo(cid),
@@ -336,10 +329,6 @@ export const purchaseController = async (req, res, next) => {
         cartToPurchase.products[index].product
       );
       if (productToPurchase === null) {
-        /* return res.status(400).json({
-          status: "error",
-          error: `Product with id=${cartToPurchase.products[index].product} does not exist. We cannot purchase this product`,
-        }); */
         throw CustomError.createError({
           name: "Purchase error",
           cause: generateCartsErrorInfo(cid),
@@ -388,7 +377,7 @@ export const purchaseController = async (req, res, next) => {
     //mandamos el mail
     mailServices(result);
 
-    return res.status(201).json({ status: "success", payload: result });
+    return res.status(200).json({ status: "success", payload: result });
   } catch (error) {
     next(error);
   }

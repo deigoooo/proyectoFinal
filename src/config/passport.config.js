@@ -47,6 +47,7 @@ const initializePassport = () => {
           };
 
           const result = await userModel.create(newUser);
+          
           return done(null, result);
         } catch (error) {
           return done(error);
