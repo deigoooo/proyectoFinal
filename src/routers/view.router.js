@@ -31,6 +31,6 @@ router.get(
   getProductViewController
 );
 
-router.get("/modify/:pid", getModifyProductController);
+router.get("/modify/:pid", handlePolicies(["ADMIN", "PREMIUM"]),getModifyProductController);
 
 export default router;

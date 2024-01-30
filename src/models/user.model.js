@@ -28,6 +28,11 @@ const userSchema = new mongoose.Schema({
     enum: ["user", "admin", "premium"], //tipos de roles para usuarios
     default: "user", // Valor por defecto: 'usuario'
   },
+  documents: [{
+    name: String,
+    reference: String
+  }],
+  last_connection:{ type: Date, default: Date}
 });
 
 const userModel = mongoose.model(userCollection, userSchema);

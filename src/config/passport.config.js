@@ -91,6 +91,7 @@ const initializePassport = () => {
               message: "Contraseña Incorrecta",
             });
           }
+          user.last_connection = Date.now();
           return done(null, user);
         } catch (err) {
           return done(err);

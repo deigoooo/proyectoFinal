@@ -1,0 +1,37 @@
+<style>
+  .menu {
+    width: 500px;
+    height: auto;
+    display: block;
+    text-align: center;
+  }
+
+  .contenedor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+</style>
+
+<div class="contenedor">
+  <div class="menu border border-primary-subtle rounded">
+    <h2 class="m-3">Cargar Archivos</h2>
+    <hr>
+
+    <form action='/api/users/{{id}}/documents' method="post" enctype="multipart/form-data">
+      <label for="profile">Perfil</label>
+      <input type="file" name="profile" id="profile" accept="image/*" />
+      <hr>
+      <label for="products">Productos</label>
+      <input type="file" name="products" id="products" accept="image/*" />
+      <hr>
+      <label for="documents">Documentos</label>
+      <input type="file" name="documents" id="documents" accept="image/*" />
+      <hr>
+      <button type="submit" class="btn btn-primary">Subir</button>
+    </form>
+
+  </div>
+
+</div>

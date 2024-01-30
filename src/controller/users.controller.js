@@ -23,3 +23,17 @@ export const putUserController = async (req, res) => {
     res.status(500).json({ status: "error", error: error.message });
   }
 };
+
+export const postUserController = async (req, res) => {
+  const uid= req.params.uid;
+  const file = req.files;
+  console.log(file);
+  
+  
+};
+
+export const getViewController = (req, res) =>{
+  const uid = req.session.user._id;
+  res.render("imgForm", { id: uid });
+
+};
