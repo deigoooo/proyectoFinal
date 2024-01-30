@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema({
     default: "user", // Valor por defecto: 'usuario'
   },
   documents: [{
+    _id: false,
     name: String,
     reference: String
   }],

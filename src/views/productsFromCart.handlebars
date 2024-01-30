@@ -1,16 +1,26 @@
 <style type="text/css">
-  .navbar{ display: flex; width:100%; justify-content: flex-end;
-  background-color:#969696; align-items: center; padding-left: 10px;
-  padding-right: 10px; margin-bottom: 10px;} .icono-grande{ margin-left: 0px;
-  font-size: 35px; color:rgb(51, 51, 51); }
+  .navbar {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    background-color: #969696;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  .icono-grande {
+    margin-left: 0px;
+    font-size: 35px;
+    color: rgb(51, 51, 51);
+  }
 </style>
 
 <div style="display: block; width:100vw; max-width: 100%;">
   <div class="navbar">
     <div>
-      <a id="btnAdmin" href="/products/"><i
-          class="fa-solid fa-backward icono-grande"
-        ></i></a>
+      <a id="btnAdmin" href="/products/"><i class="fa-solid fa-backward icono-grande"></i></a>
 
     </div>
   </div>
@@ -30,44 +40,49 @@
     </thead>
     <tbody>
       {{#each cart.products}}
-        <tr>
-          <td>{{this.product.title}}</td>
-          <td>{{this.product.description}}</td>
-          <td>{{this.product.price}}</td>
-          <td>{{this.product.code}}</td>
-          <td>{{this.product.stock}}</td>
-          <td>{{this.quantity}}</td>
-          <td><button
-              class="btn btn-danger"
-              onclick="deleteProductFromCart('{{this.product._id}}')"
-            >Eliminar</button></td>
-        </tr>
+      <tr>
+        <td>{{this.product.title}}</td>
+        <td>{{this.product.description}}</td>
+        <td>{{this.product.price}}</td>
+        <td>{{this.product.code}}</td>
+        <td>{{this.product.stock}}</td>
+        <td>{{this.quantity}}</td>
+        <td><button class="btn btn-danger" onclick="deleteProductFromCart('{{this.product._id}}')">Eliminar</button>
+        </td>
+      </tr>
       {{/each}}
     </tbody>
   </table>
-  <button
-    class="btn btn-danger"
-    style="
+  <button class="btn btn-danger" style="
   text-align: center;
   width:120px;
   color: #fff;
   border: none;
-  margin-bottom: 10px;"
-    onclick="purchase('{{cart._id}}')"
-  >Comprar</button>
+  margin-bottom: 10px;" onclick="purchase('{{cart._id}}')">Comprar</button>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-  async function deleteProductFromCart(pid) { let cartId =
-  document.getElementById("cid"); let cid = cartId.getAttribute("data-cid");
-  console.log(`entro aca ${cid} y ${pid}`); await
-  fetch(`/api/carts/${cid}/product/${pid}`, { method: "delete"
-  }).then((result)=> result.json()) .then((result) => { if (result.status ===
-  "error") throw new Error(result.error); alert(`El product fue eliminado
-  \nVista actualizada`);location.reload(); }) .catch((error) => alert(`Ocurrio
-  un error:\n${error}`));} async function purchase(cid) {console.log(`entro`)
-  const response = await fetch(`/api/carts/${cid}/purchase`); Swal.fire({ title:
-  "Compra Realizada", text: "¡Gracias por tu compra!", icon: "success",
-  confirmButtonText: "Ir a productos", }).then((result) => { if
-  (result.isConfirmed) { window.location.href = "/products"; } }); }
+  async function deleteProductFromCart(pid) {
+    let cartId =
+      document.getElementById("cid"); let cid = cartId.getAttribute("data-cid");
+    console.log(`entro aca ${cid} y ${pid}`); await
+      fetch(`/api/carts/${cid}/product/${pid}`, {
+        method: "delete"
+      }).then((result) => result.json()).then((result) => {
+        if (result.status ===
+          "error") throw new Error(result.error); alert(`El product fue eliminado
+  \nVista actualizada`); location.reload();
+      }).catch((error) => alert(`Ocurrio
+  un error:\n${error}`));
+  } async function purchase(cid) {
+    console.log(`entro`)
+    const response = await fetch(`/api/carts/${cid}/purchase`); Swal.fire({
+      title:
+        "Compra Realizada", text: "¡Gracias por tu compra!", icon: "success",
+      confirmButtonText: "Ir a productos",
+    }).then((result) => {
+      if
+        (result.isConfirmed) { window.location.href = "/products"; }
+    });
+  }
 </script>

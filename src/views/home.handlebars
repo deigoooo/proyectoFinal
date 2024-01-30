@@ -65,7 +65,18 @@
         <li><a>Hola <b>{{user.first_name}}</b></a></li>
         <li><a id="userEmail" data-useremail="{{user.email}}">{{user.email}}</a></li>
         <li>Role: <a id="role">{{user.role}}</a></li>
-        <li><button class="btn btn-primary">
+        <li><button class="btn btn-secondary">
+            <a href="/api/users/premium/{{user._id}}"style="
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              width: 100%;
+              transform: translate(-50%, -50%);
+              background-color: transparent;
+              text-decoration: none;
+              color: white;
+              line-height: 1;">Cambiar rol</a></button></li>
+        <li><button class="btn btn-secondary">
             <a href="/api/users/view"style="
               position: absolute;
               top: 50%;

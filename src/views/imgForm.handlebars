@@ -10,10 +10,31 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 90vh;
+  }
+
+  .navbar {
+    display: flex;
+    width: 100vw;
+    justify-content: flex-end;
+    background-color: #969696;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .icono-grande {
+    padding-right: 10px;
+    margin-left: 0px;
+    font-size: 35px;
+    color: rgb(51, 51, 51);
   }
 </style>
 
+<div class="navbar">
+  <div>
+    <a id="btnAdmin" href="/products/"><i class="fa-solid fa-backward icono-grande"></i></a>
+  </div>
+</div>
 <div class="contenedor">
   <div class="menu border border-primary-subtle rounded">
     <h2 class="m-3">Cargar Archivos</h2>

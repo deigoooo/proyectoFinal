@@ -4,12 +4,15 @@ export const putUserController = async (req, res) => {
   try {
     const uid = req.params.uid;
     const user = await userModel.findById(uid).lean().exec();
-    /* if (user === null) {
-      return res.status(400).json({ status: "error", error: "User not found" });
-    } */
     let result;
-
+    if (user === null)
+      { return res.status(404).json({ status: "error", error: "User not found" });}
     if (user.role === "user") {
+      if (user.documents.length < 3) {
+        return res
+          .status(404)
+          .json({ status: "error", error: "Must upload documentation" });
+      }
       user.role = "premium";
     } else if (user.role === "premium") {
       user.role = "user";
@@ -25,15 +28,29 @@ export const putUserController = async (req, res) => {
 };
 
 export const postUserController = async (req, res) => {
-  const uid= req.params.uid;
-  const file = req.files;
-  console.log(file);
-  
-  
+  try {
+    const uid = req.params.uid;
+    const user = await userModel.findById(uid).lean().exec();
+    if (user === null) {
+      res.status(404).json({ status: "error", error: "Id does not exist" });
+    }
+    const file = req.files;
+    for (let index = 0; index < file.documents.length; index++) {
+      user.documents.push({
+        name: file.documents[index].filename,
+        reference: file.documents[index].path,
+      });
+    }
+    await userModel.findByIdAndUpdate(uid, user, { new: true });
+    res
+      .status(200)
+      .json({ status: "succes", payload: "image uploaded successfully" });
+  } catch (error) {
+    res.status(500).json({ status: "error", error: error.message });
+  }
 };
 
-export const getViewController = (req, res) =>{
+export const getViewController = (req, res) => {
   const uid = req.session.user._id;
   res.render("imgForm", { id: uid });
-
 };
