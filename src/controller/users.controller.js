@@ -70,10 +70,19 @@ export const getViewController = async (req, res) => {
 export const getUsersController = async (req, res) => {
   try {
     const users = await userService.getAll();
-    const dtoUsers = users.map(user => {
+    const dtoUsers = users.map((user) => {
       return new UserGetDTO(user);
     });
-    res.status(200).json({status: "success", payload: dtoUsers});
+    res.status(200).json({ status: "success", payload: dtoUsers });
+  } catch (error) {
+    res.status(500).json({ status: "error", error: error.message });
+  }
+};
+
+export const deleteUsersController = async (req, res) => {
+  try {
+    await userService.deletePerDate();
+    res.status(200).json({ status: "success", payload: `User list updated` });
   } catch (error) {
     res.status(500).json({ status: "error", error: error.message });
   }

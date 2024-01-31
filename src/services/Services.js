@@ -37,4 +37,7 @@ export class UserService extends Repository {
   constructor(dao) {
     super(dao);
   }
+  deletePerDate = async () =>{
+    await this.dao.deletePerDate();
+  }
 }

@@ -22,15 +22,32 @@ export default class UserMongoDao {
   };
   update = async (id, data) => {
     try {
-      const result = await userModel.findByIdAndUpdate(id, data, {
+      const response = await userModel.findByIdAndUpdate(id, data, {
         returnDocument: "after",
       });
-      if (result === null) {
+      if (response === null) {
         return `[ERROR]: ${id} does not exist`;
       }
-      return result;
+      return response;
     } catch (error) {
       return `[ERROR]: ${error.message}`;
     }
   };
-};
+  deletePerDate = async () => {
+    try {
+      const users = await userModel.find().lean().exec();
+      const limiteDeTiempo = new Date(Date.now() - 48 * 60 * 60 * 1000);
+      for (let index = 0; index < users.length; index++) {
+        const lastConnectionDate = new Date(users[index].last_connection);
+        if (lastConnectionDate < limiteDeTiempo) {
+          if (users[index].role != "admin") {
+            await userModel.deleteOne({ _id: users[index]._id });
+          }
+        }
+      }
+      return await userModel.find().lean().exec();
+    } catch (error) {
+      return `[ERROR]: ${error.message}`;
+    }
+  };
+}

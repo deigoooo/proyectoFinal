@@ -47,7 +47,7 @@ const initializePassport = () => {
           };
 
           const result = await userModel.create(newUser);
-          
+
           return done(null, result);
         } catch (error) {
           return done(error);
@@ -92,6 +92,7 @@ const initializePassport = () => {
             });
           }
           user.last_connection = Date.now();
+          await userModel.findByIdAndUpdate(user._id, user);
           return done(null, user);
         } catch (err) {
           return done(err);
@@ -127,6 +128,8 @@ const initializePassport = () => {
             password: "",
             carts: { cart: newCart._id },
           });
+          newUser.last_connection = Date.now();
+          await userModel.findByIdAndUpdate(user._id, user);
           return done(null, newUser);
         } catch (err) {
           return done("Error to login with github");
@@ -157,6 +160,8 @@ const initializePassport = () => {
             password: "",
             carts: { cart: newCart._id },
           });
+          newUser.last_connection = Date.now();
+          await userModel.findByIdAndUpdate(user._id, user);
           return done(null, newUser);
         } catch (err) {
           return done("Error to login with google");
