@@ -1,7 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import nodemailer from "nodemailer";
-import UserDTO from "../dto/user.dto.js";
+import { UserDTO } from "../dto/user.dto.js";
 import UserModel from "../models/user.model.js";
 import UserPasswordModel from "../models/user-password.model.js";
 import {
@@ -24,14 +24,13 @@ router.post(
     failureFlash: true,
   }),
   async (req, res) => {
-
     res.status(200).redirect("/session/login");
   }
 );
 
 router.get("/failRegister", async (req, res) => {
   const newError = req.flash("error");
-  res.status(400).send({ error: `${newError}`, statusCode: 400 })
+  res.status(400).send({ error: `${newError}`, statusCode: 400 });
 });
 router.get("/failLogin", async (req, res) => {
   const newError = req.flash("error");

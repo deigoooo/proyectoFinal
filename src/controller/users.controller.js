@@ -1,12 +1,14 @@
-import userModel from "../models/user.model.js";
+import { UserGetDTO } from "../dto/user.dto.js";
+import { userService } from "../services/Factory.js";
 
 export const putUserController = async (req, res) => {
   try {
     const uid = req.params.uid;
-    const user = await userModel.findById(uid).lean().exec();
+    const user = await userService.getById(uid);
     let result;
-    if (user === null)
-      { return res.status(404).json({ status: "error", error: "User not found" });}
+    if (user === null) {
+      return res.status(404).json({ status: "error", error: "User not found" });
+    }
     if (user.role === "user") {
       if (user.documents.length < 3) {
         return res
@@ -18,9 +20,13 @@ export const putUserController = async (req, res) => {
       user.role = "user";
     }
 
-    result = await userModel.findByIdAndUpdate(uid, user, {
-      returnDocument: "after",
-    });
+    result = await userService.update(uid, user);
+    if (typeof result === "string") {
+      return res
+        .status(404)
+        .json({ status: "error", error: "Something goes wrong" });
+    }
+
     res.status(200).json({ status: "success", payload: result.role });
   } catch (error) {
     res.status(500).json({ status: "error", error: error.message });
@@ -30,7 +36,7 @@ export const putUserController = async (req, res) => {
 export const postUserController = async (req, res) => {
   try {
     const uid = req.params.uid;
-    const user = await userModel.findById(uid).lean().exec();
+    const user = await userService.getById(uid);
     if (user === null) {
       res.status(404).json({ status: "error", error: "Id does not exist" });
     }
@@ -41,7 +47,13 @@ export const postUserController = async (req, res) => {
         reference: file.documents[index].path,
       });
     }
-    await userModel.findByIdAndUpdate(uid, user, { new: true });
+    const result = await userService.update(uid, user);
+
+    if (typeof result === "string") {
+      return res
+        .status(404)
+        .json({ status: "error", error: "Something goes wrong" });
+    }
     res
       .status(200)
       .json({ status: "succes", payload: "image uploaded successfully" });
@@ -50,7 +62,19 @@ export const postUserController = async (req, res) => {
   }
 };
 
-export const getViewController = (req, res) => {
+export const getViewController = async (req, res) => {
   const uid = req.session.user._id;
   res.render("imgForm", { id: uid });
+};
+
+export const getUsersController = async (req, res) => {
+  try {
+    const users = await userService.getAll();
+    const dtoUsers = users.map(user => {
+      return new UserGetDTO(user);
+    });
+    res.status(200).json({status: "success", payload: dtoUsers});
+  } catch (error) {
+    res.status(500).json({ status: "error", error: error.message });
+  }
 };

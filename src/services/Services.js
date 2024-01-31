@@ -32,3 +32,9 @@ export class TicketService extends Repository {
     await this.dao.getProductsFromTicket(id);
   };
 }
+
+export class UserService extends Repository {
+  constructor(dao) {
+    super(dao);
+  }
+}
