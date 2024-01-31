@@ -117,6 +117,8 @@ const initializePassport = () => {
             .populate("carts.cart")
             .lean();
           if (user !== null) {
+            user.last_connection = Date.now();
+            await userModel.findByIdAndUpdate(user._id, user);
             return done(null, user);
           }
           const newCart = await cartService.create();
@@ -127,9 +129,8 @@ const initializePassport = () => {
             email: profile._json.email,
             password: "",
             carts: { cart: newCart._id },
+            last_connection: Date.now(),
           });
-          newUser.last_connection = Date.now();
-          await userModel.findByIdAndUpdate(user._id, user);
           return done(null, newUser);
         } catch (err) {
           return done("Error to login with github");
@@ -150,7 +151,11 @@ const initializePassport = () => {
       async function (accessToken, refreshToken, profile, done) {
         try {
           const user = await userModel.findOne({ email: profile._json.email });
-          if (user) return done(null, user);
+          if (user !== null) {
+            user.last_connection = Date.now();
+            await userModel.findByIdAndUpdate(user._id, user);
+            return done(null, user);
+          }
           const newCart = await cartService.create();
           const newUser = await userModel.create({
             first_name: profile._json.name,
@@ -159,9 +164,8 @@ const initializePassport = () => {
             email: profile._json.email,
             password: "",
             carts: { cart: newCart._id },
+            last_connection: Date.now(),
           });
-          newUser.last_connection = Date.now();
-          await userModel.findByIdAndUpdate(user._id, user);
           return done(null, newUser);
         } catch (err) {
           return done("Error to login with google");

@@ -34,7 +34,7 @@ export default class UserMongoDao {
     }
   };
   deletePerDate = async () => {
-    try {
+     try {
       const users = await userModel.find().lean().exec();
       const limiteDeTiempo = new Date(Date.now() - 48 * 60 * 60 * 1000);
       for (let index = 0; index < users.length; index++) {
@@ -45,9 +45,10 @@ export default class UserMongoDao {
           }
         }
       }
-      return await userModel.find().lean().exec();
+      const response = await userModel.find().lean().exec();
+      return response;
     } catch (error) {
       return `[ERROR]: ${error.message}`;
-    }
+    } 
   };
 }

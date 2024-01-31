@@ -4,7 +4,7 @@ import {
   postUserController,
   getViewController,
   getUsersController,
-  deleteUsersController
+  deleteUserPerDateController
 } from "../controller/users.controller.js";
 import { uploader } from "../middlewares/multer.middleware.js";
 
@@ -22,6 +22,6 @@ router.post(
   postUserController
 );
 router.get("/",getUsersController);
-router.delete("/",deleteUsersController);
+router.delete("/",deleteUserPerDateController);
 
 export default router;

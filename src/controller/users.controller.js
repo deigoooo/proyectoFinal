@@ -79,10 +79,10 @@ export const getUsersController = async (req, res) => {
   }
 };
 
-export const deleteUsersController = async (req, res) => {
+export const deleteUserPerDateController = async (req, res) => {
   try {
-    await userService.deletePerDate();
-    res.status(200).json({ status: "success", payload: `User list updated` });
+    const response = await userService.deletePerDate();
+    res.status(200).json({ status: "success", payload: response });
   } catch (error) {
     res.status(500).json({ status: "error", error: error.message });
   }
