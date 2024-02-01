@@ -1,0 +1,58 @@
+<style type="text/css">
+    .navbar {
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+        background-color: #969696;
+        align-items: center;
+        padding-rigth: px;
+        padding-right: 10px;
+        margin-bottom: 10px;
+    }
+
+    .icono-grande {
+        margin-right: 15px;
+        font-size: 35px;
+        color: rgb(51, 51, 51);
+    }
+</style>
+
+<div style="display: block; width:100vw; max-width: 100%;">
+    <div class="navbar">
+        <div>
+            <a id="btnAdmin" href="/products/"><i class="fa-solid fa-backward icono-grande"></i></a>
+
+        </div>
+    </div>
+<table class="table table-dark table-striped" id="usersTable">
+      <thead>
+        <tr>
+          <th class="col-1">ID</th>
+          <th class="col-2">Nombre</th>
+          <th class="col-2">Apellido</th>
+          <th class="col-2">Email</th>
+          <th class="col-1">Rol</th>
+          <th class="col-1"></th>
+          <th class="col-1"></th>
+        </tr>
+      </thead>
+      <tbody id="getUsers">
+        {{#each dtoUsers}}
+        <tr>
+          <td>{{this._id}}</td>
+          <td>{{this.first_name}}</td>
+          <td>{{this.last_name}}</td>
+          <td>{{this.email}}</td>
+          <td>{{this.role}}</td>
+          <td><button onclick="deleteUser('{{this._id}}')" class="btn btn-danger">Eliminar</button></td>
+          <td><button onclick="changeRolUser('{{this._id}}')" class="btn btn-Primary" style="width:115px;">{{!-- <a style="color: white; text-decoration: none;"
+                href="/products/modify/{{this._id}}"> --}}Cambiar Rol{{!-- </a> --}}</button></td>
+        </tr>
+        {{/each}}
+      </tbody>
+</table>
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/users.js"></script>

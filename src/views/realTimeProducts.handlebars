@@ -1,101 +1,73 @@
 <style type="text/css">
-  .navbar{ display: flex; width:100%; justify-content: flex-end;
-  background-color:#969696; align-items: center; padding-rigth: px;
-  padding-right: 10px; margin-bottom: 10px;} .icono-grande{ margin-right: 15px;
-  font-size: 35px; color:rgb(51, 51, 51); }
+  .navbar {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    background-color: #969696;
+    align-items: center;
+    padding-rigth: px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  .icono-grande {
+    margin-right: 15px;
+    font-size: 35px;
+    color: rgb(51, 51, 51);
+  }
 </style>
 
 <div style="display: block; width:100vw; max-width: 100%;">
   <div class="navbar">
     <div>
-      <a id="btnAdmin" href="/products/"><i
-          class="fa-solid fa-backward icono-grande"
-        ></i></a>
+      <a id="btnAdmin" href="/products/"><i class="fa-solid fa-backward icono-grande"></i></a>
 
     </div>
   </div>
   <br />
-  <form
-    id="addProduct"
-    style="max-width: 600px; margin:auto; border-radius: 5px"
-    class="border border-primary-subtle rounded p-3"
-  >
+  <form id="addProduct" style="max-width: 600px; margin:auto; border-radius: 5px"
+    class="border border-primary-subtle rounded p-3">
     <h2>Agregar Producto</h2>
     <div class="mb-3">
       <label for="title" class="form-label">Nombre</label>
-      <input
-        type="text"
-        class="form-control"
-        id="title"
-        placeholder="Nombre del producto"
-      />
+      <input type="text" class="form-control" id="title" placeholder="Nombre del producto" />
     </div>
     <div class="mb-3">
       <label for="description" class="form-label">Descipcion</label>
-      <input
-        type="text"
-        class="form-control"
-        id="description"
-        placeholder="Descripcion del producto"
-      />
+      <input type="text" class="form-control" id="description" placeholder="Descripcion del producto" />
     </div>
     <div class="mb-3">
       <label for="price" class="form-label">Precio</label>
-      <input
-        type="text"
-        class="form-control"
-        id="price"
-        placeholder="Precio del producto"
-      />
+      <input type="text" class="form-control" id="price" placeholder="Precio del producto" />
     </div>
     <div class="mb-3">
       <label for="thumbnail" class="form-label">Imagen</label>
-      <input
-        type="text"
-        class="form-control"
-        id="thumbnail"
-        placeholder="Imagen del producto"
-      />
+      <input type="text" class="form-control" id="thumbnail" placeholder="Imagen del producto" />
     </div>
     <div class="mb-3">
       <label for="stock" class="form-label">Stock</label>
-      <input
-        type="text"
-        class="form-control"
-        id="stock"
-        placeholder="Stock del producto"
-      />
+      <input type="text" class="form-control" id="stock" placeholder="Stock del producto" />
     </div>
     <div class="mb-3">
       <label for="code" class="form-label">Codigo</label>
-      <input
-        type="text"
-        class="form-control"
-        id="code"
-        placeholder="Codigo del producto"
-      />
+      <input type="text" class="form-control" id="code" placeholder="Codigo del producto" />
     </div>
     <div class="mb-3">
       <label for="category" class="form-label">Categoria</label>
-      <input
-        type="text"
-        class="form-control"
-        id="category"
-        placeholder="Categoria del producto"
-      />
+      <input type="text" class="form-control" id="category" placeholder="Categoria del producto" />
     </div>
     <button id="createBtn" class="btn btn-primary">Agregar Producto</button>
   </form>
   <hr />
   <div align="center">
     {{#if paginateInfo.hasPrevPage}}
-      <a href="{{paginateInfo.prevLink}}">Anterior</a>
+    <a href="{{paginateInfo.prevLink}}">Anterior</a>
     {{/if}}
     {{#each paginateInfo.totalPages}}
-      <a href="{{this.link}}">{{this.page}}</a>
+    <a href="{{this.link}}">{{this.page}}</a>
     {{/each}}
     {{#if paginateInfo.hasNextPage}}
-      <a href="{{paginateInfo.nextLink}}">Siguiente</a>
+    <a href="{{paginateInfo.nextLink}}">Siguiente</a>
     {{/if}}
   </div>
   <hr />
@@ -117,28 +89,18 @@
 
       <tbody id="getproducts">
         {{#each products}}
-          <tr>
-            <td>{{this._id}}</td>
-            <td>{{this.title}}</td>
-            <td>{{this.description}}</td>
-            <td>{{this.price}}</td>
-            <td>{{this.stock}}</td>
-            <td>{{this.code}}</td>
-            <td>{{this.category}}</td>
-            <td><button
-                onclick="deleteProduct('{{this._id}}')"
-                class="btn btn-danger"
-                id=""
-              >Eliminar</button></td>
-            <td><button
-                {{!-- onclick="deleteProduct('{{this._id}}')" --}}
-                class="btn btn-Primary"
-                id=""
-              ><a
-                  style="color: white; text-decoration: none"
-                  href="/products/modify/{{this._id}}"
-                >Modificar</a></button></td>
-          </tr>
+        <tr>
+          <td>{{this._id}}</td>
+          <td>{{this.title}}</td>
+          <td>{{this.description}}</td>
+          <td>{{this.price}}</td>
+          <td>{{this.stock}}</td>
+          <td>{{this.code}}</td>
+          <td>{{this.category}}</td>
+          <td><button onclick="deleteProduct('{{this._id}}')" class="btn btn-danger">Eliminar</button></td>
+          <td><button class="btn btn-Primary"><a style="color: white; text-decoration: none"
+                href="/products/modify/{{this._id}}">Modificar</a></button></td>
+        </tr>
         {{/each}}
       </tbody>
 

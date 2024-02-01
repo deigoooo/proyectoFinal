@@ -87,3 +87,11 @@ export const deleteUserPerDateController = async (req, res) => {
     res.status(500).json({ status: "error", error: error.message });
   }
 };
+
+export const getAdminUserController = async (req, res) => {
+  const users = await userService.getAll();
+  const dtoUsers = users.map((user) => {
+    return new UserGetDTO(user);
+  });
+  res.render("users", { dtoUsers });
+};

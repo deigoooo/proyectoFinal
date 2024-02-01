@@ -7,7 +7,7 @@ import mockingRouter from "../routers/mocking.router.js";
 import loggerTestRouter from "../routers/loggerTest.router.js";
 import usersRouter from "../routers/users.router.js";
 import errorHandler from "../middlewares/error.middleware.js";
-import { messageService } from "../services/Factory.js";
+import { messageService,userService } from "../services/Factory.js";
 
 //middleware de SocketIO
 const run = (socketServer, app) => {
@@ -39,9 +39,17 @@ const run = (socketServer, app) => {
       messageService.create(data);
       socketServer.emit("logs", await messageService.getAll());
     });
+    socket.on("updateUser", async (data) => {
+      console.log(`entro al socket`)
+      const users = await userService.getAll();
+      const response = users.map((user) => {
+        return new UserGetDTO(user);
+      });
+      socketServer.emit("updateUser", response);
+    });
   });
 
-  app.use("/", (req, res) => res.redirect("session/login"));
+  app.use("/", (req, res) => res.redirect("/session/login"));
 
   //aplico el middleware de error
   app.use(errorHandler);
