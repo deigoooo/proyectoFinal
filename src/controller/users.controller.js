@@ -43,8 +43,20 @@ export const postUserController = async (req, res) => {
     const file = req.files;
     for (let index = 0; index < file.documents.length; index++) {
       user.documents.push({
-        name: file.documents[index].filename,
+        name: file.documents[index].originalname,
         reference: file.documents[index].path,
+      });
+    }
+    for (let index = 0; index < file.profile.length; index++) {
+      user.documents.push({
+        name: file.profile[index].originalname,
+        reference: file.profile[index].path,
+      });
+    }
+    for (let index = 0; index < file.products.length; index++) {
+      user.documents.push({
+        name: file.products[index].originalname,
+        reference: file.products[index].path,
       });
     }
     const result = await userService.update(uid, user);
