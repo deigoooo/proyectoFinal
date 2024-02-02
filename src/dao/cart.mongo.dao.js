@@ -98,4 +98,27 @@ export default class CartMongoDao {
       };
     }
   };
+  getProductsFromCartForOnWire = async (cid) => {
+    try {
+      const result = await cartModel
+        .findById(cid)
+        .populate("products.product")
+        .lean();
+      if (result === null) {
+        return {
+          statusCode: 404,
+          response: { status: "error", error: "Not found" },
+        };
+      }
+      return {
+        statusCode: 200,
+        response: { status: "success", payload: result },
+      };
+    } catch (error) {
+      return {
+        statusCode: 500,
+        response: { status: "error", error: error.message },
+      };
+    }
+  };
 }

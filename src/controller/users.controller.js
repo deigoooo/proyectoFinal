@@ -95,3 +95,57 @@ export const getAdminUserController = async (req, res) => {
   });
   res.render("users", { dtoUsers });
 };
+
+export const deleteUserByIdController = async (req, res) => {
+  try {
+    const uid = req.params.uid;
+    const isAdmin = await userService.getById(uid);
+    if (req.session.user._id == uid) {
+      return res.status(400).json({
+        status: "error",
+        error: `No puede borrarse a si mismo`,
+      });
+    }
+    if (isAdmin.role === "admin") {
+      return res.status(400).json({
+        status: "error",
+        error: "No tiene privilegios para borrar a un Admin",
+      });
+    }
+    const user = await userService.delete(uid);
+    if (typeof user === "string") {
+      return res.status(400).json({ status: "error", error: `${user.error}` });
+    }
+    const response = await userService.getAll();
+    res.status(200).json({ status: "success", payload: response });
+  } catch (error) {
+    res.status(500).json({ status: "error", error: error.message });
+  }
+};
+
+export const putRoleUserController = async (req,res) => {
+  try {
+    const uid = req.params.uid
+    const user = await userService.getById(uid);
+    if (typeof user ==='string'){
+      return res.status(400).json({status:'error', error:`${user.error}` })
+    }
+    switch (user.role) {
+      case 'admin':
+        user.role = 'user';
+        break;
+      case 'user':
+        user.role = 'premium';
+        break;
+      case 'premium':
+        user.role = 'admin';
+        break;
+      default:
+        return res.status(400).json({status:'error', error:`Rol no especificado` })
+    }
+    const response = await userService.update(user._id,user);
+    res.status(200).json({status:'success', payload: response});
+  } catch (error) {
+    res.status(500).json({ status: "error", error: error.message });
+  }
+};

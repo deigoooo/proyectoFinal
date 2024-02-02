@@ -92,7 +92,7 @@ export const addProductsController = async (req, res, next) => {
     });
     const products = await productService.getAll();
     req.io.emit("updateProduct", products);
-    res.status(201).json({ status: "success", payload: newProduct });
+    res.status(200).json({ status: "success", payload: newProduct });
   } catch (error) {
     next(error);
   }

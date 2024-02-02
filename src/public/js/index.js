@@ -3,7 +3,7 @@ let table = document.getElementById("realProduct");
 let getProduct = document.getElementById("getProducts");
 let btnDelete = document.getElementById("btnDelete");
 
-document.getElementById("createBtn").addEventListener("click", async () => {
+const addProduct = async () => {
   const body = {
     title: document.getElementById("title").value,
     description: document.getElementById("description").value,
@@ -14,46 +14,50 @@ document.getElementById("createBtn").addEventListener("click", async () => {
     category: document.getElementById("category").value,
   };
   //este fetch  es de metod post para enviarle el nuevo producto en el body
-  await fetch("/api/products", {
+  const response = await fetch("/api/products", {
     method: "post",
     body: JSON.stringify(body),
     headers: {
       "Content-Type": "application/json",
     },
-  })
-    .then((result) => result.json())
-    .then((result) => {
-      if (result.status === "error") throw new Error(result.error);
-    })
-    //este fetch es un Get para tener la lista nueva completa
-    .then(() => fetch("/api/products"))
-    .then((result) => result.json())
-    .then((result) => {
-      if (result.status === "error") throw new Error(result.error);
-      socketClient.emit("productList", result.payload);
-      alert(`El producto fue agregado con exito \n Vista actualizada`);
-      document.getElementById("title").value = "";
-      document.getElementById("description").value = "";
-      document.getElementById("price").value = "";
-      document.getElementById("thumbnail").value = "";
-      document.getElementById("stock").value = "";
-      document.getElementById("code").value = "";
-      document.getElementById("category").value = "";
-    })
-    .catch((error) => alert(`Ocurrio un error:\n${error}`));
-});
+  });
+  if (response.status === 200) {
+    Swal.fire({
+      icon: "success",
+      title: "Éxito",
+      text: "Producto eliminado correctamente",
+    });
+  } else {
+    const errorData = await response.json();
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: `Hubo un error: ${errorData.error}`,
+    });
+  }
+  socketClient.emit("productList", response);
+};
 
 const deleteProduct = async (id) => {
-  await fetch(`/api/products/${id}`, {
-    method: "delete",
-  })
-    .then((result) => result.json())
-    .then((result) => {
-      if (result.status === "error") throw new Error(result.error);
-      socketClient.emit("productList", result.payload);
-      alert(`El product fue eliminado \nVista actualizada`);
-    })
-    .catch((error) => alert(`Ocurrio un error:\n${error}`));
+  const response = await fetch(`/api/products/${id}`, {
+    method: "DELETE",
+    headers: { "content-type": "application/json" },
+  });
+  if (response.status === 200) {
+    Swal.fire({
+      icon: "success",
+      title: "Éxito",
+      text: "Producto eliminado correctamente",
+    });
+  } else {
+    const errorData = await response.json();
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: `Hubo un error: ${errorData.error}`,
+    });
+  }
+  socketClient.emit("productList", response);
 };
 
 async function purchase(cid) {
@@ -73,21 +77,28 @@ async function purchase(cid) {
 async function deleteProductFromCart(pid) {
   let cartId = document.getElementById("cid");
   let cid = cartId.getAttribute("data-cid");
-  await fetch(`/api/carts/${cid}/product/${pid}`, { method: "delete" })
-    .then((result) => result.json())
-    .then((result) => {
-      if (result.status === "error") throw new Error(result.error);
-      alert(`El product fue eliminado
-  \nVista actualizada`);
-      location.reload();
-    })
-    .catch((error) =>
-      alert(`Ocurrio
-  un error:\n${error}`)
-    );
+  const response = await fetch(`/api/carts/${cid}/product/${pid}`, {
+    method: "DELETE",
+    headers: { "content-type": "application/json" },
+  });
+  if (response.status === 200) {
+    Swal.fire({
+      icon: "success",
+      title: "Éxito",
+      text: "Producto eliminado correctamente",
+    });
+  } else {
+    const errorData = await response.json();
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: `Hubo un error: ${errorData.error}`,
+    });
+  }
+  socketClient.emit("productList", response);
 }
 
-socketClient.on("updateProduct", (data) => {
+socketClient.on("productList", (data) => {
   table.innerHTML = `<tr>
       <td>ID</td>
       <td>Nombre</td>
@@ -97,17 +108,21 @@ socketClient.on("updateProduct", (data) => {
       <td>Codigo</td>
       <td>Categoria</td>
       <td></td>
+      <td></td>
     </tr>`;
   for (product of data) {
     let tr = document.createElement("tr");
-    tr.innerHTML = `<td>${product._id}</td>
+    tr.innerHTML = `
+      <td>${product._id}</td>
       <td>${product.title}</td>
       <td>${product.description}</td>
       <td>${product.price}</td>
       <td>${product.stock}</td>
       <td>${product.code}</td>
       <td>${product.category}</td>
-      <td><button class="btn btn-danger" onclick="deleteProduct(${product._id})">Eliminar</button></td>`;
+      <td><button onclick="deleteProduct('${product._id}')" class="btn btn-danger">Eliminar</button></td>
+      <td><button class="btn btn-Primary"><a style="color: white; text-decoration: none"
+                href="/products/modify/${product._id}">Modificar</a></button></td>`;
     table.getElementsByTagName("tbody")[0].appendChild(tr);
   }
 });

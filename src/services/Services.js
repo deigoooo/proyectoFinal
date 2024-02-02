@@ -18,6 +18,8 @@ export class CartService extends Repository {
     await this.dao.deleteProductFromCart(cid, pid);
   getProductsFromCart = async (req, res) =>
     await this.dao.getProductsFromCart(req, res);
+  getProductsFromCartForOnWire= async(cid)=>
+    await this.dao.getProductsFromCartForOnWire(cid);
 }
 export class MessageService extends Repository {
   constructor(dao) {

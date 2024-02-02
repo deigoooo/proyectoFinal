@@ -7,7 +7,8 @@ import mockingRouter from "../routers/mocking.router.js";
 import loggerTestRouter from "../routers/loggerTest.router.js";
 import usersRouter from "../routers/users.router.js";
 import errorHandler from "../middlewares/error.middleware.js";
-import { messageService,userService } from "../services/Factory.js";
+import { cartService, messageService, productService, userService } from "../services/Factory.js";
+import { UserGetDTO } from "../dto/user.dto.js";
 
 //middleware de SocketIO
 const run = (socketServer, app) => {
@@ -32,15 +33,19 @@ const run = (socketServer, app) => {
   socketServer.on("connection", async (socket) => {
     socketServer.emit("logs", await messageService.getAll());
     console.log(`Nuevo cliente conectado: ${socket.id}`);
-    socket.on("productList", (data) => {
-      socketServer.emit("updateProduct", data);
+    socket.on("productList", async (data) => {
+      const products = await productService.getAll()
+      socketServer.emit("productList", products);
+    });
+    socket.on("cartUpdate", async (data) => {
+      const cart = await cartService.getProductsFromCartForOnWire(data);
+      socketServer.emit("cartUpdate", cart.response.payload.products);
     });
     socket.on("message", async (data) => {
       messageService.create(data);
       socketServer.emit("logs", await messageService.getAll());
     });
     socket.on("updateUser", async (data) => {
-      console.log(`entro al socket`)
       const users = await userService.getAll();
       const response = users.map((user) => {
         return new UserGetDTO(user);

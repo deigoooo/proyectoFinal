@@ -16,7 +16,8 @@
     color: rgb(51, 51, 51);
   }
 </style>
-
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <div style="display: block; width:100vw; max-width: 100%;">
   <div class="navbar">
     <div>
@@ -26,16 +27,16 @@
   </div>
   <h2 id="cid" data-cid="{{cart._id}}">Products from Cart with id={{cart._id}}</h2>
   <hr />
-  <table class="table table-dark table-striped">
+  <table class="table table-dark table-striped" id="cartTable">
     <thead>
       <tr>
-        <td><strong>Producto</strong></td>
-        <td><strong>Descripción</strong></td>
-        <td><strong>Precio</strong></td>
-        <td><strong>Código</strong></td>
-        <td><strong>Stock</strong></td>
-        <td><strong>Cantidad</strong></td>
-        <td></td>
+        <th><strong>Producto</strong></th>
+        <th><strong>Descripción</strong></th>
+        <th><strong>Precio</strong></th>
+        <th><strong>Código</strong></th>
+        <th><strong>Stock</strong></th>
+        <th><strong>Cantidad</strong></th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -60,29 +61,70 @@
   border: none;
   margin-bottom: 10px;" onclick="purchase('{{cart._id}}')">Comprar</button>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
+
+  const socketClient = io();
+  let table = document.getElementById("cartTable");
   async function deleteProductFromCart(pid) {
-    let cartId =
-      document.getElementById("cid"); let cid = cartId.getAttribute("data-cid");
-    console.log(`entro aca ${cid} y ${pid}`); await
-      fetch(`/api/carts/${cid}/product/${pid}`, {
-        method: "delete"
-      }).then((result) => result.json()).then((result) => {
-        if (result.status ===
-          "error") throw new Error(result.error); alert(`El product fue eliminado
-  \nVista actualizada`); location.reload();
-      }).catch((error) => alert(`Ocurrio
-  un error:\n${error}`));
-  } async function purchase(cid) {
-    console.log(`entro`)
-    const response = await fetch(`/api/carts/${cid}/purchase`); Swal.fire({
-      title:
-        "Compra Realizada", text: "¡Gracias por tu compra!", icon: "success",
+    let cartId = document.getElementById("cid");
+    let cid = cartId.getAttribute("data-cid");
+    const response = await fetch(`/api/carts/${cid}/product/${pid}`, {
+      method: "DELETE",
+      headers: { "content-type": "application/json" },
+    });
+    if (response.status === 200) {
+      Swal.fire({
+        icon: "success",
+        title: "Éxito",
+        text: "Producto eliminado correctamente",
+      });
+    } else {
+      const errorData = await response.json();
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: `Hubo un error: ${errorData.error}`,
+      });
+    };
+    socketClient.emit("cartUpdate", cid);
+  };
+
+  async function purchase(cid) {
+    const response = await fetch(`/api/carts/${cid}/purchase`);
+    Swal.fire({
+      title: "Compra Realizada",
+      text: "¡Gracias por tu compra!",
+      icon: "success",
       confirmButtonText: "Ir a productos",
     }).then((result) => {
-      if
-        (result.isConfirmed) { window.location.href = "/products"; }
+      if (result.isConfirmed) {
+        window.location.href = "/products";
+      }
     });
   }
+
+  socketClient.on("cartUpdate", (data) => {
+    table.innerHTML = `
+        <tr>
+          <th><strong>Producto</strong></th>
+          <th><strong>Descripción</strong></th>
+          <th><strong>Precio</strong></th>
+          <th><strong>Código</strong></th>
+          <th><strong>Stock</strong></th>
+          <th><strong>Cantidad</strong></th>
+          <th></th>
+        </tr>`;
+    for (product of data) {
+      let tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${product.product.title}</td>
+        <td>${product.product.description}</td>
+        <td>${product.product.price}</td>
+        <td>${product.product.code}</td>
+        <td>${product.quantity}</td>
+        <td><button class="btn btn-danger" onclick="deleteProductFromCart('${product.product._id}')">Eliminar</button>`;
+      table.getElementsByTagName("tbody")[0].appendChild(tr);
+    }
+  });
 </script>
