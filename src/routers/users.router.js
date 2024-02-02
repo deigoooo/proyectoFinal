@@ -5,17 +5,18 @@ import {
   getViewController,
   getUsersController,
   deleteUserPerDateController,
-  getAdminUserController,
+  getAdminViewUserController,
   deleteUserByIdController,
   putRoleUserController,
 } from "../controller/users.controller.js";
 import { uploader } from "../middlewares/multer.middleware.js";
+import { handlePolicies } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
 router.get("/premium/:uid", putUserController);
 router.get("/view", getViewController);
-router.get("/admin", getAdminUserController);
+router.get("/admin", handlePolicies(["ADMIN"]), getAdminViewUserController);
 router.post(
   "/:uid/documents",
   uploader.fields([
@@ -27,7 +28,7 @@ router.post(
 );
 router.put("/:uid", putRoleUserController);
 router.get("/", getUsersController);
-router.delete("/", deleteUserPerDateController);
-router.delete("/:uid", deleteUserByIdController);
+router.delete("/", handlePolicies(["ADMIN"]), deleteUserPerDateController);
+router.delete("/:uid", handlePolicies(["ADMIN"]), deleteUserByIdController);
 
 export default router;

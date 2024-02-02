@@ -100,7 +100,7 @@ export const deleteUserPerDateController = async (req, res) => {
   }
 };
 
-export const getAdminUserController = async (req, res) => {
+export const getAdminViewUserController = async (req, res) => {
   const users = await userService.getAll();
   const dtoUsers = users.map((user) => {
     return new UserGetDTO(user);

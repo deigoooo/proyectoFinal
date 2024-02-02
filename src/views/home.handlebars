@@ -102,9 +102,9 @@
     </li>
   </ul>
   <div>
+    <a id="btnToolbox" href="/api/users/admin" style="display: none;"><i class="fa-solid fa-toolbox icono-grande my-icon"></i></a>
     <a id="btnAdmin" href="/products/realTimeProducts"><i class="fa-solid fa-square-plus icono-grande my-icon"></i></a>
     <a href="/products/{{user.carts}}"><i class="fa-solid fa-cart-shopping icono-grande my-icon"></i></a>
-
   </div>
 </div>
 <hr />
@@ -123,13 +123,13 @@
 <table class="table table-dark table-striped">
   <thead>
     <tr>
-      <td></td>
-      <td><strong>Producto</strong></td>
-      <td><strong>Descripción</strong></td>
-      <td><strong>Precio</strong></td>
-      <td><strong>Código</strong></td>
-      <td><strong>Stock</strong></td>
-      <td><strong>Categoría</strong></td>
+      <td class="col-1"></td>
+      <td class="col-3"><strong>Producto</strong></td>
+      <td class="col-3"><strong>Descripción</strong></td>
+      <td class="col-1"><strong>Precio</strong></td>
+      <td class="col-2"><strong>Código</strong></td>
+      <td class="col-1"><strong>Stock</strong></td>
+      <td class="col-1"><strong>Categoría</strong></td>
     </tr>
   </thead>
   <tbody>
@@ -149,10 +149,15 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
   const btnAdmin = document.getElementById("btnAdmin");
+  const btnToolbox = document.getElementById("btnToolbox");
   const btnR = document.getElementById("role");
+
   const role = btnR.textContent || btnR.innerText;
   if (role === "user") {
     btnAdmin.style.display = "none";
+  }
+  if (role === "admin") {
+    btnToolbox.style.display = "inline";
   }
   const addProductToCart = async (pid,owner) => {
     const userEmail = document.getElementById("userEmail");
