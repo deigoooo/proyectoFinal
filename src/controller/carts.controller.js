@@ -3,7 +3,7 @@ import {
   productService,
   ticketService,
 } from "../services/Factory.js";
-import mailServices from "../services/nodemailer.services.js";
+import { mailTicketServices } from "../services/nodemailer.services.js";
 import shortid from "shortid";
 import CustomError from "../services/errors/custom_error.js";
 import EError from "../services/errors/enums.js";
@@ -375,7 +375,7 @@ export const purchaseController = async (req, res, next) => {
     const result = await ticketService.create(newTicket);
 
     //mandamos el mail
-    mailServices(result);
+    mailTicketServices(result);
 
     return res.status(200).json({ status: "success", payload: result });
   } catch (error) {
