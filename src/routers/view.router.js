@@ -4,6 +4,7 @@ import {
   realTimeController,
   getProductViewController,
   getModifyProductController,
+  successViewController,
 } from "../controller/view.controller.js";
 import {
   handlePolicies,
@@ -32,5 +33,8 @@ router.get(
 );
 
 router.get("/modify/:pid", handlePolicies(["ADMIN", "PREMIUM"]),getModifyProductController);
+
+router.get('/success/:cid',successViewController);
+router.get('/cancel', (req, res) => res.send('cancel'));
 
 export default router;

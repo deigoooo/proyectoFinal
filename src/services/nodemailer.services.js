@@ -42,6 +42,8 @@ export const mailTicketServices = async (ticket) => {
       Quantity: ticket.products[index].quantity,
     });
   }
+  
+
   let mail = Mailgenerator.generate(response);
 
   let message = {

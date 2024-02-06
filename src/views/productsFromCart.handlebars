@@ -92,16 +92,8 @@
 
   async function purchase(cid) {
     const response = await fetch(`/api/carts/${cid}/purchase`);
-    Swal.fire({
-      title: "Compra Realizada",
-      text: "¡Gracias por tu compra!",
-      icon: "success",
-      confirmButtonText: "Ir a productos",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.location.href = "/products";
-      }
-    });
+    const data = await response.json();
+    window.location.href = data.payload.url;
   }
 
   socketClient.on("cartUpdate", (data) => {

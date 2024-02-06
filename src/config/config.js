@@ -42,6 +42,9 @@ export default {
     nodemailer_user: process.env.NODEMAILER_USER,
     nodemailer_password: process.env.NODEMAILER_PASS,
   },
+  stripe:{
+    stripe_access_token: process.env.STRIPE_ACCESS_TOKEN
+  },
   PORT: program.opts().p || 8080,
   MODE: program.opts().mode,
 };

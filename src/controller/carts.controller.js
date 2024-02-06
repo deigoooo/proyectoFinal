@@ -8,6 +8,9 @@ import shortid from "shortid";
 import CustomError from "../services/errors/custom_error.js";
 import EError from "../services/errors/enums.js";
 import { generateCartsErrorInfo } from "../services/errors/info.js";
+import { PaymentDTO } from "../dto/payment.dto.js";
+import {payment} from "../services/payment.services.js";
+
 
 export const getCartsController = async (req, res, next) => {
   try {
@@ -322,8 +325,7 @@ export const purchaseController = async (req, res, next) => {
       });
     }
     let productsToTicket = [];
-    let productsAfterPurchase = cartToPurchase.products;
-    let amount = 0;
+
     for (let index = 0; index < cartToPurchase.products.length; index++) {
       const productToPurchase = await productService.getById(
         cartToPurchase.products[index].product
@@ -337,48 +339,24 @@ export const purchaseController = async (req, res, next) => {
         });
       }
       if (cartToPurchase.products[index].quantity <= productToPurchase.stock) {
-        //actualizamos el stock del producto que se está comprando
-        productToPurchase.stock -= cartToPurchase.products[index].quantity;
-        await productService.update(productToPurchase._id, {
-          stock: productToPurchase.stock,
-        });
-        //eliminamos (del carrito) los productos que se han comparado (en memoria)
-        productsAfterPurchase = productsAfterPurchase.filter(
-          (item) =>
-            item.product.toString() !==
-            cartToPurchase.products[index].product.toString()
-        );
-        //calculamos el amount (total del ticket)
-        amount +=
-          productToPurchase.price * cartToPurchase.products[index].quantity;
+
         //colocamos el producto en el Ticket (en memoria)
         productsToTicket.push({
           product: productToPurchase._id,
+          description: productToPurchase.description,
+          title: productToPurchase.title,
           price: productToPurchase.price,
           quantity: cartToPurchase.products[index].quantity,
         });
       }
     }
-    //eliminamos (del carrito) los productos que se han comparado
-    await cartService.update(
-      cid,
-      { products: productsAfterPurchase },
-      { returnDocument: "after" }
-    );
-    //creamos el Ticket
-    const newTicket = {
-      code: shortid.generate(),
-      products: productsToTicket,
-      amount,
-      purchaser: req.session.user.email,
-    };
-    const result = await ticketService.create(newTicket);
+    const respone = await payment(productsToTicket,cid);
 
-    //mandamos el mail
-    mailTicketServices(result);
-
-    return res.status(200).json({ status: "success", payload: result });
+    return res.status(200).json({ status: "success", payload: respone });
   } catch (error) {
     next(error);
   }
 };
+
+export const createSession = async (req, res, next) => {};
+
