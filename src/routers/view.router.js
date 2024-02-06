@@ -5,6 +5,7 @@ import {
   getProductViewController,
   getModifyProductController,
   successViewController,
+  cancelViewController,
 } from "../controller/view.controller.js";
 import {
   handlePolicies,
@@ -32,9 +33,13 @@ router.get(
   getProductViewController
 );
 
-router.get("/modify/:pid", handlePolicies(["ADMIN", "PREMIUM"]),getModifyProductController);
+router.get(
+  "/modify/:pid",
+  handlePolicies(["ADMIN", "PREMIUM"]),
+  getModifyProductController
+);
 
-router.get('/success/:cid',successViewController);
-router.get('/cancel', (req, res) => res.send('cancel'));
+router.get("/success/:cid", successViewController);
+//router.get("/cancel", cancelViewController);
 
 export default router;

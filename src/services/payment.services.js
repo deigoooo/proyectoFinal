@@ -24,7 +24,7 @@ export const payment = async (ticket,cid) => {
       line_items: items,
       mode: "payment",
       success_url:`http://localhost:8080/products/success/${cid}`,
-      cancel_url: `http://localhost:8080/products/cancel`
+      cancel_url: `http://localhost:8080/cancel`
     }); 
     return response;
   } catch (error) {

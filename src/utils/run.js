@@ -7,7 +7,12 @@ import mockingRouter from "../routers/mocking.router.js";
 import loggerTestRouter from "../routers/loggerTest.router.js";
 import usersRouter from "../routers/users.router.js";
 import errorHandler from "../middlewares/error.middleware.js";
-import { cartService, messageService, productService, userService } from "../services/Factory.js";
+import {
+  cartService,
+  messageService,
+  productService,
+  userService,
+} from "../services/Factory.js";
 import { UserGetDTO } from "../dto/user.dto.js";
 
 //middleware de SocketIO
@@ -28,13 +33,14 @@ const run = (socketServer, app) => {
   app.use("/api/products", productsRouter);
   app.use("/api/carts", cartsRouter);
   app.use("/api/users", usersRouter);
+  app.use("/cancel", (req, res) => res.render("cancel"));
 
   //configuracion del socket
   socketServer.on("connection", async (socket) => {
     socketServer.emit("logs", await messageService.getAll());
     console.log(`Nuevo cliente conectado: ${socket.id}`);
     socket.on("productList", async (data) => {
-      const products = await productService.getAll()
+      const products = await productService.getAll();
       socketServer.emit("productList", products);
     });
     socket.on("cartUpdate", async (data) => {
