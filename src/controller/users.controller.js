@@ -41,13 +41,31 @@ export const postUserController = async (req, res) => {
       res.status(404).json({ status: "error", error: "Id does not exist" });
     }
     const file = req.files;
-    for (let index = 0; index < file.documents.length; index++) {
-      user.documents.push({
-        name: file.documents[index].originalname,
-        reference: file.documents[index].path,
-      });
+    if (file.documents !== undefined) {
+      for (let index = 0; index < file.documents.length; index++) {
+        user.documents.push({
+          name: file.documents[index].originalname,
+          reference: file.documents[index].path,
+        });
+      }
     }
-    for (let index = 0; index < file.profile.length; index++) {
+    if (file.profile !== undefined) {
+      for (let index = 0; index < file.profile.length; index++) {
+        user.documents.push({
+          name: file.profile[index].originalname,
+          reference: file.profile[index].path,
+        });
+      }
+    }
+    if (file.products !== undefined) {
+      for (let index = 0; index < file.products.length; index++) {
+        user.documents.push({
+          name: file.products[index].originalname,
+          reference: file.products[index].path,
+        });
+      }
+    }
+    /*     for (let index = 0; index < file.profile.length; index++) {
       user.documents.push({
         name: file.profile[index].originalname,
         reference: file.profile[index].path,
@@ -58,7 +76,7 @@ export const postUserController = async (req, res) => {
         name: file.products[index].originalname,
         reference: file.products[index].path,
       });
-    }
+    } */
     const result = await userService.update(uid, user);
 
     if (typeof result === "string") {
@@ -135,28 +153,30 @@ export const deleteUserByIdController = async (req, res) => {
   }
 };
 
-export const putRoleUserController = async (req,res) => {
+export const putRoleUserController = async (req, res) => {
   try {
-    const uid = req.params.uid
+    const uid = req.params.uid;
     const user = await userService.getById(uid);
-    if (typeof user ==='string'){
-      return res.status(400).json({status:'error', error:`${user.error}` })
+    if (typeof user === "string") {
+      return res.status(400).json({ status: "error", error: `${user.error}` });
     }
     switch (user.role) {
-      case 'admin':
-        user.role = 'user';
+      case "admin":
+        user.role = "user";
         break;
-      case 'user':
-        user.role = 'premium';
+      case "user":
+        user.role = "premium";
         break;
-      case 'premium':
-        user.role = 'admin';
+      case "premium":
+        user.role = "admin";
         break;
       default:
-        return res.status(400).json({status:'error', error:`Rol no especificado` })
+        return res
+          .status(400)
+          .json({ status: "error", error: `Rol no especificado` });
     }
-    const response = await userService.update(user._id,user);
-    res.status(200).json({status:'success', payload: response});
+    const response = await userService.update(user._id, user);
+    res.status(200).json({ status: "success", payload: response });
   } catch (error) {
     res.status(500).json({ status: "error", error: error.message });
   }
