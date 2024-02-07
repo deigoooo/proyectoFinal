@@ -45,6 +45,7 @@ export default {
   stripe:{
     stripe_access_token: process.env.STRIPE_ACCESS_TOKEN
   },
+  HOST: process.env.HOST,
   PORT: program.opts().p || 8080,
   MODE: program.opts().mode,
 };

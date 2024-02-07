@@ -1,14 +1,10 @@
 import {
   cartService,
   productService,
-  ticketService,
 } from "../services/Factory.js";
-import { mailTicketServices } from "../services/nodemailer.services.js";
-import shortid from "shortid";
 import CustomError from "../services/errors/custom_error.js";
 import EError from "../services/errors/enums.js";
 import { generateCartsErrorInfo } from "../services/errors/info.js";
-import { PaymentDTO } from "../dto/payment.dto.js";
 import {payment} from "../services/payment.services.js";
 
 
