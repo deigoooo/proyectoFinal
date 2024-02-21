@@ -153,7 +153,3 @@ export const successViewController = async (req, res) => {
 
   return res.render("success", { ticket: result.code });
 };
-
-export const cancelViewController = async (req, res) => {
-  console.log(`que paso`)
-};
