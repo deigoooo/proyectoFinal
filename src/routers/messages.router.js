@@ -4,6 +4,6 @@ import { handlePolicies } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.get("/", handlePolicies(["USER"]), getMessageController);
+router.get("/", handlePolicies(["USER", "ADMIN", "PREMIUM"]), getMessageController);
 
 export default router;

@@ -5,7 +5,6 @@ import {
   getProductViewController,
   getModifyProductController,
   successViewController,
-  cancelViewController,
 } from "../controller/view.controller.js";
 import {
   handlePolicies,
